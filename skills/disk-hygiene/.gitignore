@@ -1,0 +1,5 @@
+# личные правила раскладки (фамилии клиентов, дела) — только локально
+scripts/rules.local.json
+*.csv
+manifest.json
+__pycache__/
