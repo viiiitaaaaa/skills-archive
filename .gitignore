@@ -2,3 +2,5 @@
 **/rules.local.json
 __pycache__/
 *.pyc
+# VPN-конфиг Happ с данными серверов — только на компьютере (🟡)
+**/happ_china_latest.json
