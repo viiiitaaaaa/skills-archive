@@ -8,7 +8,7 @@
   1. В Happ: правый клик (или «⋮») по нужному серверу подписки → «Копировать конфиг / Поделиться → JSON».
   2. python happ_china_patch.py            — возьмёт JSON из буфера, допишет правила, положит обратно в буфер
      python happ_china_patch.py file.json  — то же из файла
-  3. В Happ: «+» → «Импорт из буфера обмена» → появится сервер «… | 1688+PDD напрямую».
+  3. В Happ: «+» → «Импорт из буфера обмена» → появится сервер «… | 1688+PDD+17 напрямую».
 """
 import json, subprocess, sys, time, datetime, pathlib
 
@@ -19,6 +19,8 @@ DIRECT_DOMAINS = [
     # Pinduoduo (pdd.net — антибот-проверка, без неё нет товаров)
     "pinduoduo.com", "yangkeduo.com", "pddpic.com", "pddugc.com", "pinduoduo.net", "pdd.net",
     "pinduoduo.cn", "yangkeduo.cn", "pddglobalhk.com", "hutaojie.com",
+    # Оптовые рынки одежды, Baidu, 妙手ERP (28.09: 17zwd через VPN грузился плохо / обрывался)
+    "17zwd.com", "17.shop", "vvic.com", "baidu.com", "bdimg.com", "bdstatic.com", "91miaoshou.com",
 ]
 # Картинки PDD: у img-4.pddpic.com 2 адреса; 14.0.37.180 отвечает за 0,2 с, 148.253.245.44 — 25 с/таймаут
 # напрямую (проверено 27.09). Быстрый закрепляем, медленный пускаем через VPN.
@@ -66,7 +68,7 @@ def patch(cfg):
 
     stamp = datetime.date.today().strftime("%d.%m")
     base = (cfg.get("remarks") or "сервер").split(" | 1688")[0]
-    cfg["remarks"] = f"{base} | 1688+PDD напрямую {stamp}"
+    cfg["remarks"] = f"{base} | 1688+PDD+17 напрямую {stamp}"
     return cfg
 
 

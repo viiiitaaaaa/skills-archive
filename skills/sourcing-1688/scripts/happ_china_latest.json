@@ -1,0 +1,331 @@
+{
+  "burstObservatory": {
+    "pingConfig": {
+      "connectivity": "https://ya.ru",
+      "destination": "https://connectivitycheck.gstatic.com/generate_204",
+      "interval": "3m",
+      "sampling": 1,
+      "timeout": "3s"
+    },
+    "subjectSelector": [
+      "proxy"
+    ]
+  },
+  "dns": {
+    "hosts": {
+      "lkfl2.nalog.ru": "213.24.64.175",
+      "lknpd.nalog.ru": "213.24.64.181",
+      "img-4.pddpic.com": "14.0.37.180"
+    },
+    "queryStrategy": "UseIPv4",
+    "servers": [
+      "8.8.8.8",
+      {
+        "address": "https://77.88.8.8/dns-query",
+        "domains": [
+          "geosite:category-ru"
+        ],
+        "skipFallback": true
+      }
+    ]
+  },
+  "inbounds": [
+    {
+      "listen": "127.0.0.1",
+      "port": 10808,
+      "protocol": "socks",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      },
+      "sniffing": {
+        "destOverride": [
+          "http",
+          "tls",
+          "quic"
+        ],
+        "enabled": true,
+        "routeOnly": true
+      },
+      "tag": "socks"
+    },
+    {
+      "listen": "127.0.0.1",
+      "port": 10809,
+      "protocol": "http",
+      "settings": {
+        "allowTransparent": false
+      },
+      "sniffing": {
+        "destOverride": [
+          "http",
+          "tls",
+          "quic"
+        ],
+        "enabled": true,
+        "routeOnly": true
+      },
+      "tag": "http"
+    }
+  ],
+  "log": {
+    "dnsLog": false,
+    "loglevel": "warning"
+  },
+  "meta": null,
+  "outbounds": [
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "104.194.140.194",
+            "port": 443,
+            "users": [
+              {
+                "encryption": "none",
+                "flow": "xtls-rprx-vision",
+                "id": "94f4fea6-85ec-44ec-8e70-b6409088724c"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "realitySettings": {
+          "fingerprint": "firefox",
+          "publicKey": "vl5zsNjQRzSRiF_io36JvMJKGWmMcitmZr4Ogtdwa28",
+          "serverName": "www.google.com",
+          "shortId": "a606f3787ebf17d9"
+        },
+        "security": "reality",
+        "tcpSettings": {}
+      },
+      "tag": "proxy"
+    },
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "104.194.149.201",
+            "port": 443,
+            "users": [
+              {
+                "encryption": "none",
+                "flow": "xtls-rprx-vision",
+                "id": "94f4fea6-85ec-44ec-8e70-b6409088724c"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "realitySettings": {
+          "fingerprint": "firefox",
+          "publicKey": "aYVNatKHOK7WI__kqucMhdDuFrdSbjFRiAIeLCxrFDU",
+          "serverName": "teamviewer.com",
+          "shortId": "bf19bed881cad5ee"
+        },
+        "security": "reality",
+        "tcpSettings": {}
+      },
+      "tag": "proxy-2"
+    },
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "45.139.227.86",
+            "port": 443,
+            "users": [
+              {
+                "encryption": "none",
+                "flow": "xtls-rprx-vision",
+                "id": "94f4fea6-85ec-44ec-8e70-b6409088724c"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "realitySettings": {
+          "fingerprint": "firefox",
+          "publicKey": "XiAbgSUb5Otd4YGjujjyTFMAGAThdC7qM-EUaFZDi34",
+          "serverName": "teamviewer.com",
+          "shortId": "120666110491f269"
+        },
+        "security": "reality",
+        "tcpSettings": {}
+      },
+      "tag": "proxy-3"
+    },
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "206.245.166.4",
+            "port": 443,
+            "users": [
+              {
+                "encryption": "none",
+                "flow": "xtls-rprx-vision",
+                "id": "94f4fea6-85ec-44ec-8e70-b6409088724c"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "realitySettings": {
+          "fingerprint": "firefox",
+          "publicKey": "Pf6-V2BNI6RgmPHz2i8t53ZDQFy7y-a_Vez1IF5E-jc",
+          "serverName": "teamviewer.com",
+          "shortId": "3e19e4d2b21433b9"
+        },
+        "security": "reality",
+        "tcpSettings": {}
+      },
+      "tag": "proxy-4"
+    },
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "104.194.149.194",
+            "port": 443,
+            "users": [
+              {
+                "encryption": "none",
+                "flow": "xtls-rprx-vision",
+                "id": "94f4fea6-85ec-44ec-8e70-b6409088724c"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "realitySettings": {
+          "fingerprint": "firefox",
+          "publicKey": "c_4sTHS59McP1E3oDd-V5ZmBXKCOShR5-vjsnvUB7GE",
+          "serverName": "teamviewer.com",
+          "shortId": "f3e3ec18baa2bfb8"
+        },
+        "security": "reality",
+        "tcpSettings": {}
+      },
+      "tag": "proxy-5"
+    },
+    {
+      "protocol": "freedom",
+      "tag": "direct"
+    },
+    {
+      "protocol": "blackhole",
+      "tag": "block"
+    }
+  ],
+  "remarks": "Свободный интернет #1 (безлимит ⚡️) | 1688+PDD+17 напрямую 28.09",
+  "routing": {
+    "balancers": [
+      {
+        "fallbackTag": "proxy",
+        "selector": [
+          "proxy"
+        ],
+        "strategy": {
+          "settings": {
+            "baselines": [
+              "1500ms"
+            ],
+            "expected": 2,
+            "maxRTT": "3s",
+            "tolerance": 0.05
+          },
+          "type": "leastLoad"
+        },
+        "tag": "LB"
+      }
+    ],
+    "domainMatcher": "hybrid",
+    "domainStrategy": "AsIs",
+    "rules": [
+      {
+        "type": "field",
+        "ip": [
+          "148.253.245.44/32"
+        ],
+        "balancerTag": "LB"
+      },
+      {
+        "type": "field",
+        "domain": [
+          "domain:1688.com",
+          "domain:alicdn.com",
+          "domain:mmstat.com",
+          "domain:taobao.com",
+          "domain:tbcdn.cn",
+          "domain:alibaba.com",
+          "domain:alipay.com",
+          "domain:aliyuncs.com",
+          "domain:alibabausercontent.com",
+          "domain:alibaba-inc.com",
+          "domain:tmall.com",
+          "domain:dingtalk.com",
+          "domain:pinduoduo.com",
+          "domain:yangkeduo.com",
+          "domain:pddpic.com",
+          "domain:pddugc.com",
+          "domain:pinduoduo.net",
+          "domain:pdd.net",
+          "domain:pinduoduo.cn",
+          "domain:yangkeduo.cn",
+          "domain:pddglobalhk.com",
+          "domain:hutaojie.com",
+          "domain:17zwd.com",
+          "domain:17.shop",
+          "domain:vvic.com",
+          "domain:baidu.com",
+          "domain:bdimg.com",
+          "domain:bdstatic.com",
+          "domain:91miaoshou.com"
+        ],
+        "outboundTag": "direct"
+      },
+      {
+        "balancerTag": "LB",
+        "domain": [
+          "domain:obhodi4.ru"
+        ],
+        "type": "field"
+      },
+      {
+        "outboundTag": "direct",
+        "protocol": [
+          "bittorrent"
+        ],
+        "type": "field"
+      },
+      {
+        "domain": [
+          "geosite:category-ru"
+        ],
+        "outboundTag": "direct",
+        "type": "field"
+      },
+      {
+        "balancerTag": "LB",
+        "network": "tcp,udp",
+        "type": "field"
+      }
+    ]
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "lastUpdated": 1790284983775,
+  "lastUpdated": 1790635167759,
   "skills": [
     {
       "skillId": "docs",
@@ -15,8 +15,8 @@
       "description": "Найти, кто продаёт конкретный товар на рынке США (или другой страны), прогнав его фотографию через Google Lens в браузере. Обязательно использовать этот скилл, когда пользователь даёт фото товаров — скриншоты AliExpress/1688/Ozon/WB, картинки из .xlsx-подборки, папку Google Drive с фото — и просит «найти этот товар в гугле», «найти 1 в 1 такой же», «кто продаёт это в США», «найти поставщиков/конкурентов», «проверить, занята ли ниша», «найти похожие листинги на Amazon/Walmart/Etsy». Также использовать, когда текстовый поиск уже дал только категорийные совпадения и пользователь недоволен, что это «не тот же товар». Ключевое правило: тождество товара определяется ТОЛЬКО обратным поиском по картинке, никогда текстовым описанием.",
       "source": "custom",
       "updatedAt": "2026-08-11T18:03:25.578907Z",
-      "creatorType": "user",
-      "backingPluginId": "plugin_01Y4Voqyb2PqCuF9MXA1ggqJ"
+      "backingPluginId": "plugin_01Y4Voqyb2PqCuF9MXA1ggqJ",
+      "creatorType": "user"
     },
     {
       "skillId": "skill_01E6WZbtsK7ExUv8f1V23FzH",
@@ -24,8 +24,8 @@
       "description": "Помогает вести проект интернет-магазина декоративных бытовых мелочей для дома (ванная, прихожая, спальня, кухня, гостиная и другие комнаты) — тегировать товарные фото по комнате/категории/стилю, собирать три типа товарных сетов (комнатный стилевой сет, категорийная коллекция в одном стиле, кросс-категорийный мини-сет), классифицировать новые референсы дизайна с Pinterest по уже утверждённому списку из 17 стилей (или предлагать новый тег, если референс не подходит ни под один), генерировать промты для визуала по стилю, и держать в голове структуру и навигацию сайта при обсуждении новых разделов. Обязательно используй этот скилл, когда пользователь присылает фото товаров или интерьеров для сайта декора, упоминает \"сет\", \"мини-сет\", \"стиль\", \"теги товаров\", каталог декора для дома, или продолжает работу над этим конкретным проектом сайта — даже если не называет скилл или проект по имени напрямую.",
       "source": "custom",
       "updatedAt": "2026-08-18T21:45:56.319134Z",
-      "creatorType": "user",
-      "backingPluginId": "plugin_0183owdMTUzPcSrgQvJkYiiQ"
+      "backingPluginId": "plugin_0183owdMTUzPcSrgQvJkYiiQ",
+      "creatorType": "user"
     },
     {
       "skillId": "morning",
@@ -41,8 +41,8 @@
       "description": "Подобрать из папки товарных фото (1688/поставщик/каталог) 4-5 предметов, которые органично и стильно сочетаются между собой по материалу, цвету и фактуре — независимо от исходной категории (кухня, ванная и т.д.) — и определить, для какой комнаты/сценария получившийся набор подходит лучше всего. Используй, когда пользователь просит \"подобрать товары в одном стиле\", \"чтобы сочетались\", \"собрать образ/сет из папки\", особенно если упоминается конкретный интерьерный стиль (Organic Luxe, Warm Minimalism, Heritage Maximalism, Quiet Luxury и т.п.) или прикладывает референс промтов/скриптов для стиля интерьера.",
       "source": "custom",
       "updatedAt": "2026-08-18T08:02:03.098992Z",
-      "creatorType": "user",
-      "backingPluginId": "plugin_01BEgBSh1oADe8GRB4ZV4Diy"
+      "backingPluginId": "plugin_01BEgBSh1oADe8GRB4ZV4Diy",
+      "creatorType": "user"
     },
     {
       "skillId": "skill_01X5VfVrgi8Me1c4g2uvVWmZ",
@@ -50,8 +50,8 @@
       "description": "Собрать премиальный каталог товаров из выгрузок 1688采购助手 — разложить SKU по тональным коллекциям в стиле Togas / Zara Home и выдать .xlsx с встроенными фото, цветовой разметкой строк и расчётом закупки, розницы и маржи. Обязательно использовать этот скилл, когда пользователь загружает один или несколько файлов вида «商品列表-1688采购助手*.xlsx», просит собрать ассортимент или концепцию магазина, разложить товары по коллекциям, подобрать позиции «в одном стиле», «в тон», «под Togas», добавить новые товары в существующие коллекции, или жалуется, что подобранные позиции не сочетаются друг с другом. Также использовать, когда нужна таблица ассортимента с картинками внутри файла.",
       "source": "custom",
       "updatedAt": "2026-08-11T10:15:52.978437Z",
-      "creatorType": "user",
-      "backingPluginId": "plugin_01CiAqrv5NYNKpmex2CSgCGY"
+      "backingPluginId": "plugin_01CiAqrv5NYNKpmex2CSgCGY",
+      "creatorType": "user"
     },
     {
       "skillId": "skill_01WopM3nqj7waUcaFU6dpe1e",
@@ -59,8 +59,8 @@
       "description": "Produce vertical (9:16) product ad videos for TikTok, Reels and Shorts from real product photos using the Artlist MCP connector — generating scene stills, animating them into clips, adding voice-over, and assembling the final cut with ffmpeg. Use this skill whenever the user wants an ad, promo, commercial, reel, TikTok video, or marketing video for a physical product, whenever they upload product photos and ask to \"animate\", \"make a video\", \"turn into a reel\", and whenever they mention Artlist, generating video from images, or e-commerce creatives for dropshipping or marketplace listings. Also use it when the user only asks for a video prompt or ad script for a product — the scripting and cost rules here apply before any generation starts.",
       "source": "custom",
       "updatedAt": "2026-08-08T11:48:45.404559Z",
-      "creatorType": "user",
-      "backingPluginId": "plugin_018Bati2abQGMgw5hcKNNrb3"
+      "backingPluginId": "plugin_018Bati2abQGMgw5hcKNNrb3",
+      "creatorType": "user"
     },
     {
       "skillId": "skill_01MY2veEX183arG3Aq2KDkGt",
@@ -68,8 +68,8 @@
       "description": "Validate keywords and product niches from Glimpse, Google Trends, Keyword Planner, or similar keyword-research screenshots and exports before committing to a niche store or product line. Use this whenever the user shares keyword screenshots, growth percentages, YoY numbers, search-volume charts, or asks which niche to pick, which product to sell, whether a trend is real, or wants keywords grouped into store niches or product funnels. Also use it when the user is choosing between product categories for e-commerce, dropshipping, or a marketplace store — even if they only say \"check these keywords\" or \"what's growing\". Growth percentages in these tools are systematically misleading, and this skill prevents acting on fake trends.",
       "source": "custom",
       "updatedAt": "2026-08-06T13:53:12.947495Z",
-      "creatorType": "user",
-      "backingPluginId": "plugin_01SYVwAGurcnkHvbE8nuWMim"
+      "backingPluginId": "plugin_01SYVwAGurcnkHvbE8nuWMim",
+      "creatorType": "user"
     },
     {
       "skillId": "skill_01Nw6JzrJVBdDv7CSNXR6gcW",
@@ -77,8 +77,8 @@
       "description": "Собрать или починить Excel-файл юнит-экономики маркетплейса (Wildberries или Ozon), в который пользователь вставляет выгруженные отчёты, а сводная и итоговая статистика пересчитываются сами. Обязательно использовать этот скилл, когда пользователь загружает отчёт реализации WB, отчёт по начислениям Ozon, ListExpense (реклама), отчёт о стоимости размещения/остатках, или просит \"автоматизировать отчёты\", \"сделать чтобы подтягивалось по ВПР\", \"свести отчёты в единую статистику\", \"посчитать юнит-экономику\", \"распределить рекламу по артикулам\". ТАКЖЕ обязательно использовать при ЛЮБОЙ жалобе на существующий такой файл — \"опять ошибка\", \"#ССЫЛКА!\", \"#REF!\", \"слетели формулы\", \"не подтягивается Export\", \"не сходится логистика/выручка\", \"везде нули\" — потому что причины поломок здесь уже известны и чинятся по чеклисту, а не наугад.",
       "source": "custom",
       "updatedAt": "2026-08-20T12:41:19.193284Z",
-      "creatorType": "user",
-      "backingPluginId": "plugin_012vjQx9xBcMCAeqb3v7oo3W"
+      "backingPluginId": "plugin_012vjQx9xBcMCAeqb3v7oo3W",
+      "creatorType": "user"
     },
     {
       "skillId": "xlsx",
@@ -110,8 +110,8 @@
       "description": "Подготовка процессуальных документов для судов общей юрисдикции РФ — исковых заявлений, ходатайств, заявлений об ускорении, возражений, апелляционных жалоб. Обязательно использовать этот скилл, когда пользователь просит составить иск, ходатайство, заявление в суд, документы по наследственным, жилищным или имущественным спорам, упоминает ГПК, ЕГРН, нотариуса, наследственное дело, доли в праве собственности, госпошлину, обеспечительные меры или истребование доказательств — даже если он просто описывает конфликтную ситуацию и не называет документ прямо. Скилл задаёт приоритет процессуальной скорости, правила проверки норм и формат вывода в .docx.",
       "source": "custom",
       "updatedAt": "2026-08-10T01:25:16.026305Z",
-      "creatorType": "user",
-      "backingPluginId": "plugin_01VbG6DaMkCSJXoYJiVgyjPh"
+      "backingPluginId": "plugin_01VbG6DaMkCSJXoYJiVgyjPh",
+      "creatorType": "user"
     },
     {
       "skillId": "pdf",
@@ -127,8 +127,8 @@
       "description": "Distribute a marketplace supply shipment (Wildberries or Ozon) across multiple fulfillment warehouses, and optionally push the result into an Ozon seller-account supply request via the browser. Use this whenever the user has a shipment quantity per SKU (often an \"Export\" or \"Заказы\" sheet with per-warehouse order/recommendation counts) and asks to split it across warehouses/clusters/склады, apply a minimum-quantity-per-warehouse cutoff, exclude weak warehouses, or fill in an Ozon/WB \"заявка на поставку\". Trigger on phrases like \"распредели поставку по складам\", \"раскладка по кластерам\", \"сколько отгружать на каждый склад\", or when the user uploads an Export sheet plus a shipment-quantity sheet and wants warehouse columns filled in.",
       "source": "custom",
       "updatedAt": "2026-08-06T08:23:39.574400Z",
-      "creatorType": "user",
-      "backingPluginId": "plugin_01UznsR1tYtwwbxEPVgyZnFb"
+      "backingPluginId": "plugin_01UznsR1tYtwwbxEPVgyZnFb",
+      "creatorType": "user"
     },
     {
       "skillId": "skill-creator",
@@ -151,8 +151,7 @@
       "name": "docx-tables",
       "description": "Правила вёрстки таблиц в .docx (расчёты процентов, реестры, сметы), чтобы Word не сдвигал колонки и не разрывал таблицу. Применять при любом .docx с таблицей.",
       "source": "plugin",
-      "updatedAt": "2026-09-24T21:20:45.764931Z",
-      "creatorType": "user",
+      "updatedAt": "2026-09-28T22:29:28.295587Z",
       "backingPluginId": "plugin_01LmzhetVWae7xQGywbc6KTN"
     }
   ]
