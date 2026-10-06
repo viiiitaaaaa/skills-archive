@@ -79,3 +79,19 @@ description: База знаний по дизайну и вёрстке сай�
 - UX Live — почти весь мемы и игры; брать единицы. Intelligent Design пишет про интерьер — перенос на сайт делаем
   сами в «Для нашего сайта» и прямо пишем, что пост про интерьер.
 - Сниппеты с CodePen — это идеи; под премиум упрощать (самый сдержанный вариант), не тащить эффект как есть.
+
+## Наш сайт Frivent — как собирать и показывать (06.10.2026)
+
+- Код: `C:\Users\User\lead-engine\site\` (GitHub viiiitaaaaa/lead-engine). Все её решения по виду — в `site\CLAUDE.md`, читать первым.
+- Пересборка: `python site\build.py` — пишет 6 страниц клиентов и 6 `katalog-*.html`, вставляет в `index.html` шапку/форму/отзывы
+  по меткам `<!--HEADER-->`, `<!--FORM-->`, `<!--REVIEWS-->` и обновляет `?v=<md5>` у styles.css/app.js (иначе «не обновилось»).
+- Тексты страниц — `PAGES` в build.py; товары/услуги каталогов — `site\catalog_data.py` (ITEMS + CATALOGS по клиентам).
+- Просмотр: артефакт https://claude.ai/artifact/NZ2g9DGMcge1LJuHkJbitD — preview.py вырезает doctype/head из index.html,
+  публикуем с `root=C:\Users\User\lead-engine` и картой `files` (styles.css, app.js, страницы, каталоги, img, fonts). После публикации — Artifact open.
+- Решено: палитра «без зелёного» (беж/серый, бордовые кнопки #6b1a24, глубокий синий #222947); шрифт Vela Sans везде (woff2 в site/fonts);
+  шкала текста 11.5/13/15/17/22/до 48 (−10–15% от конкурентов); владельцу — только образ жизни, без инженерных слов; без цен, «Запросить цену».
+- Отзывы Яндекса: прямая ссылка `https://yandex.ru/maps/org/frivent/14071920427/reviews/?reviews%5BpublicId%5D=<publicId автора>&utm_source=review`;
+  отзывы берутся из состояния страницы Яндекс Карт в Chrome (reviewResults). Анонимный отзыв → ссылка на общий список.
+- Портфолио: только реальные объекты Frivent и только то, что поставили; frivent-russia.com мёртв — брать web.archive.org.
+- Грабли: в Chrome `scrollbar-color` отключает `::-webkit-scrollbar` — держать его под `@supports (-moz-appearance:none)`;
+  не вставлять перевод строки внутрь "\n".join в build.py; лого не растягивать (она замечает вертикальное растяжение).
