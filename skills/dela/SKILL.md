@@ -121,7 +121,11 @@ Wi-Fi мимо адаптера happ-xray (проверено 02.10: «235 Accep
    (чаты дел бывают и сессиями Cowork `claude.ai/cowork/cse_…` — в списке chat_conversations их нет, искать в
    закреплённых в боковой панели; загрузка и «Send message» там те же),
    Кузнецов: https://claude.ai/chat/6bc9661b-b3df-4ba4-9a06-78cbd5d0e498,
-   Ставри: https://claude.ai/chat/1e67695a-b8ab-4481-8204-15db3a862888; одно дело = один чат, новый чат по делу
+   Ставри: https://claude.ai/chat/1e67695a-b8ab-4481-8204-15db3a862888,
+   Крупенькин: https://claude.ai/chat/49c81408-ce4d-4618-924a-d1482e5e87f3 (создан 06.10),
+   Атлант Групп: https://claude.ai/chat/4e27dfb8-f34f-4da3-bed6-f1dfdd2c13f7 (создан 06.10),
+   (ссылка Cowork Эспады открывается как обычный чат claude.ai/chat/cfe25cc3-d013-8d63-95a1-e77cd5490a41 — это тот же чат);
+   чат Кузнецова общий для алиментов и раздела имущества; одно дело = один чат, новый чат по делу
    НЕ заводить, если он уже есть (её замечание 29.09 «эспаду не надо плодить по чатам»); нет чата — найти в боковой панели по фамилии),
    `find` → input «Upload files» → `file_upload` (docx + `итоги_<Дело>_<дата>.md`, до 10 МБ);
    текст — через `javascript_tool`: `document.execCommand('insertText', false, текст)` (обычный `type`
