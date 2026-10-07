@@ -51,56 +51,53 @@ def clean_bg(page, white=175, black=95):
     pad[: bg.shape[0], : bg.shape[1]] = bg
     norm = np.clip(a / np.maximum(pad, 1) * 255, 0, 255)
     out = np.clip((norm - black) / (white - black) * 255, 0, 255)
-    # линии края листа: строки/столбцы у краёв (8%), почти сплошь тёмные
-    dark = out < 128
-    h, w = out.shape
-    bh, bw = int(h * 0.08), int(w * 0.08)
-    for y in [*range(bh), *range(h - bh, h)]:
-        if dark[y].mean() > 0.4:
-            out[max(y - 4, 0): y + 5] = 255
-    for x in [*range(bw), *range(w - bw, w)]:
-        if dark[:, x].mean() > 0.4:
-            out[:, max(x - 4, 0): x + 5] = 255
     return Image.fromarray(out.astype(np.uint8))
 
 
+EDGE = 0.015  # белим только кромку скана шириной 1,5% — там тень края листа, текста там нет
+
+
 def fix(img, dpi=300, rot180=False):
+    """Ничего из содержимого не обрезается и не стирается: только поворот, кромка скана и укладка на A4."""
     g = ImageOps.grayscale(img)
     if rot180:
         g = g.rotate(180)
-    a = np.asarray(g)
+    a = np.array(g)
+    h, w = a.shape
+    eh, ew = int(h * EDGE), int(w * EDGE)
+    a[:eh], a[h - eh:], a[:, :ew], a[:, w - ew:] = 255, 255, 255, 255
+    g = Image.fromarray(a)
     k = 4
-    small = a[::k, ::k] < 160
-    small = clean_border(small)
-    ang = find_angle(small)
-    g = g.rotate(ang, resample=Image.BICUBIC, fillcolor=255, expand=False)
-    a = np.asarray(g).copy()
+    ang = find_angle(clean_border(a[::k, ::k] < 160))
+    g = g.rotate(ang, resample=Image.BICUBIC, fillcolor=255, expand=True)
+    a = np.asarray(g)
     hh, ww = (a.shape[0] // k) * k, (a.shape[1] // k) * k
-    raw = (a[:hh, :ww].reshape(hh // k, k, ww // k, k).min(axis=(1, 3)) < 170)
-    small = clean_border(raw.copy())
-    # закрасить белым только выкинутое у краёв (тени, полосы, загнутые углы); текст не трогаем
-    junk = ndi.binary_dilation(raw & ~small, iterations=3) & ~ndi.binary_dilation(small, iterations=1)
-    big = np.zeros(a.shape, bool)
-    big[:hh, :ww] = np.kron(junk, np.ones((k, k), bool))
-    a[big] = 255
-    ys, xs = np.nonzero(small)
+    ink = a[:hh, :ww].reshape(hh // k, k, ww // k, k).min(axis=(1, 3)) < 200
+    ink = ndi.binary_opening(ink, iterations=1) | (a[:hh:k, :ww:k] < 120)  # без одиночных точек пыли
+    ys, xs = np.nonzero(ink)
     W, H = round(A4_MM[0] / 25.4 * dpi), round(A4_MM[1] / 25.4 * dpi)
     page = Image.new("L", (W, H), 255)
     if len(xs) == 0:
         return page, ang
-    pad = 40
-    x0, x1 = max(xs.min() * k - pad, 0), min(xs.max() * k + pad, a.shape[1])
-    y0, y1 = max(ys.min() * k - pad, 0), min(ys.max() * k + pad, a.shape[0])
+    pad = 30
+    x0, x1 = max(xs.min() * k - pad, 0), min(xs.max() * k + k + pad, a.shape[1])
+    y0, y1 = max(ys.min() * k - pad, 0), min(ys.max() * k + k + pad, a.shape[0])
     crop = Image.fromarray(a[y0:y1, x0:x1])
-    m = int(dpi * 0.2)
+    m = int(dpi * 0.15)
     s = min(1.0, (W - 2 * m) / crop.width, (H - 2 * m) / crop.height)
     if s < 1:
         crop = crop.resize((int(crop.width * s), int(crop.height * s)), Image.LANCZOS)
-        y0 = int(y0 * s)
     x = (W - crop.width) // 2
-    y = min(max(y0, m), H - crop.height - m)
+    y = min(max(int(y0 * s), m), H - crop.height - m)
     page.paste(crop, (x, y))
     return page, ang
+
+
+def ink_check(src, page, rot180=False):
+    """Доля тёмных пикселей (текст), сохранившихся после обработки; должна быть ≥ 0.97."""
+    a = np.asarray(ImageOps.grayscale(src))
+    b = np.asarray(page)
+    return (b < 110).sum() / max((a < 110).sum(), 1)
 
 
 if __name__ == "__main__":
@@ -116,4 +113,5 @@ if __name__ == "__main__":
     if not a.no_clean:
         page = clean_bg(page, a.white)
     page.save(a.out)
-    print(f"{a.out}: наклон {ang:+.2f}°")
+    r = ink_check(Image.open(a.inp), page)
+    print(f"{a.out}: наклон {ang:+.2f}°, текст сохранён {r:.0%}" + ("" if r >= 0.97 else "  ⚠ ПРОВЕРИТЬ — возможна потеря"))
