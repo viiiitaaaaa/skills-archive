@@ -38,6 +38,32 @@ def clean_border(mask):
     return mask
 
 
+def clean_bg(page, white=175, black=95):
+    """Выбелить фон: просвет текста с другой стороны, тени от заломов, неровная серость.
+    Фон оценивается крупным «максимум-фильтром» (текст пропадает, остаётся бумага), делим на него,
+    затем уровни: светлее white -> белое, темнее black -> чёрное."""
+    a = np.asarray(page, dtype=np.float32)
+    k = 8
+    sm = a[::k, ::k]
+    bg = ndi.gaussian_filter(ndi.grey_closing(sm, size=(9, 9)), 3)
+    bg = np.kron(bg, np.ones((k, k), np.float32))[: a.shape[0], : a.shape[1]]
+    pad = np.full(a.shape, 255, np.float32)
+    pad[: bg.shape[0], : bg.shape[1]] = bg
+    norm = np.clip(a / np.maximum(pad, 1) * 255, 0, 255)
+    out = np.clip((norm - black) / (white - black) * 255, 0, 255)
+    # линии края листа: строки/столбцы у краёв (8%), почти сплошь тёмные
+    dark = out < 128
+    h, w = out.shape
+    bh, bw = int(h * 0.08), int(w * 0.08)
+    for y in [*range(bh), *range(h - bh, h)]:
+        if dark[y].mean() > 0.4:
+            out[max(y - 4, 0): y + 5] = 255
+    for x in [*range(bw), *range(w - bw, w)]:
+        if dark[:, x].mean() > 0.4:
+            out[:, max(x - 4, 0): x + 5] = 255
+    return Image.fromarray(out.astype(np.uint8))
+
+
 def fix(img, dpi=300, rot180=False):
     g = ImageOps.grayscale(img)
     if rot180:
@@ -83,7 +109,11 @@ if __name__ == "__main__":
     ap.add_argument("out")
     ap.add_argument("--rot180", action="store_true")
     ap.add_argument("--dpi", type=int, default=300)
+    ap.add_argument("--white", type=int, default=175, help="светлее этого — в белое (ниже = агрессивнее)")
+    ap.add_argument("--no-clean", action="store_true")
     a = ap.parse_args()
     page, ang = fix(Image.open(a.inp), a.dpi, a.rot180)
+    if not a.no_clean:
+        page = clean_bg(page, a.white)
     page.save(a.out)
     print(f"{a.out}: наклон {ang:+.2f}°")
