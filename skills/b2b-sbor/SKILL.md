@@ -55,6 +55,14 @@ CyberScraper 2077 (python2day/8190, пост 794, 30.09) — открытый п
 `playwright install`, `streamlit run main.py` → http://localhost:8501; можно с локальной моделью Ollama. Не установлен.
 Границы: ключ OpenAI/Gemini — только отдельный, не боевой (🟡→ лучше Ollama локально); не на 1688/Taobao под её аккаунтом;
 «обход капчи» не включать на сайтах, где у нас вход. Код прочитать до запуска.
+**Код прочитан 07.10 (itsOwen/CyberScraper-2077, 3,3 тыс. ⭐, MIT): 🟡, не установлено, ждёт её ОК.** Скрытых отправок нет:
+текст страницы уходит только в выбранную модель (OpenAI/Gemini/LiteLLM или локальная Ollama). Тяжёлые зависимости
+(LangChain, Streamlit, patchright — «незаметный» Playwright, Tor, Google Sheets OAuth). В README реклама прокси-сервисов —
+не покупать. Ставить только в отдельное окружение:
+`git clone https://github.com/itsOwen/CyberScraper-2077 C:\Users\User\tools\cyberscraper` →
+`cd C:\Users\User\tools\cyberscraper; py -3.12 -m venv venv; .\venv\Scripts\pip install -r requirements.txt; .\venv\Scripts\patchright install chromium`
+→ `.\venv\Scripts\streamlit run main.py`. Ключ — отдельный дешёвый (не боевой) или Ollama. Пользы средне: у нас уже Apify
+и stealth-browser MCP, свой парсер под сайт часто быстрее.
 
 ## Итог для неё
 Коротко: сколько партнёров (элитные / коммерция, профили), конкурентов, объектов коммерции; где смотреть (раздел 10 документа, блоки панели); что неточно и что проверить звонками. Без вопросов в конце.
