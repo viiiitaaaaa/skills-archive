@@ -1,0 +1,254 @@
+﻿<#
+  pc_check.ps1 — проверка компьютера на вредоносные программы, майнеры, шпионов.
+  Ничего не удаляет. Только собирает факты и пишет отчёт.
+
+  Запуск:  powershell -NoProfile -ExecutionPolicy Bypass -File pc_check.ps1 [-Scan quick|full] [-Seconds 8]
+  Отчёт:   C:\Users\User\pc_check\reports\pc_check_<дата>.md  (+ .json с сырыми данными)
+  Лучше запускать от администратора — тогда видны все процессы и задачи.
+#>
+param(
+    [ValidateSet('none','quick','full')] [string]$Scan = 'none',
+    [int]$Seconds = 8,
+    [string]$OutDir = 'C:\Users\User\pc_check\reports'
+)
+$ErrorActionPreference = 'SilentlyContinue'
+[Console]::OutputEncoding = [Text.Encoding]::UTF8
+New-Item -ItemType Directory -Force $OutDir | Out-Null
+$stamp = Get-Date -Format 'yyyyMMdd_HHmm'
+$md = Join-Path $OutDir "pc_check_$stamp.md"
+$jsonPath = Join-Path $OutDir "pc_check_$stamp.json"
+$isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole('Administrators')
+
+$findings = New-Object System.Collections.Generic.List[object]   # level: RED / YELLOW / INFO
+function Add-Finding($level, $area, $what, $why, $action) {
+    $findings.Add([PSCustomObject]@{ level=$level; area=$area; what=$what; why=$why; action=$action })
+}
+
+# --- справочники --------------------------------------------------------------
+$userDirs = @("$env:TEMP", "$env:LOCALAPPDATA\Temp", "$env:APPDATA", "$env:LOCALAPPDATA", "$env:USERPROFILE\Downloads",
+              'C:\ProgramData', 'C:\Users\Public', "$env:USERPROFILE\Desktop", 'C:\Windows\Temp', 'C:\$Recycle.Bin')
+$knownBadNames = 'xmrig|minerd|cpuminer|nicehash|kryptex|nbminer|phoenixminer|t-rex|lolminer|gminer|ethminer|claymore|coinhive|srbminer|xmr-stak|ccminer|bfgminer|cgminer|wannamine|photominer'
+$minerPorts = 3333,4444,5555,7777,8888,9999,14433,14444,45700,45560,3334,3335,3336,4445,5556,8008,8080,8899,45500
+$lolbins = 'powershell|pwsh|cmd\.exe|wscript|cscript|mshta|rundll32|regsvr32|certutil|bitsadmin|msiexec|schtasks|wmic|forfiles|installutil|regasm|msbuild'
+$suspArgs = '-enc|-encodedcommand|-e [A-Za-z0-9+/=]{20,}|-w hidden|-windowstyle hidden|bypass|downloadstring|invoke-expression|iex |frombase64|hidden|-nop |vbs|\.hta|javascript:'
+$whitelistPublishers = 'Microsoft|Google|Anthropic|Mozilla|Opera|Telegram|Dropbox|Adobe|NVIDIA|Intel|Apple|Kensington|Yandex|Zoom|GitHub|Python Software|Dolphin|Windscribe|FlyFrog|Seagull|Discord|Spotify'
+
+$exclNames = 'claude|python|pythonw|node|chrome|msedgewebview2|GoogleDriveFS|OneDrive|Taskmgr|powershell|conhost'  # наши и обычные, по CPU не паникуем
+
+function In-UserDir($path) { if (-not $path) { return $false }; foreach ($d in $userDirs) { if ($path -like "$d*") { return $true } }; return $false }
+function Sig($path) {
+    if (-not $path -or -not (Test-Path $path)) { return 'нет файла' }
+    $s = Get-AuthenticodeSignature $path
+    if ($s.Status -eq 'Valid') { return "подписан: " + ($s.SignerCertificate.Subject -replace '^CN=([^,]+).*','$1') }
+    return "НЕ подписан ($($s.Status))"
+}
+function Hash($path) { if ($path -and (Test-Path $path)) { (Get-FileHash $path -Algorithm SHA256).Hash } }
+
+$report = [ordered]@{}
+Write-Host "Проверка компьютера. Администратор: $isAdmin. Отчёт: $md"
+
+# --- 1. Защитник Windows ------------------------------------------------------
+Write-Host "1/8 Защитник Windows..."
+$mp = Get-MpComputerStatus
+$threats = Get-MpThreatDetection | Sort-Object InitialDetectionTime -Descending | Select-Object -First 20
+$report.defender = [ordered]@{
+    enabled = $mp.AntivirusEnabled; realtime = $mp.RealTimeProtectionEnabled; tamper = $mp.IsTamperProtected
+    signatures = $mp.AntivirusSignatureLastUpdated; quickScan = $mp.QuickScanEndTime; fullScan = $mp.FullScanEndTime
+    threats = @($threats | ForEach-Object { [ordered]@{ time=$_.InitialDetectionTime; id=$_.ThreatID; resources=($_.Resources -join '; '); action=$_.ActionSuccess } })
+}
+if (-not $mp.AntivirusEnabled) { Add-Finding RED 'Защитник' 'Антивирус выключен' 'Без антивируса любой файл запускается без проверки' 'Включить Защитник Windows или другой антивирус' }
+elseif (-not $mp.RealTimeProtectionEnabled) { Add-Finding RED 'Защитник' 'Защита в реальном времени выключена' 'Вирус отключает её первым делом' 'Включить: Безопасность Windows → Защита от вирусов → Параметры' }
+if ($mp.AntivirusSignatureLastUpdated -lt (Get-Date).AddDays(-7)) { Add-Finding YELLOW 'Защитник' "Базы старше недели ($($mp.AntivirusSignatureLastUpdated))" 'Новые вирусы не распознаются' 'Обновить базы: Безопасность Windows → Обновления защиты' }
+if (-not $mp.FullScanEndTime -or $mp.FullScanEndTime -lt (Get-Date).AddDays(-30)) { Add-Finding YELLOW 'Защитник' 'Полная проверка не делалась больше месяца' 'Быстрая проверка смотрит только типовые места' 'Запустить: pc_check.ps1 -Scan full (1–3 часа)' }
+foreach ($t in $threats) { Add-Finding YELLOW 'Защитник' "Ранее найдена угроза: $($t.Resources -join '; ')" "Обнаружено $($t.InitialDetectionTime)" 'Проверить в Безопасность Windows → Журнал защиты, что угроза удалена/в карантине' }
+$exclusions = @($mp.ExclusionPath) + @($mp.ExclusionProcess) | Where-Object { $_ }
+if (-not $exclusions) { $prefs = Get-MpPreference; $exclusions = @($prefs.ExclusionPath) + @($prefs.ExclusionProcess) + @($prefs.ExclusionExtension) | Where-Object { $_ } }
+$report.defender.exclusions = @($exclusions)
+foreach ($e in $exclusions) { Add-Finding YELLOW 'Защитник' "Исключение из проверки: $e" 'Майнеры и шпионы часто добавляют свою папку в исключения, чтобы их не видели' 'Если вы этого не добавляли — убрать исключение' }
+
+if ($Scan -ne 'none') {
+    Write-Host "   Запуск проверки Защитником ($Scan)... это долго"
+    Start-MpScan -ScanType $(if ($Scan -eq 'full') { 'FullScan' } else { 'QuickScan' })
+    $new = Get-MpThreatDetection | Where-Object { $_.InitialDetectionTime -gt (Get-Date).AddHours(-3) }
+    foreach ($t in $new) { Add-Finding RED 'Защитник' "Найдено при проверке: $($t.Resources -join '; ')" 'Свежая находка антивируса' 'Открыть Безопасность Windows → Журнал защиты и удалить' }
+}
+
+# --- 2. Процессы: подпись, место, нагрузка ------------------------------------
+Write-Host "2/8 Процессы (замер нагрузки $Seconds с)..."
+$p1 = Get-Process | Select-Object Id, Name, Path, CPU, WorkingSet64, StartTime
+Start-Sleep -Seconds $Seconds
+$p2 = Get-Process | Select-Object Id, CPU
+$cores = (Get-CimInstance Win32_ComputerSystem).NumberOfLogicalProcessors
+$procs = foreach ($p in $p1) {
+    $after = $p2 | Where-Object Id -eq $p.Id
+    $cpuPct = if ($after -and $p.CPU -ne $null) { [math]::Round((($after.CPU - $p.CPU) / $Seconds / $cores) * 100, 1) } else { 0 }
+    $cmd = (Get-CimInstance Win32_Process -Filter "ProcessId=$($p.Id)").CommandLine
+    [PSCustomObject]@{ Id=$p.Id; Name=$p.Name; Path=$p.Path; CpuPct=$cpuPct; MemMB=[math]::Round($p.WorkingSet64/1MB); Cmd=$cmd; Sig=$null; UserDir=(In-UserDir $p.Path) }
+}
+foreach ($p in $procs) {
+    if ($p.Name -match $knownBadNames -or $p.Cmd -match $knownBadNames -or $p.Cmd -match 'stratum\+tcp|--donate-level|--algo|-o pool\.') {
+        Add-Finding RED 'Майнер' "Процесс $($p.Name) (PID $($p.Id)): $($p.Path)" 'Имя или параметры запуска как у криптомайнера' 'Завершить процесс, найти откуда запускается (раздел Автозагрузка), удалить файл' }
+    if ($p.UserDir) {
+        $p.Sig = Sig $p.Path
+        if ($p.Sig -like 'НЕ подписан*' -or $p.Sig -eq 'нет файла') {
+            Add-Finding YELLOW 'Процессы' "Неподписанный процесс из пользовательской папки: $($p.Name) → $($p.Path)" 'Вирусы живут в Temp/AppData/ProgramData, потому что туда можно писать без прав администратора. Подписи у них нет.' 'Проверить, что это за программа; хэш файла проверить на virustotal.com' }
+    }
+    if ($p.CpuPct -ge 25 -and $p.Name -notmatch $exclNames) {
+        Add-Finding YELLOW 'Нагрузка' "Процесс $($p.Name) грузит процессор на $($p.CpuPct)% ($($p.Path))" 'Постоянная высокая нагрузка в простое — признак майнера' 'Если программа не должна сейчас работать — разобраться; майнер часто маскируется под svchost/explorer из чужой папки' }
+    if ($p.Name -match '^(svchost|explorer|csrss|lsass|winlogon|services|smss|dwm)$' -and $p.Path -and $p.Path -notlike 'C:\Windows\*') {
+        Add-Finding RED 'Маскировка' "Системное имя, но чужая папка: $($p.Name) → $($p.Path)" 'Настоящие системные процессы лежат только в C:\Windows' 'Это почти наверняка вредонос: завершить, удалить файл, проверить автозагрузку' }
+    if ($p.Cmd -match $suspArgs -and $p.Name -match $lolbins) {
+        Add-Finding YELLOW 'Процессы' "Подозрительная команда: $($p.Name) $($p.Cmd.Substring(0,[math]::Min(200,$p.Cmd.Length)))" 'Скрытое окно, закодированная команда, загрузка из сети — типичные приёмы вирусов' 'Посмотреть, кто это запустил (родительский процесс, задача планировщика)' }
+}
+$report.processes = @($procs | Sort-Object CpuPct -Descending | Select-Object -First 40)
+$report.cpuTop = @($procs | Sort-Object CpuPct -Descending | Select-Object -First 10 Name, CpuPct, MemMB, Path)
+$report.memTop = @($procs | Group-Object Name | ForEach-Object { [PSCustomObject]@{ Name=$_.Name; Count=$_.Count; MemMB=($_.Group | Measure-Object MemMB -Sum).Sum } } | Sort-Object MemMB -Descending | Select-Object -First 10)
+
+# --- 3. Сеть ------------------------------------------------------------------
+Write-Host "3/8 Сетевые соединения..."
+$conns = Get-NetTCPConnection -State Established | Where-Object { $_.RemoteAddress -notmatch '^(127\.|::1|0\.0\.0\.0|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)' }
+$connRows = foreach ($c in $conns) {
+    $pr = $procs | Where-Object Id -eq $c.OwningProcess
+    [PSCustomObject]@{ Proc=$pr.Name; Pid=$c.OwningProcess; Remote="$($c.RemoteAddress):$($c.RemotePort)"; Path=$pr.Path }
+}
+foreach ($r in $connRows) {
+    $port = [int]($r.Remote -split ':')[-1]
+    if ($port -in $minerPorts -and $r.Proc -notmatch 'chrome|opera|msedge|firefox|xray|Happ|Windscribe') {
+        Add-Finding RED 'Сеть' "$($r.Proc) (PID $($r.Pid)) держит соединение $($r.Remote)" 'Порт типичен для пулов криптомайнинга' 'Проверить процесс; если не узнаёте — завершить и удалить' }
+    if ($r.Path -and (In-UserDir $r.Path) -and $r.Proc -notmatch 'Telegram|Discord|Spotify|Zoom|claude|Code|cursor|python|node|opera|Whimsical|JDownloader|uTorrent|Comfy|GitHub') {
+        Add-Finding YELLOW 'Сеть' "В интернет ходит программа из пользовательской папки: $($r.Proc) → $($r.Remote) ($($r.Path))" 'Шпионы отправляют данные наружу именно так' 'Понять, что за программа; незнакомую — удалить' }
+}
+$report.connections = @($connRows | Group-Object Proc | ForEach-Object { [PSCustomObject]@{ Proc=$_.Name; Count=$_.Count; Remotes=(($_.Group.Remote | Select-Object -Unique -First 5) -join ', ') } })
+$listen = Get-NetTCPConnection -State Listen | Where-Object { $_.LocalAddress -notmatch '^(127\.|::1)' } | ForEach-Object { $pr = $procs | Where-Object Id -eq $_.OwningProcess; [PSCustomObject]@{ Port=$_.LocalPort; Proc=$pr.Name; Path=$pr.Path } } | Sort-Object Port -Unique
+$report.listening = @($listen)
+foreach ($l in $listen) { if ($l.Path -and (In-UserDir $l.Path)) { Add-Finding YELLOW 'Сеть' "Программа из пользовательской папки слушает порт $($l.Port): $($l.Proc) ($($l.Path))" 'Открытый порт = кто-то может подключиться снаружи (бэкдор, удалённый доступ)' 'Если это не ваш сервер/скрипт — завершить и удалить' } }
+
+# --- 4. Автозагрузка и закрепление --------------------------------------------
+Write-Host "4/8 Автозагрузка, задачи, службы, WMI..."
+$auto = New-Object System.Collections.Generic.List[object]
+foreach ($k in 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run','HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce','HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run','HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run','HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce') {
+    $v = Get-ItemProperty $k; if ($v) { $v.PSObject.Properties | Where-Object { $_.Name -notlike 'PS*' } | ForEach-Object { $auto.Add([PSCustomObject]@{ Where="Реестр $k"; Name=$_.Name; Cmd=$_.Value }) } }
+}
+foreach ($d in "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup","$env:ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp") {
+    Get-ChildItem $d -File | ForEach-Object {
+        $target = $_.FullName
+        if ($_.Extension -eq '.lnk') { $target = (New-Object -ComObject WScript.Shell).CreateShortcut($_.FullName).TargetPath }
+        $auto.Add([PSCustomObject]@{ Where='Папка Автозагрузка'; Name=$_.Name; Cmd=$target }) }
+}
+# Winlogon / Image File Execution Options — классические места закрепления
+$wl = Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon'
+if ($wl.Shell -and $wl.Shell -ne 'explorer.exe') { Add-Finding RED 'Закрепление' "Winlogon Shell подменён: $($wl.Shell)" 'Вместо рабочего стола Windows запускает чужую программу' 'Вернуть значение explorer.exe' }
+if ($wl.Userinit -and $wl.Userinit -notmatch '^C:\\Windows\\system32\\userinit\.exe,?$') { Add-Finding RED 'Закрепление' "Winlogon Userinit подменён: $($wl.Userinit)" 'Запускается при каждом входе до всего остального' 'Вернуть C:\Windows\system32\userinit.exe,' }
+Get-ChildItem 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options' | ForEach-Object { $dbg = (Get-ItemProperty $_.PSPath).Debugger; if ($dbg) { Add-Finding RED 'Закрепление' "Перехват запуска $($_.PSChildName) → $dbg" 'Вместо программы запускается другая' 'Удалить параметр Debugger' } }
+
+$tasks = Get-ScheduledTask | Where-Object { $_.State -ne 'Disabled' } | ForEach-Object {
+    $t = $_; foreach ($a in $t.Actions) { if ($a.Execute) { [PSCustomObject]@{ Where="Задача $($t.TaskPath)$($t.TaskName)"; Name=$t.TaskName; Cmd=("$($a.Execute) $($a.Arguments)").Trim(); Author=$t.Author } } }
+}
+$tasks | ForEach-Object { $auto.Add($_) }
+$svcs = Get-CimInstance Win32_Service | Where-Object { $_.PathName -and $_.PathName -notlike 'C:\Windows\*' -and $_.PathName -notlike '"C:\Windows\*' }
+$svcs | ForEach-Object { $auto.Add([PSCustomObject]@{ Where="Служба $($_.Name) ($($_.StartMode))"; Name=$_.DisplayName; Cmd=$_.PathName }) }
+$report.autostart = @($auto)
+
+foreach ($a in $auto) {
+    $exe = ($a.Cmd -replace '^"([^"]+)".*','$1' -replace '^(\S+\.exe).*','$1')
+    $exe = [Environment]::ExpandEnvironmentVariables($exe)
+    if ($a.Cmd -match $knownBadNames) { Add-Finding RED 'Автозагрузка' "$($a.Where): $($a.Cmd)" 'Имя майнера' 'Удалить запись и файл' ; continue }
+    if ($a.Cmd -match $suspArgs -and $a.Cmd -match $lolbins) { Add-Finding RED 'Автозагрузка' "$($a.Where): $($a.Cmd.Substring(0,[math]::Min(220,$a.Cmd.Length)))" 'Скрытая/закодированная команда при старте — так закрепляются вирусы' 'Раскодировать команду, удалить запись'; continue }
+    if ((In-UserDir $exe) -and $exe -match '\.(exe|dll|vbs|js|bat|cmd|ps1|hta|scr)$') {
+        $sig = Sig $exe
+        if ($sig -like 'НЕ подписан*') { Add-Finding YELLOW 'Автозагрузка' "$($a.Where): $exe — $sig" 'Неподписанная программа из пользовательской папки стартует сама' 'Узнать, что это; незнакомое — отключить и удалить' }
+        elseif ($sig -eq 'нет файла') { Add-Finding INFO 'Автозагрузка' "$($a.Where): файла уже нет ($exe)" 'Мёртвая запись' 'Удалить запись, чтобы не мусорила' }
+    }
+    if ($a.Where -like 'Задача*' -and $a.Cmd -match '\.(vbs|js|hta|bat|cmd|ps1)( |$)' -and $a.Author -notmatch 'Microsoft') { Add-Finding YELLOW 'Автозагрузка' "$($a.Where): $($a.Cmd)" 'Задача планировщика запускает скрипт' 'Открыть файл скрипта и посмотреть, что он делает' }
+}
+# WMI-подписки — скрытый способ автозапуска, обычным людям не нужен
+$wmi = Get-CimInstance -Namespace root\subscription -ClassName __EventConsumer | Where-Object { $_.CommandLineTemplate -or $_.ScriptText }
+foreach ($w in $wmi) { Add-Finding RED 'Закрепление' "WMI-подписка $($w.Name): $($w.CommandLineTemplate)$($w.ScriptText)" 'Невидимый автозапуск через WMI — почти всегда вредонос' 'Удалить подписку (Remove-CimInstance), проверить что она запускала' }
+$report.wmi = @($wmi | Select-Object Name, CommandLineTemplate, ScriptText)
+
+# --- 5. hosts, DNS, прокси ----------------------------------------------------
+Write-Host "5/8 hosts, DNS, прокси..."
+$hosts = Get-Content C:\Windows\System32\drivers\etc\hosts | Where-Object { $_ -match '^\s*[0-9a-fA-F:.]+\s+\S' -and $_ -notmatch '^\s*#' }
+$report.hosts = @($hosts)
+foreach ($h in $hosts) { if ($h -notmatch 'localhost') { Add-Finding YELLOW 'Сеть' "Запись в hosts: $h" 'Через hosts подменяют сайты (банк, антивирус) или блокируют обновления' 'Если не вы добавляли — удалить строку' } }
+$dns = Get-DnsClientServerAddress -AddressFamily IPv4 | Where-Object { $_.ServerAddresses } | ForEach-Object { "$($_.InterfaceAlias): $($_.ServerAddresses -join ', ')" }
+$report.dns = @($dns)
+$proxy = Get-ItemProperty 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings'
+$report.proxy = [ordered]@{ enabled=$proxy.ProxyEnable; server=$proxy.ProxyServer; autoconfig=$proxy.AutoConfigURL }
+if ($proxy.ProxyEnable -eq 1 -and $proxy.ProxyServer -notmatch '127\.0\.0\.1|localhost') { Add-Finding YELLOW 'Сеть' "Включён системный прокси: $($proxy.ProxyServer)" 'Весь трафик идёт через чужой сервер — так перехватывают пароли' 'Если это не ваш VPN — отключить: Параметры → Сеть → Прокси' }
+if ($proxy.AutoConfigURL) { Add-Finding YELLOW 'Сеть' "Автонастройка прокси (PAC): $($proxy.AutoConfigURL)" 'Скрипт может перенаправлять часть сайтов' 'Если не ваш — убрать' }
+
+# --- 6. Расширения Chrome -----------------------------------------------------
+Write-Host "6/8 Расширения браузеров..."
+$ext = foreach ($prof in (Get-ChildItem "$env:LOCALAPPDATA\Google\Chrome\User Data" -Directory | Where-Object { $_.Name -match '^(Default|Profile \d+)$' })) {
+    foreach ($e in (Get-ChildItem "$($prof.FullName)\Extensions" -Directory)) {
+        $ver = Get-ChildItem $e.FullName -Directory | Select-Object -First 1
+        $m = Get-Content "$($ver.FullName)\manifest.json" -Raw | ConvertFrom-Json
+        $name = $m.name
+        if ($name -like '__MSG_*') { $key = $name -replace '__MSG_(.+)__','$1'; $loc = Get-Content "$($ver.FullName)\_locales\en\messages.json" -Raw | ConvertFrom-Json; if ($loc.$key) { $name = $loc.$key.message } }
+        [PSCustomObject]@{ Profile=$prof.Name; Id=$e.Name; Name=$name; Perms=(($m.permissions | Where-Object { $_ -is [string] }) -join ', ') }
+    }
+}
+$report.chromeExtensions = @($ext)
+foreach ($e in $ext) { if ($e.Perms -match '<all_urls>|webRequest|clipboardRead|nativeMessaging|debugger' -and $e.Name -notmatch 'Google|Docs|Sheets|Slides|Claude|uBlock|AdGuard|Translate|LastPass|Bitwarden|1Password') {
+    Add-Finding INFO 'Браузер' "Расширение «$($e.Name)» ($($e.Profile)) с широкими правами: $($e.Perms)" 'Расширения с доступом ко всем сайтам видят пароли и переписку' 'Оставить только те, которыми пользуетесь: chrome://extensions' } }
+
+# --- 7. Свежие исполняемые файлы в пользовательских папках -------------------
+Write-Host "7/8 Свежие exe/dll в Temp, AppData, ProgramData..."
+$recent = foreach ($d in @("$env:TEMP","$env:APPDATA","$env:LOCALAPPDATA",'C:\ProgramData','C:\Users\Public','C:\Windows\Temp')) {
+    Get-ChildItem $d -Recurse -File -Include *.exe,*.dll,*.scr,*.vbs,*.hta,*.bat,*.ps1 -Depth 3 | Where-Object { $_.LastWriteTime -gt (Get-Date).AddDays(-7) -and $_.FullName -notmatch '\\(Google|Microsoft|Anthropic|Claude|Python|node_modules|venv|\.venv|pip|npm|Programs\\(cursor|whimsical|Comfy)|Package Cache|dolphin_anty|JetBrains|Telegram|Discord|Zoom|Yandex|Opera|Mozilla|NVIDIA|Intel|GitHub|stealth-browser|claude_widget|Temp\\claude)\\' }
+}
+$report.recentExecutables = @($recent | Select-Object FullName, LastWriteTime, Length | Sort-Object LastWriteTime -Descending | Select-Object -First 40)
+$unsignedRecent = $recent | Where-Object { $_.Extension -in '.exe','.dll','.scr' } | Where-Object { (Sig $_.FullName) -like 'НЕ подписан*' } | Select-Object -First 15
+foreach ($f in $unsignedRecent) { Add-Finding INFO 'Файлы' "Свежий неподписанный файл: $($f.FullName) ($($f.LastWriteTime))" 'Появился за последнюю неделю в папке, куда вирусы любят ставиться' 'Если не узнаёте — проверить хэш на virustotal.com (SHA256 в json-отчёте)' }
+
+# --- 8. Прочее: UAC, RDP, скрытые пользователи, удалённый доступ ---------------
+Write-Host "8/8 UAC, удалённый доступ, пользователи..."
+$uac = (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System').EnableLUA
+if ($uac -ne 1) { Add-Finding RED 'Система' 'Контроль учётных записей (UAC) выключен' 'Любая программа получает права администратора без вопроса' 'Включить UAC: Панель управления → Учётные записи → Изменить параметры контроля' }
+$rdp = (Get-ItemProperty 'HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server').fDenyTSConnections
+if ($rdp -eq 0) { Add-Finding YELLOW 'Система' 'Включён удалённый рабочий стол (RDP)' 'Снаружи можно подключиться по паролю' 'Если не пользуетесь — выключить: Параметры → Система → Удалённый рабочий стол' }
+$users = Get-LocalUser | Where-Object Enabled | Select-Object Name, LastLogon
+$report.users = @($users)
+foreach ($u in $users) { if ($u.Name -notin 'User' -and $u.Name -notmatch 'Администратор|Administrator|Гость|Guest|DefaultAccount|WDAGUtilityAccount') { Add-Finding YELLOW 'Система' "Дополнительный включённый пользователь: $($u.Name)" 'Лишняя учётная запись = чужой вход' 'Если не создавали — отключить' } }
+$remoteTools = Get-Process | Where-Object { $_.Name -match 'anydesk|teamviewer|rustdesk|rudesktop|ammyy|radmin|ultraviewer|supremo|aeroadmin|litemanager|getscreen|vnc' }
+foreach ($r in $remoteTools) { Add-Finding YELLOW 'Удалённый доступ' "Запущена программа удалённого доступа: $($r.Name) ($($r.Path))" 'Через неё компьютером можно управлять со стороны' 'Если сейчас никому доступ не давали — закрыть и удалить' }
+$remoteInstalled = Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*','HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*','HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*' | Where-Object { $_.DisplayName -match 'anydesk|teamviewer|rustdesk|rudesktop|ammyy|radmin|ultraviewer|supremo|aeroadmin|litemanager|vnc' } | Select-Object -ExpandProperty DisplayName
+foreach ($r in $remoteInstalled) { Add-Finding INFO 'Удалённый доступ' "Установлена программа удалённого доступа: $r" 'Сама по себе не вредна, но это дверь в компьютер' 'Держать только если нужна' }
+
+# --- Отчёт ----------------------------------------------------------------------
+$red = @($findings | Where-Object level -eq 'RED'); $yel = @($findings | Where-Object level -eq 'YELLOW'); $inf = @($findings | Where-Object level -eq 'INFO')
+$verdict = if ($red.Count) { '🔴 Есть признаки заражения — нужно разбираться' } elseif ($yel.Count) { '🟡 Явного вредоноса нет, но есть что проверить' } else { '🟢 Чисто' }
+$report.findings = @($findings); $report.verdict = $verdict; $report.isAdmin = $isAdmin; $report.time = (Get-Date).ToString('s')
+$report | ConvertTo-Json -Depth 6 | Set-Content $jsonPath -Encoding UTF8
+
+$sb = New-Object Text.StringBuilder
+[void]$sb.AppendLine("# Проверка компьютера — $(Get-Date -Format 'dd.MM.yyyy HH:mm')")
+[void]$sb.AppendLine("`n**Вердикт: $verdict**`n")
+[void]$sb.AppendLine("Красных: $($red.Count) · Жёлтых: $($yel.Count) · Для сведения: $($inf.Count) · Права администратора: $isAdmin`n")
+foreach ($lvl in @(@('RED','🔴 Красное — вероятный вредонос'), @('YELLOW','🟡 Жёлтое — проверить'), @('INFO','⚪ Для сведения'))) {
+    $items = $findings | Where-Object level -eq $lvl[0]
+    if ($items) { [void]$sb.AppendLine("## $($lvl[1])`n"); foreach ($f in $items) { [void]$sb.AppendLine("- **[$($f.area)]** $($f.what)`n  - Почему важно: $($f.why)`n  - Что делать: $($f.action)") }; [void]$sb.AppendLine() }
+}
+[void]$sb.AppendLine("## Защитник Windows`n- Включён: $($mp.AntivirusEnabled), реальное время: $($mp.RealTimeProtectionEnabled), защита от отключения: $($mp.IsTamperProtected)`n- Базы: $($mp.AntivirusSignatureLastUpdated); быстрая проверка: $($mp.QuickScanEndTime); полная: $($mp.FullScanEndTime)`n")
+[void]$sb.AppendLine("## Нагрузка на процессор за $Seconds с (топ)`n| Процесс | CPU % | Память МБ | Путь |`n|---|---|---|---|")
+foreach ($p in $report.cpuTop) { [void]$sb.AppendLine("| $($p.Name) | $($p.CpuPct) | $($p.MemMB) | $($p.Path) |") }
+[void]$sb.AppendLine("`n## Память (топ по программам)`n| Программа | Процессов | МБ |`n|---|---|---|")
+foreach ($p in $report.memTop) { [void]$sb.AppendLine("| $($p.Name) | $($p.Count) | $($p.MemMB) |") }
+[void]$sb.AppendLine("`n## Кто ходит в интернет`n| Программа | Соединений | Куда (примеры) |`n|---|---|---|")
+foreach ($c in $report.connections) { [void]$sb.AppendLine("| $($c.Proc) | $($c.Count) | $($c.Remotes) |") }
+[void]$sb.AppendLine("`n## Открытые порты (слушают снаружи)`n| Порт | Программа | Путь |`n|---|---|---|")
+foreach ($l in $report.listening) { [void]$sb.AppendLine("| $($l.Port) | $($l.Proc) | $($l.Path) |") }
+[void]$sb.AppendLine("`n## Автозагрузка (всё, что стартует само)`n| Где | Имя | Команда |`n|---|---|---|")
+foreach ($a in $report.autostart | Where-Object { $_.Where -notlike 'Задача \Microsoft*' }) { [void]$sb.AppendLine("| $($a.Where) | $($a.Name) | $(($a.Cmd -replace '\|','/').Substring(0,[math]::Min(120,$a.Cmd.Length))) |") }
+[void]$sb.AppendLine("`n## Расширения Chrome`n| Профиль | Название | Права |`n|---|---|---|")
+foreach ($e in $report.chromeExtensions) { [void]$sb.AppendLine("| $($e.Profile) | $($e.Name) | $($e.Perms) |") }
+[void]$sb.AppendLine("`n## hosts / DNS / прокси`n- hosts: $(if ($hosts) { $hosts -join '; ' } else { 'пусто (норма)' })`n- DNS: $($dns -join '; ')`n- Прокси: $(if ($proxy.ProxyEnable -eq 1) { $proxy.ProxyServer } else { 'выключен' })")
+[void]$sb.AppendLine("`nСырые данные: $jsonPath")
+$sb.ToString() | Set-Content $md -Encoding UTF8
+
+Write-Host "`n$verdict"
+Write-Host "Красных: $($red.Count), жёлтых: $($yel.Count), для сведения: $($inf.Count)"
+foreach ($f in $red) { Write-Host "  🔴 [$($f.area)] $($f.what)" }
+foreach ($f in $yel) { Write-Host "  🟡 [$($f.area)] $($f.what)" }
+Write-Host "Отчёт: $md"
