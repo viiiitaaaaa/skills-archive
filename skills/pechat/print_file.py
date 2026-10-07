@@ -8,7 +8,7 @@ PDF и картинки печатаются напрямую; .html/.htm/.txt/.
 """
 import argparse, os, subprocess, sys, tempfile
 
-DEFAULT_PRINTER = "RICOH SP 221SNw"  # лазерный A4; системный по умолчанию Xprinter — это этикетки
+DEFAULT_PRINTER = "RICOH SP 221SNw DDST"  # лазерный A4; системный по умолчанию Xprinter — это этикетки
 CHROME = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
 IMG = {".png", ".jpg", ".jpeg", ".bmp", ".gif", ".tif", ".tiff", ".webp"}
 VIA_CHROME = {".html", ".htm", ".txt", ".md", ".svg"}
