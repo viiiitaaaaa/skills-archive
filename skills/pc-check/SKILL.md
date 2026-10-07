@@ -32,6 +32,7 @@ $null = $p.WaitForExit(540000); Get-Content $log -Encoding UTF8
 ## Что уже известно про этот ПК (07.10.2026) — не поднимать как новую тревогу
 
 - **07.10.2026 по её команде удалены**: блокировка Adobe в hosts (962 строки, копия в `C:\Users\User\pc_check\hosts_backup_*.txt`), KMS-активатор (перехват SppExtComObj/osppsvc, SppExtComObjHook.dll, исключение Защитника, адрес KMS 172.16.0.2 у Office), SoftEther VPN Server, задача AliUpdater и папки Ali1688Buyer; остатки данных WW1688CEF, Ali1688BuyerData, aliim, ProgramData\Alibaba (защищена — удалять через takeown от администратора). Если они появятся снова — это новая находка, сказать.
+- **07.10.2026 вечером**: полная проверка Защитником — угроз 0; удалены McAfee WebAdvisor (Uninstaller.exe /s + ключи `HKLM\SOFTWARE\[WOW6432Node\]Google\Chrome\Extensions\fheoggkfdfchfphceeifdbepaooicaho`, иначе Chrome вернёт расширение) и задача AliProctectUpdate. Если McAfee снова появится — новая находка.
 - Если Adobe или Office начнут просить лицензию — это следствие удаления активаторов, не поломка.
 - Бесплатные VPN-расширения в Chrome: «VPN Наружу», «ЮБуст», Bunny VPN, Browsec — ей сказано, решения пока нет.
 - Свои скрипты, которые не тревога: tg_monitor (задача TG_Monitor), бот «Дела» (start_bot.bat), виджет лимитов Claude, stealth-browser-mcp, Dolphin anty.
