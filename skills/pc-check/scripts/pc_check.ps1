@@ -59,7 +59,7 @@ $report.defender = [ordered]@{
 if (-not $mp.AntivirusEnabled) { Add-Finding RED 'Защитник' 'Антивирус выключен' 'Без антивируса любой файл запускается без проверки' 'Включить Защитник Windows или другой антивирус' }
 elseif (-not $mp.RealTimeProtectionEnabled) { Add-Finding RED 'Защитник' 'Защита в реальном времени выключена' 'Вирус отключает её первым делом' 'Включить: Безопасность Windows → Защита от вирусов → Параметры' }
 if ($mp.AntivirusSignatureLastUpdated -lt (Get-Date).AddDays(-7)) { Add-Finding YELLOW 'Защитник' "Базы старше недели ($($mp.AntivirusSignatureLastUpdated))" 'Новые вирусы не распознаются' 'Обновить базы: Безопасность Windows → Обновления защиты' }
-if (-not $mp.FullScanEndTime -or $mp.FullScanEndTime -lt (Get-Date).AddDays(-30)) { Add-Finding YELLOW 'Защитник' 'Полная проверка не делалась больше месяца' 'Быстрая проверка смотрит только типовые места' 'Запустить: pc_check.ps1 -Scan full (1–3 часа)' }
+if ($Scan -ne 'full' -and (-not $mp.FullScanEndTime -or $mp.FullScanEndTime -lt (Get-Date).AddDays(-30))) { Add-Finding YELLOW 'Защитник' 'Полная проверка не делалась больше месяца' 'Быстрая проверка смотрит только типовые места' 'Запустить: pc_check.ps1 -Scan full (1–3 часа)' }
 foreach ($t in $threats) { Add-Finding YELLOW 'Защитник' "Ранее найдена угроза: $($t.Resources -join '; ')" "Обнаружено $($t.InitialDetectionTime)" 'Проверить в Безопасность Windows → Журнал защиты, что угроза удалена/в карантине' }
 $exclusions = @($mp.ExclusionPath) + @($mp.ExclusionProcess) | Where-Object { $_ }
 if (-not $exclusions) { $prefs = Get-MpPreference; $exclusions = @($prefs.ExclusionPath) + @($prefs.ExclusionProcess) + @($prefs.ExclusionExtension) | Where-Object { $_ } }
@@ -73,6 +73,9 @@ foreach ($e in $exclusions) {
 if ($Scan -ne 'none') {
     Write-Host "   Запуск проверки Защитником ($Scan)... это долго"
     Start-MpScan -ScanType $(if ($Scan -eq 'full') { 'FullScan' } else { 'QuickScan' })
+    # состояние читали до проверки — перечитать, иначе в отчёте старые даты
+    $mp = Get-MpComputerStatus
+    $report.defender.quickScan = $mp.QuickScanEndTime; $report.defender.fullScan = $mp.FullScanEndTime
     $new = Get-MpThreatDetection | Where-Object { $_.InitialDetectionTime -gt (Get-Date).AddHours(-3) }
     foreach ($t in $new) { Add-Finding RED 'Защитник' "Найдено при проверке: $($t.Resources -join '; ')" 'Свежая находка антивируса' 'Открыть Безопасность Windows → Журнал защиты и удалить' }
 }

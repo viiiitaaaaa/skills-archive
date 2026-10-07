@@ -58,6 +58,12 @@ Shopify Payments.
 | `make_pages.py` | страницы About us, FAQ, Payment policy с текстами |
 | `make_menus.py` | меню шапки, Information и Legal для футера |
 | `upload_files.py` | `python upload_files.py <папка> hero` — картинки из папки в Files магазина |
+| `proverit_pravku.py` | `python proverit_pravku.py ozhidanie.json` — после массовой правки сверяет, что реально лежит в магазине (название, статус, теги, inventoryPolicy…): «совпало N из M» + расхождения |
+
+**Правило после любой массовой правки (≥ 5 товаров):** «готово» пишем только после `proverit_pravku.py` с
+«совпало M из M» (или повторного запроса к API со счётчиком изменённых). Отчёт скрипта/ИИ «всё сделал» — не
+доказательство: у автора канала ИИ «поменял остатки у 250 товаров», а в Shopify не изменилось ничего
+(proecomdmitriy/1141, пост 182, 19.08.2026).
 | `find_keys.py` | `python find_keys.py "credit card"` — поиск ключей текстов чекаута |
 | `checkout_texts.py` | правка текстов чекаута (упирается в ограничение, см. ниже) |
 | `audit_store.py` | снимок магазина: страницы, меню, коллекции, товары, тема |
