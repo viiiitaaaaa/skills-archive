@@ -4,7 +4,7 @@
 
   Запуск:  powershell -NoProfile -ExecutionPolicy Bypass -File pc_check.ps1 [-Scan quick|full] [-Seconds 8]
   Отчёт:   C:\Users\User\pc_check\reports\pc_check_<дата>.md  (+ .json с сырыми данными)
-  Лучше запускать от администратора — тогда видны все процессы и задачи.
+  Лучше запускать от администратора — тогда видны исключения антивируса и все задачи.
 #>
 param(
     [ValidateSet('none','quick','full')] [string]$Scan = 'none',
@@ -17,7 +17,7 @@ New-Item -ItemType Directory -Force $OutDir | Out-Null
 $stamp = Get-Date -Format 'yyyyMMdd_HHmm'
 $md = Join-Path $OutDir "pc_check_$stamp.md"
 $jsonPath = Join-Path $OutDir "pc_check_$stamp.json"
-$isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole('Administrators')
+$isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 
 $findings = New-Object System.Collections.Generic.List[object]   # level: RED / YELLOW / INFO
 function Add-Finding($level, $area, $what, $why, $action) {
@@ -63,8 +63,12 @@ if (-not $mp.FullScanEndTime -or $mp.FullScanEndTime -lt (Get-Date).AddDays(-30)
 foreach ($t in $threats) { Add-Finding YELLOW 'Защитник' "Ранее найдена угроза: $($t.Resources -join '; ')" "Обнаружено $($t.InitialDetectionTime)" 'Проверить в Безопасность Windows → Журнал защиты, что угроза удалена/в карантине' }
 $exclusions = @($mp.ExclusionPath) + @($mp.ExclusionProcess) | Where-Object { $_ }
 if (-not $exclusions) { $prefs = Get-MpPreference; $exclusions = @($prefs.ExclusionPath) + @($prefs.ExclusionProcess) + @($prefs.ExclusionExtension) | Where-Object { $_ } }
+$exclusions = @($exclusions | Where-Object { $_ -notlike 'N/A*' })
+if (-not $isAdmin) { Add-Finding INFO 'Защитник' 'Исключения антивируса не проверены' 'Список исключений виден только администратору' 'Запустить проверку с правами администратора' }
 $report.defender.exclusions = @($exclusions)
-foreach ($e in $exclusions) { Add-Finding YELLOW 'Защитник' "Исключение из проверки: $e" 'Майнеры и шпионы часто добавляют свою папку в исключения, чтобы их не видели' 'Если вы этого не добавляли — убрать исключение' }
+foreach ($e in $exclusions) {
+    if ($e -match 'SppExtComObjHook') { Add-Finding YELLOW 'Активатор' "Исключение антивируса для $e" 'Это файл KMS-активатора: им «бесплатно» активируют Windows или Office без покупки лицензии. Сам он не шпион, но его прячут от антивируса, а сборки активаторов из интернета часто бывают с вирусами внутри' 'Если активировали Windows/Office сами — знать об этом. Надёжнее купить ключ; файл и исключение тогда убрать'; continue }
+    Add-Finding YELLOW 'Защитник' "Исключение из проверки: $e" 'Майнеры и шпионы часто добавляют свою папку в исключения, чтобы их не видели' 'Если вы этого не добавляли — убрать исключение' }
 
 if ($Scan -ne 'none') {
     Write-Host "   Запуск проверки Защитником ($Scan)... это долго"
@@ -97,7 +101,7 @@ foreach ($p in $procs) {
         Add-Finding YELLOW 'Нагрузка' "Процесс $($p.Name) грузит процессор на $($p.CpuPct)% ($($p.Path))" 'Постоянная высокая нагрузка в простое — признак майнера' 'Если программа не должна сейчас работать — разобраться; майнер часто маскируется под svchost/explorer из чужой папки' }
     if ($p.Name -match '^(svchost|explorer|csrss|lsass|winlogon|services|smss|dwm)$' -and $p.Path -and $p.Path -notlike 'C:\Windows\*') {
         Add-Finding RED 'Маскировка' "Системное имя, но чужая папка: $($p.Name) → $($p.Path)" 'Настоящие системные процессы лежат только в C:\Windows' 'Это почти наверняка вредонос: завершить, удалить файл, проверить автозагрузку' }
-    if ($p.Cmd -match $suspArgs -and $p.Name -match $lolbins) {
+    if ($p.Cmd -match $suspArgs -and $p.Name -match $lolbins -and $p.Cmd -notmatch 'pc_check\.ps1|CLAUDE_CODE|\\\.claude\\') {
         Add-Finding YELLOW 'Процессы' "Подозрительная команда: $($p.Name) $($p.Cmd.Substring(0,[math]::Min(200,$p.Cmd.Length)))" 'Скрытое окно, закодированная команда, загрузка из сети — типичные приёмы вирусов' 'Посмотреть, кто это запустил (родительский процесс, задача планировщика)' }
 }
 $report.processes = @($procs | Sort-Object CpuPct -Descending | Select-Object -First 40)
@@ -121,19 +125,26 @@ foreach ($r in $connRows) {
 $report.connections = @($connRows | Group-Object Proc | ForEach-Object { [PSCustomObject]@{ Proc=$_.Name; Count=$_.Count; Remotes=(($_.Group.Remote | Select-Object -Unique -First 5) -join ', ') } })
 $listen = Get-NetTCPConnection -State Listen | Where-Object { $_.LocalAddress -notmatch '^(127\.|::1)' } | ForEach-Object { $pr = $procs | Where-Object Id -eq $_.OwningProcess; [PSCustomObject]@{ Port=$_.LocalPort; Proc=$pr.Name; Path=$pr.Path } } | Sort-Object Port -Unique
 $report.listening = @($listen)
+$serverSeen = @{}
+foreach ($l in $listen) {
+    if ($l.Path -and $l.Path -notlike 'C:\Windows\*' -and -not (In-UserDir $l.Path) -and -not $serverSeen[$l.Path]) {
+        $serverSeen[$l.Path] = $true
+        $ports = ($listen | Where-Object Path -eq $l.Path | ForEach-Object Port) -join ', '
+        Add-Finding YELLOW 'Сеть' "Программа принимает подключения из сети: $($l.Proc) ($($l.Path)), порты $ports" 'Это сервер: к компьютеру можно подключиться снаружи. Нормально, только если вы его сами ставили и он вам нужен' 'Если не знаете, что это, — остановить службу и удалить программу' }
+}
 foreach ($l in $listen) { if ($l.Path -and (In-UserDir $l.Path)) { Add-Finding YELLOW 'Сеть' "Программа из пользовательской папки слушает порт $($l.Port): $($l.Proc) ($($l.Path))" 'Открытый порт = кто-то может подключиться снаружи (бэкдор, удалённый доступ)' 'Если это не ваш сервер/скрипт — завершить и удалить' } }
 
 # --- 4. Автозагрузка и закрепление --------------------------------------------
 Write-Host "4/8 Автозагрузка, задачи, службы, WMI..."
 $auto = New-Object System.Collections.Generic.List[object]
 foreach ($k in 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run','HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce','HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run','HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run','HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce') {
-    $v = Get-ItemProperty $k; if ($v) { $v.PSObject.Properties | Where-Object { $_.Name -notlike 'PS*' } | ForEach-Object { $auto.Add([PSCustomObject]@{ Where="Реестр $k"; Name=$_.Name; Cmd=$_.Value }) } }
+    $v = Get-ItemProperty $k; if ($v) { $v.PSObject.Properties | Where-Object { $_.Name -notlike 'PS*' } | ForEach-Object { $auto.Add([PSCustomObject]@{ Place="Реестр $k"; Name=$_.Name; Cmd=$_.Value }) } }
 }
 foreach ($d in "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup","$env:ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp") {
     Get-ChildItem $d -File | ForEach-Object {
         $target = $_.FullName
         if ($_.Extension -eq '.lnk') { $target = (New-Object -ComObject WScript.Shell).CreateShortcut($_.FullName).TargetPath }
-        $auto.Add([PSCustomObject]@{ Where='Папка Автозагрузка'; Name=$_.Name; Cmd=$target }) }
+        $auto.Add([PSCustomObject]@{ Place='Папка Автозагрузка'; Name=$_.Name; Cmd=$target }) }
 }
 # Winlogon / Image File Execution Options — классические места закрепления
 $wl = Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon'
@@ -142,24 +153,24 @@ if ($wl.Userinit -and $wl.Userinit -notmatch '^C:\\Windows\\system32\\userinit\.
 Get-ChildItem 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options' | ForEach-Object { $dbg = (Get-ItemProperty $_.PSPath).Debugger; if ($dbg) { Add-Finding RED 'Закрепление' "Перехват запуска $($_.PSChildName) → $dbg" 'Вместо программы запускается другая' 'Удалить параметр Debugger' } }
 
 $tasks = Get-ScheduledTask | Where-Object { $_.State -ne 'Disabled' } | ForEach-Object {
-    $t = $_; foreach ($a in $t.Actions) { if ($a.Execute) { [PSCustomObject]@{ Where="Задача $($t.TaskPath)$($t.TaskName)"; Name=$t.TaskName; Cmd=("$($a.Execute) $($a.Arguments)").Trim(); Author=$t.Author } } }
+    $t = $_; foreach ($a in $t.Actions) { if ($a.Execute) { [PSCustomObject]@{ Place="Задача $($t.TaskPath)$($t.TaskName)"; Name=$t.TaskName; Cmd=("$($a.Execute) $($a.Arguments)").Trim(); Author=$t.Author } } }
 }
 $tasks | ForEach-Object { $auto.Add($_) }
 $svcs = Get-CimInstance Win32_Service | Where-Object { $_.PathName -and $_.PathName -notlike 'C:\Windows\*' -and $_.PathName -notlike '"C:\Windows\*' }
-$svcs | ForEach-Object { $auto.Add([PSCustomObject]@{ Where="Служба $($_.Name) ($($_.StartMode))"; Name=$_.DisplayName; Cmd=$_.PathName }) }
-$report.autostart = @($auto)
+$svcs | ForEach-Object { $auto.Add([PSCustomObject]@{ Place="Служба $($_.Name) ($($_.StartMode))"; Name=$_.DisplayName; Cmd=$_.PathName }) }
+$report.autostart = $auto.ToArray()
 
 foreach ($a in $auto) {
     $exe = ($a.Cmd -replace '^"([^"]+)".*','$1' -replace '^(\S+\.exe).*','$1')
     $exe = [Environment]::ExpandEnvironmentVariables($exe)
-    if ($a.Cmd -match $knownBadNames) { Add-Finding RED 'Автозагрузка' "$($a.Where): $($a.Cmd)" 'Имя майнера' 'Удалить запись и файл' ; continue }
-    if ($a.Cmd -match $suspArgs -and $a.Cmd -match $lolbins) { Add-Finding RED 'Автозагрузка' "$($a.Where): $($a.Cmd.Substring(0,[math]::Min(220,$a.Cmd.Length)))" 'Скрытая/закодированная команда при старте — так закрепляются вирусы' 'Раскодировать команду, удалить запись'; continue }
+    if ($a.Cmd -match $knownBadNames) { Add-Finding RED 'Автозагрузка' "$($a.Place): $($a.Cmd)" 'Имя майнера' 'Удалить запись и файл' ; continue }
+    if ($a.Cmd -match $suspArgs -and $a.Cmd -match $lolbins) { Add-Finding RED 'Автозагрузка' "$($a.Place): $($a.Cmd.Substring(0,[math]::Min(220,$a.Cmd.Length)))" 'Скрытая/закодированная команда при старте — так закрепляются вирусы' 'Раскодировать команду, удалить запись'; continue }
     if ((In-UserDir $exe) -and $exe -match '\.(exe|dll|vbs|js|bat|cmd|ps1|hta|scr)$') {
         $sig = Sig $exe
-        if ($sig -like 'НЕ подписан*') { Add-Finding YELLOW 'Автозагрузка' "$($a.Where): $exe — $sig" 'Неподписанная программа из пользовательской папки стартует сама' 'Узнать, что это; незнакомое — отключить и удалить' }
-        elseif ($sig -eq 'нет файла') { Add-Finding INFO 'Автозагрузка' "$($a.Where): файла уже нет ($exe)" 'Мёртвая запись' 'Удалить запись, чтобы не мусорила' }
+        if ($sig -like 'НЕ подписан*') { Add-Finding YELLOW 'Автозагрузка' "$($a.Place): $exe — $sig" 'Неподписанная программа из пользовательской папки стартует сама' 'Узнать, что это; незнакомое — отключить и удалить' }
+        elseif ($sig -eq 'нет файла') { Add-Finding INFO 'Автозагрузка' "$($a.Place): файла уже нет ($exe)" 'Мёртвая запись' 'Удалить запись, чтобы не мусорила' }
     }
-    if ($a.Where -like 'Задача*' -and $a.Cmd -match '\.(vbs|js|hta|bat|cmd|ps1)( |$)' -and $a.Author -notmatch 'Microsoft') { Add-Finding YELLOW 'Автозагрузка' "$($a.Where): $($a.Cmd)" 'Задача планировщика запускает скрипт' 'Открыть файл скрипта и посмотреть, что он делает' }
+    if ($a.Place -like 'Задача*' -and $a.Cmd -match '\.(vbs|js|hta|bat|cmd|ps1)( |$)' -and $a.Author -notmatch 'Microsoft') { Add-Finding YELLOW 'Автозагрузка' "$($a.Place): $($a.Cmd)" 'Задача планировщика запускает скрипт' 'Открыть файл скрипта и посмотреть, что он делает' }
 }
 # WMI-подписки — скрытый способ автозапуска, обычным людям не нужен
 $wmi = Get-CimInstance -Namespace root\subscription -ClassName __EventConsumer | Where-Object { $_.CommandLineTemplate -or $_.ScriptText }
@@ -169,8 +180,14 @@ $report.wmi = @($wmi | Select-Object Name, CommandLineTemplate, ScriptText)
 # --- 5. hosts, DNS, прокси ----------------------------------------------------
 Write-Host "5/8 hosts, DNS, прокси..."
 $hosts = Get-Content C:\Windows\System32\drivers\etc\hosts | Where-Object { $_ -match '^\s*[0-9a-fA-F:.]+\s+\S' -and $_ -notmatch '^\s*#' }
-$report.hosts = @($hosts)
-foreach ($h in $hosts) { if ($h -notmatch 'localhost') { Add-Finding YELLOW 'Сеть' "Запись в hosts: $h" 'Через hosts подменяют сайты (банк, антивирус) или блокируют обновления' 'Если не вы добавляли — удалить строку' } }
+$report.hosts = [ordered]@{ count = @($hosts).Count; first = (@($hosts) | Select-Object -First 30) -join "`n" }
+$hostsReal = @($hosts | Where-Object { $_ -notmatch 'localhost' })
+$hostsAdobe = @($hostsReal | Where-Object { $_ -match '^\s*(0\.0\.0\.0|127\.0\.0\.1)\s+\S*(adobe|demdex|omtrdc|licensingstack|adobejanus)' })
+$hostsBlock = @($hostsReal | Where-Object { $_ -match '^\s*(0\.0\.0\.0|127\.0\.0\.1)\s' -and $_ -notin $hostsAdobe })
+$hostsRedirect = @($hostsReal | Where-Object { $_ -notmatch '^\s*(0\.0\.0\.0|127\.0\.0\.1|::1?)\s' })
+if ($hostsAdobe.Count) { Add-Finding INFO 'Сеть' "В hosts заблокировано $($hostsAdobe.Count) адресов Adobe" 'Так делают «активаторы» нелицензионных Photoshop/Acrobat, чтобы программа не проверяла лицензию. Сам файл безвреден, но такие активаторы — частый источник вирусов и майнеров' 'Если ставили взломанный Adobe — запустить полную проверку Защитником (-Scan full)' }
+if ($hostsBlock.Count) { Add-Finding YELLOW 'Сеть' "В hosts заблокировано ещё $($hostsBlock.Count) адресов: $(($hostsBlock | Select-Object -First 5) -join '; ')" 'Вирусы так блокируют сайты антивирусов и обновления Windows' 'Посмотреть список в C:\Windows\System32\drivers\etc\hosts; незнакомое удалить' }
+foreach ($h in $hostsRedirect) { Add-Finding RED 'Сеть' "hosts перенаправляет сайт на другой адрес: $h" 'Так подменяют банк, почту или соцсеть на поддельную страницу' 'Удалить строку из hosts, сменить пароли от этого сайта' }
 $dns = Get-DnsClientServerAddress -AddressFamily IPv4 | Where-Object { $_.ServerAddresses } | ForEach-Object { "$($_.InterfaceAlias): $($_.ServerAddresses -join ', ')" }
 $report.dns = @($dns)
 $proxy = Get-ItemProperty 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings'
@@ -183,13 +200,24 @@ Write-Host "6/8 Расширения браузеров..."
 $ext = foreach ($prof in (Get-ChildItem "$env:LOCALAPPDATA\Google\Chrome\User Data" -Directory | Where-Object { $_.Name -match '^(Default|Profile \d+)$' })) {
     foreach ($e in (Get-ChildItem "$($prof.FullName)\Extensions" -Directory)) {
         $ver = Get-ChildItem $e.FullName -Directory | Select-Object -First 1
-        $m = Get-Content "$($ver.FullName)\manifest.json" -Raw | ConvertFrom-Json
+        $m = Get-Content "$($ver.FullName)\manifest.json" -Raw -Encoding UTF8 | ConvertFrom-Json
         $name = $m.name
-        if ($name -like '__MSG_*') { $key = $name -replace '__MSG_(.+)__','$1'; $loc = Get-Content "$($ver.FullName)\_locales\en\messages.json" -Raw | ConvertFrom-Json; if ($loc.$key) { $name = $loc.$key.message } }
+        if ($name -like '__MSG_*') {
+            $key = $name -replace '__MSG_(.+)__','$1'
+            foreach ($lang in @('ru', $m.default_locale, 'en', 'en_US')) {
+                if (-not $lang) { continue }
+                $f = "$($ver.FullName)\_locales\$lang\messages.json"
+                if (Test-Path $f) { $loc = Get-Content $f -Raw -Encoding UTF8 | ConvertFrom-Json; $hit = $loc.PSObject.Properties | Where-Object { $_.Name -ieq $key } | Select-Object -First 1; if ($hit) { $name = $hit.Value.message; break } }
+            }
+            if ($name -like '__MSG_*') { $name = "без названия (id $($e.Name))" }
+        }
         [PSCustomObject]@{ Profile=$prof.Name; Id=$e.Name; Name=$name; Perms=(($m.permissions | Where-Object { $_ -is [string] }) -join ', ') }
     }
 }
 $report.chromeExtensions = @($ext)
+$vpnExt = @($ext | Where-Object { $_.Perms -match '(^|, )proxy(,|$)' } | Group-Object Name)
+foreach ($g in $vpnExt) { Add-Finding YELLOW 'Браузер' "VPN-расширение «$($g.Name)»" 'Бесплатный VPN в браузере пропускает через свои серверы все сайты, которые вы открываете, и может их читать. Многие бесплатные VPN зарабатывают продажей этих данных' 'Оставить одно, которому доверяете, остальные удалить в chrome://extensions' }
+$ext = @($ext | Where-Object { $_.Perms -notmatch '(^|, )proxy(,|$)' })
 foreach ($e in $ext) { if ($e.Perms -match '<all_urls>|webRequest|clipboardRead|nativeMessaging|debugger' -and $e.Name -notmatch 'Google|Docs|Sheets|Slides|Claude|uBlock|AdGuard|Translate|LastPass|Bitwarden|1Password') {
     Add-Finding INFO 'Браузер' "Расширение «$($e.Name)» ($($e.Profile)) с широкими правами: $($e.Perms)" 'Расширения с доступом ко всем сайтам видят пароли и переписку' 'Оставить только те, которыми пользуетесь: chrome://extensions' } }
 
@@ -208,7 +236,9 @@ $uac = (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Polici
 if ($uac -ne 1) { Add-Finding RED 'Система' 'Контроль учётных записей (UAC) выключен' 'Любая программа получает права администратора без вопроса' 'Включить UAC: Панель управления → Учётные записи → Изменить параметры контроля' }
 $rdp = (Get-ItemProperty 'HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server').fDenyTSConnections
 if ($rdp -eq 0) { Add-Finding YELLOW 'Система' 'Включён удалённый рабочий стол (RDP)' 'Снаружи можно подключиться по паролю' 'Если не пользуетесь — выключить: Параметры → Система → Удалённый рабочий стол' }
-$users = Get-LocalUser | Where-Object Enabled | Select-Object Name, LastLogon
+Write-Host "   пользователи..."
+$users = Get-LocalUser | Where-Object Enabled | Select-Object Name, @{n='LastLogon';e={"$($_.LastLogon)"}}
+Write-Host "   программы удалённого доступа..."
 $report.users = @($users)
 foreach ($u in $users) { if ($u.Name -notin 'User' -and $u.Name -notmatch 'Администратор|Administrator|Гость|Guest|DefaultAccount|WDAGUtilityAccount') { Add-Finding YELLOW 'Система' "Дополнительный включённый пользователь: $($u.Name)" 'Лишняя учётная запись = чужой вход' 'Если не создавали — отключить' } }
 $remoteTools = Get-Process | Where-Object { $_.Name -match 'anydesk|teamviewer|rustdesk|rudesktop|ammyy|radmin|ultraviewer|supremo|aeroadmin|litemanager|getscreen|vnc' }
@@ -219,8 +249,11 @@ foreach ($r in $remoteInstalled) { Add-Finding INFO 'Удалённый дост
 # --- Отчёт ----------------------------------------------------------------------
 $red = @($findings | Where-Object level -eq 'RED'); $yel = @($findings | Where-Object level -eq 'YELLOW'); $inf = @($findings | Where-Object level -eq 'INFO')
 $verdict = if ($red.Count) { '🔴 Есть признаки заражения — нужно разбираться' } elseif ($yel.Count) { '🟡 Явного вредоноса нет, но есть что проверить' } else { '🟢 Чисто' }
-$report.findings = @($findings); $report.verdict = $verdict; $report.isAdmin = $isAdmin; $report.time = (Get-Date).ToString('s')
-$report | ConvertTo-Json -Depth 6 | Set-Content $jsonPath -Encoding UTF8
+$report.findings = $findings.ToArray(); $report.verdict = $verdict; $report.isAdmin = $isAdmin; $report.time = (Get-Date).ToString('s')
+Write-Host "Сохраняю отчёт..."
+foreach ($k in @($report.Keys)) { $t0 = Get-Date; $null = $report[$k] | ConvertTo-Json -Depth 4 -Compress; $dt = ((Get-Date) - $t0).TotalSeconds; if ($dt -gt 2) { Write-Host "   медленный раздел json: $k ($([math]::Round($dt)) с)" } }
+$report | ConvertTo-Json -Depth 4 | Set-Content $jsonPath -Encoding UTF8
+Write-Host "json готов"
 
 $sb = New-Object Text.StringBuilder
 [void]$sb.AppendLine("# Проверка компьютера — $(Get-Date -Format 'dd.MM.yyyy HH:mm')")
@@ -240,10 +273,10 @@ foreach ($c in $report.connections) { [void]$sb.AppendLine("| $($c.Proc) | $($c.
 [void]$sb.AppendLine("`n## Открытые порты (слушают снаружи)`n| Порт | Программа | Путь |`n|---|---|---|")
 foreach ($l in $report.listening) { [void]$sb.AppendLine("| $($l.Port) | $($l.Proc) | $($l.Path) |") }
 [void]$sb.AppendLine("`n## Автозагрузка (всё, что стартует само)`n| Где | Имя | Команда |`n|---|---|---|")
-foreach ($a in $report.autostart | Where-Object { $_.Where -notlike 'Задача \Microsoft*' }) { [void]$sb.AppendLine("| $($a.Where) | $($a.Name) | $(($a.Cmd -replace '\|','/').Substring(0,[math]::Min(120,$a.Cmd.Length))) |") }
+foreach ($a in $report.autostart | Where-Object { $_.Place -notlike 'Задача \Microsoft*' }) { [void]$sb.AppendLine("| $($a.Place) | $($a.Name) | $("$($a.Cmd)" -replace '\|','/' -replace '^(.{120}).+$','$1…') |") }
 [void]$sb.AppendLine("`n## Расширения Chrome`n| Профиль | Название | Права |`n|---|---|---|")
 foreach ($e in $report.chromeExtensions) { [void]$sb.AppendLine("| $($e.Profile) | $($e.Name) | $($e.Perms) |") }
-[void]$sb.AppendLine("`n## hosts / DNS / прокси`n- hosts: $(if ($hosts) { $hosts -join '; ' } else { 'пусто (норма)' })`n- DNS: $($dns -join '; ')`n- Прокси: $(if ($proxy.ProxyEnable -eq 1) { $proxy.ProxyServer } else { 'выключен' })")
+[void]$sb.AppendLine("`n## hosts / DNS / прокси`n- hosts: $(if ($hosts) { "$(@($hosts).Count) строк (подробности выше)" } else { 'пусто (норма)' })`n- DNS: $($dns -join '; ')`n- Прокси: $(if ($proxy.ProxyEnable -eq 1) { $proxy.ProxyServer } else { 'выключен' })")
 [void]$sb.AppendLine("`nСырые данные: $jsonPath")
 $sb.ToString() | Set-Content $md -Encoding UTF8
 
