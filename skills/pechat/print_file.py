@@ -52,6 +52,7 @@ def main():
     ap.add_argument("--printer", default=DEFAULT_PRINTER)
     ap.add_argument("--pages")
     ap.add_argument("--copies", type=int, default=1)
+    ap.add_argument("--rot180", action="store_true", help="повернуть страницы на 180° (обороты при ручной двусторонней печати)")
     ap.add_argument("--list", action="store_true")
     a = ap.parse_args()
 
@@ -76,6 +77,8 @@ def main():
     n = 0
     for _ in range(a.copies):
         for img in images(src, a.pages):
+            if a.rot180:
+                img = img.rotate(180)
             s = min(pw / img.width, ph / img.height)
             w, h = int(img.width * s), int(img.height * s)
             x, y = (pw - w) // 2, (ph - h) // 2
