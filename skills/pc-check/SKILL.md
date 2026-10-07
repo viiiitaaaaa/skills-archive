@@ -31,11 +31,9 @@ $null = $p.WaitForExit(540000); Get-Content $log -Encoding UTF8
 
 ## Что уже известно про этот ПК (07.10.2026) — не поднимать как новую тревогу
 
-- **Adobe**: в hosts заблокировано ~960 адресов Adobe. Это след активатора Adobe. Сказать один раз, не пугать.
-- **SppExtComObjHook.dll** в исключениях Защитника — KMS-активатор Windows/Office.
-- **SoftEther VPN Server** (служба SEVPNSERVER, порты 443/992/1194/5555) стоит с 08.10.2025 и принимает входящие подключения. Её ответ, нужен ли он, ещё не получен.
-- Бесплатные VPN-расширения в Chrome: «VPN Наружу», «ЮБуст», Bunny VPN, Browsec.
-- **AliUpdater** — задача планировщика программы Ali1688Buyer (помощник 1688). Именно она возвращает AlibabaProtect. Пока она стоит, AlibabaProtect будет появляться снова.
+- **07.10.2026 по её команде удалены**: блокировка Adobe в hosts (962 строки, копия в `C:\Users\User\pc_check\hosts_backup_*.txt`), KMS-активатор (перехват SppExtComObj/osppsvc, SppExtComObjHook.dll, исключение Защитника, адрес KMS 172.16.0.2 у Office), SoftEther VPN Server, задача AliUpdater и папки Ali1688Buyer. Если они появятся снова — это новая находка, сказать.
+- Если Adobe или Office начнут просить лицензию — это следствие удаления активаторов, не поломка.
+- Бесплатные VPN-расширения в Chrome: «VPN Наружу», «ЮБуст», Bunny VPN, Browsec — ей сказано, решения пока нет.
 - Свои скрипты, которые не тревога: tg_monitor (задача TG_Monitor), бот «Дела» (start_bot.bat), виджет лимитов Claude, stealth-browser-mcp, Dolphin anty.
 - Edge с диска не удаляется (только страны ЕС) — убран из автозагрузки.
 
