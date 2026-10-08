@@ -57,7 +57,7 @@ def clean_bg(page, white=175, black=95):
 EDGE = 0.015  # белим только кромку скана шириной 1,5% — там тень края листа, текста там нет
 
 
-def fix(img, dpi=300, rot180=False):
+def fix(img, dpi=300, rot180=False, angle=None):
     """Ничего из содержимого не обрезается и не стирается: только поворот, кромка скана и укладка на A4."""
     g = ImageOps.grayscale(img)
     if rot180:
@@ -68,7 +68,7 @@ def fix(img, dpi=300, rot180=False):
     a[:eh], a[h - eh:], a[:, :ew], a[:, w - ew:] = 255, 255, 255, 255
     g = Image.fromarray(a)
     k = 4
-    ang = find_angle(clean_border(a[::k, ::k] < 160))
+    ang = find_angle(clean_border(a[::k, ::k] < 160)) if angle is None else angle
     g = g.rotate(ang, resample=Image.BICUBIC, fillcolor=255, expand=True)
     a = np.asarray(g)
     hh, ww = (a.shape[0] // k) * k, (a.shape[1] // k) * k
@@ -108,8 +108,9 @@ if __name__ == "__main__":
     ap.add_argument("--dpi", type=int, default=300)
     ap.add_argument("--white", type=int, default=175, help="светлее этого — в белое (ниже = агрессивнее)")
     ap.add_argument("--no-clean", action="store_true")
+    ap.add_argument("--angle", type=float, help="задать наклон вручную (почти пустой оборот: автоопределение врёт по просвету)")
     a = ap.parse_args()
-    page, ang = fix(Image.open(a.inp), a.dpi, a.rot180)
+    page, ang = fix(Image.open(a.inp), a.dpi, a.rot180, a.angle)
     if not a.no_clean:
         page = clean_bg(page, a.white)
     page.save(a.out)
