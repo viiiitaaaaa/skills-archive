@@ -645,3 +645,5 @@ $150–300 и «потолок» цены покупателя, конверси
 
 Связано: [[artmellio-system-repo]], [[shopify-admin-api-dostup]],
 [[dolphin-vstroennye-prilozheniya]], [[shopify-cli-tolko-po-tokenu]]
+
+**Из книг, второе прочтение (09.10.2026)** — ещё 32 приёмов по книгам в `references/iz_knig_2.md`; открывать при задаче по теме скилла.

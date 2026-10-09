@@ -95,3 +95,5 @@ Often-empty phrases: it's worth noting, it's important to note, at the end of th
 4. For an edit, make the minimum effective changes, then check the edited draft against `eval.md` yourself.
 5. If any check fails, fix the draft and run the checks again.
 6. Output the full edited draft and a short **What changed** section.
+
+**Из книг, второе прочтение (09.10.2026)** — ещё 2 приёмов по книгам в `references/iz_knig_2.md`; открывать при задаче по теме скилла.

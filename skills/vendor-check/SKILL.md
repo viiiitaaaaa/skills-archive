@@ -54,3 +54,5 @@ aliens_eye <бренд_или_ник> --correlate --domains --format all --outpu
   `git clone https://github.com/reconurge/flowsint C:\Users\User\tools\flowsint` → правка `.env` → `docker compose up -d`.
 - Те же границы: только деловая проверка контрагентов; частных лиц и жителей посёлков (lead-engine) — нет.
   Данные: 🟡 почты/телефоны контрагентов — вводить только в локальный инструмент, не в онлайн-сервисы.
+
+**Из книг, второе прочтение (09.10.2026)** — ещё 9 приёмов по книгам в `references/iz_knig_2.md`; открывать при задаче по теме скилла.

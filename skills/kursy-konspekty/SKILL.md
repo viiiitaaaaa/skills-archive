@@ -60,3 +60,5 @@ description: "Конспекты бесплатных курсов, которы
   `dl_pages.py <папка> <url…>` (страницы → текст, PDF как есть, raw GitHub как .md),
   `yt_pdf.py pdf <папка>` (PDF → .txt) и `yt_pdf.py yt <папка> <id видео…>` (субтитры). Для `yt_pdf.py` нужен venv
   с `youtube-transcript-api pypdf`. Сырьё класть в scratchpad, не в скилл.
+
+**Из книг, второе прочтение (09.10.2026)** — ещё 1 приёмов по книгам в `references/iz_knig_2.md`; открывать при задаче по теме скилла.
