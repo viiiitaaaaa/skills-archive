@@ -118,6 +118,10 @@ Code со скиллами. Есть цифра, приём или инстру�
      затем `await tgWebSync(<план>, 31)` → «база: новых N, дочитано скрытых M». Больше 45 с — запускать без await,
      результат в `window.__sync`, проверять повторно.
    - Личные чаты не открывать и не читать — только история каналов из channels.txt.
+   - Закрытые каналы БЕЗ @адреса (09.10: CodeGuard: Python и CodeGuard: Academy из папки Tech, она подписалась) записаны
+     в channels.txt как `c/<номер канала>` — readChannel берёт номер вместо адреса, ссылка на пост `t.me/c/<номер>/<пост>`,
+     имя на панели — `PRIVATE_TITLES` в news.py. Номер узнать: Telegram Web → `rootScope.managers.appChatsManager.getChat(<номер>)`.
+     Сразу после открытия вкладки getHistory падает с ошибкой — подождать 2–3 с, пока Telegram Web загрузит чаты.
    - Если Telegram Web не залогинен — сказать пользователю, вход делает только она.
 1в. **Чат shopify_chat** (решение 23.09: важные вопросы сразу с ответами). Чат через t.me/s не читается —
    тем же Telegram Web: `--serve`, затем в вкладке вставить `readChat` из `tg_web_reader.js` и `await readChat("shopify_chat", 45)`
