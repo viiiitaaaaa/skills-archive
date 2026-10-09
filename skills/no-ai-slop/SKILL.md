@@ -97,3 +97,5 @@ Often-empty phrases: it's worth noting, it's important to note, at the end of th
 6. Output the full edited draft and a short **What changed** section.
 
 **Из книг, второе прочтение (09.10.2026)** — ещё 2 приёмов по книгам в `references/iz_knig_2.md`; открывать при задаче по теме скилла.
+
+**Из книг, третье прочтение (09.10.2026)** — ещё 1 приёмов по книгам в `references/iz_knig_3.md`; открывать при задаче по теме скилла.
