@@ -199,6 +199,8 @@ commit + push, и `ARTMELLIO_SKILLS\sync_skills.ps1`.
 - ИИ → основной столбец «лично тебе — Claude Code / инструменты». Полностью: neurozeh, ii_papka, AiHubFeed, notboring_tech,
   oestick, ei_ai_channel, productvibe. Хайп «вышла модель X» и дубли vibecoding_tg/PushEnter → skip.
 - Новые каналы из тегов/папок проверять так же: 20 постов → помощники по 25 каналов → «берём/фон/нет» → channels.txt + QUIET.
+  tgcamp.com (каталог англоязычных каналов, marketing/en, 78 шт.) проверен 09.10 — сплошь спам: накрутка Instagram,
+  форекс, «заработок», купоны, продажа аккаунтов; живых полезных 0 → этот каталог не использовать.
   Папку Telegram читать в Telegram Web (окно «Add Folder», адреса — `rootScope.managers.appChatsManager.getChat`), НЕ добавлять.
 
 **Большой сбор (сотни постов) — разбирать помощниками параллельно** (05.10: 651 пост за ~3 мин): вывод news.py разрезать
