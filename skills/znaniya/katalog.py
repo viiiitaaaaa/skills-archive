@@ -72,7 +72,10 @@ def status_of(key, v, manual):
 def read_study():
     """Изучение ссылок поста (видео, курсы, статьи, GitHub): tg_monitor\\study_*\\res_*.json и out_*.json."""
     st = {}
-    for f in list(NOTES.parent.glob("study_*/res_*.json")) + list(NOTES.parent.glob("study_*/out_*.json")):
+    # папки по дате (study_0710 < study_1210): более свежая запись о той же ссылке заменяет старую
+    files = sorted(list(NOTES.parent.glob("study_*/res_*.json")) + list(NOTES.parent.glob("study_*/out_*.json")),
+                   key=lambda p: (p.parent.name[-4:], p.name))
+    for f in files:
         try:
             rows = json.loads(f.read_text(encoding="utf-8"))
         except (ValueError, OSError):
@@ -83,18 +86,22 @@ def read_study():
             s = str(r.get("status") or r.get("verdict") or "")
             kind = ("ok" if s.startswith(("изучено", "пропущено", "🟢", "🟡", "🔴")) else
                     "part" if s.startswith("частично") else "fail")
-            st.setdefault(r["post"], []).append((kind, r.get("link", "")))
-    return st
+            st.setdefault(r["post"], {})[norm_link(r.get("link", ""))] = (kind, r.get("link", ""), s, r.get("result", ""))
+    return {p: list(v.values()) for p, v in st.items()}
+
+
+def norm_link(l):
+    return re.sub(r"^https?://(www\.)?|[?#].*$|/$", "", l or "").lower()
 
 
 def study_line(rows):
     if not rows:
         return ""
-    ok = sum(1 for k, _ in rows if k == "ok")
-    part = sum(1 for k, _ in rows if k == "part")
+    ok = sum(1 for r in rows if r[0] == "ok")
+    part = sum(1 for r in rows if r[0] == "part")
     fail = len(rows) - ok - part
-    tail = (f", частично {part}" if part else "") + (f", не открылось {fail}" if fail else "")
-    vid = " (есть видео/курс)" if any("youtu" in l or "course" in l or "playlist" in l for _, l in rows) else ""
+    tail = (f", частично {part}" if part else "") + (f", ⚠️ не открылось {fail}" if fail else "")
+    vid = " (есть видео/курс)" if any(re.search(r"youtu|course|playlist|academy", r[1]) for r in rows) else ""
     return f"📖 Материалы по ссылкам: изучено {ok} из {len(rows)}{tail}{vid}"
 
 
@@ -113,6 +120,41 @@ def read_noted():
             "status": status_of(k, v, manual), "study": study_line(study.get(k)), "link": f"https://t.me/{k}" if not k.startswith("c/") else f"https://t.me/{k}",
         })
     return items
+
+
+def read_sliv():
+    """Курсы канала slivaker_it, отмеченные полезными при разборе (cat == course)."""
+    import sqlite3
+    notes = json.loads(NOTES.read_text(encoding="utf-8"))
+    db = sqlite3.connect(NOTES.parent / "tg_monitor.db")
+    out = []
+    for k, v in notes.items():
+        if not k.startswith("slivaker_it/") or v.get("cat") != "course":
+            continue
+        r = db.execute("select post_date, text from posts where channel='slivaker_it' and post_id=?",
+                       (int(k.split("/")[1]),)).fetchone()
+        date, text = (r[0][:10], r[1] or "") if r else ("", "")
+        head = text.split("Размер:")[0]
+        title = v.get("headline") or re.sub(r"^\s*Курс\s*:\s*", "", " ".join(head.split())) or k
+        size = re.search(r"Размер:\s*([^\n]+)", text)
+        price = re.search(r"Цена:\s*([^\n]+)", text)
+        out.append({"key": k, "date": date, "title": title, "for_us": v.get("for_us", ""),
+                    "size": size.group(1).strip() if size else "", "price": price.group(1).strip() if price else ""})
+    return sorted(out, key=lambda x: x["date"], reverse=True)
+
+
+def gaps_block(study):
+    rows = []
+    for post, items in study.items():
+        for kind, link, status, result in items:
+            if kind != "ok":
+                rows.append((kind, post, link, status, result))
+    rows.sort(key=lambda x: (x[0] != "fail", x[1]))
+    lis = "".join(
+        f'<li class="it {"zhdet" if k == "fail" else ""}"><span class="ic">{"⚠️" if k == "fail" else "◐"}</span><div>'
+        f'<a href="https://t.me/{esc(p)}">{esc(p)}</a> · <a href="{esc(l)}">ссылка</a>'
+        f'<div class="what">{esc(s)}</div><div class="where">{esc(res)}</div></div></li>' for k, p, l, s, res in rows)
+    return len(rows), lis
 
 
 def esc(s):
@@ -156,7 +198,15 @@ def build():
     if other:
         ev_html.append(event_block("Прочее", [], other))
 
+    n_gaps, gaps = gaps_block(read_study())
+    sliv = read_sliv()
+    sliv_html = "".join(
+        f'<li class="it" data-s="{esc((c["title"] + c["for_us"]).lower())}"><span class="ic">◻️</span><div>'
+        f'<a href="https://t.me/{esc(c["key"])}">{esc(c["title"])}</a> <span class="muted">· {esc(c["date"])}'
+        f'{" · " + esc(c["size"]) if c["size"] else ""}{" · цена автора " + esc(c["price"]) if c["price"] else ""}</span>'
+        f'<div class="what">{esc(c["for_us"])}</div></div></li>' for c in sliv)
     page = TEMPLATE.format(
+        n_gaps=n_gaps, gaps=gaps, n_sliv=len(sliv), sliv=sliv_html,
         now=now, n_study=n_study, n_sk=len(skills), n_no=len(noted), da=cnt["da"], zhdet=cnt["zhdet"], net=cnt["net"],
         skills="".join(sk_html), events="".join(ev_html))
     OUT.write_text(page, encoding="utf-8")
@@ -231,6 +281,10 @@ h2{{margin:36px 0 8px;font-size:21px}}h3{{margin:22px 0 8px;font-size:16px;color
 <div class="muted">Обновлено {now}. Файл открывается в любом браузере, вход в Claude не нужен.</div>
 <div class="stats"><div><b>{n_sk}</b>скиллов</div><div><b>{n_no}</b>принято к сведению</div>
 <div><b>✅ {da}</b>применено</div><div><b>⏳ {zhdet}</b>ждут события</div><div><b>❌ {net}</b>отказались</div><div><b>📖 {n_study}</b>с изученными ссылками, видео, курсами</div></div>
+<details class="ev" open><summary><b>⚠️ Не удалось изучить полностью — {n_gaps}</b>
+<span class="muted">· важно: что не открылось и почему</span></summary>
+<p class="muted">⚠️ — не открылось совсем; ◐ — частично (причина в строке). Остальные ссылки, видео и курсы из принятого изучены.</p>
+<ul>{gaps}</ul></details>
 <input id="q" placeholder="Поиск: реклама, доставка, сайт, 1688…" oninput="f(this.value)">
 <h2>Что умеем — скиллы</h2>
 <p class="muted">Скилл — готовая инструкция для Claude по одной теме. Чтобы вызвать, напишите одну из фраз «Скажите: …».</p>
@@ -239,6 +293,11 @@ h2{{margin:36px 0 8px;font-size:21px}}h3{{margin:22px 0 8px;font-size:16px;color
 <p class="muted">Всё, что вы принимали к сведению из новостей. Когда начинаем дело из списка, Claude поднимает пункты ⏳ этого события.
 Книги и курсы — в скиллах knowledge-library и kursy-konspekty (поиск: «что мы знаем про …»).</p>
 {events}
+<h2>Курсы Сливакера — отмечены полезными, не изучены ({n_sliv})</h2>
+<p class="muted">Канал slivaker_it выкладывает чужие платные курсы бесплатно, без разрешения авторов, поэтому Claude их не скачивает
+и не проходит. Если курс куплен у автора или лежит у вас законно, скажите, где файлы, и Claude пройдёт его и разложит по скиллам.
+Строка «цена автора» — сколько курс стоит официально.</p>
+<details class="ev"><summary><b>Список курсов</b></summary><ul>{sliv}</ul></details>
 </main><script>
 function f(v){{v=v.toLowerCase().trim();
 document.querySelectorAll('[data-s]').forEach(e=>e.classList.toggle('hide',v&&!e.dataset.s.includes(v)));
