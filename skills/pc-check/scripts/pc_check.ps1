@@ -48,7 +48,7 @@ $report = [ordered]@{}
 Write-Host "Проверка компьютера. Администратор: $isAdmin. Отчёт: $md"
 
 # --- 1. Защитник Windows ------------------------------------------------------
-Write-Host "1/8 Защитник Windows..."
+Write-Host "1/10 Защитник Windows..."
 $mp = Get-MpComputerStatus
 $threats = Get-MpThreatDetection | Sort-Object InitialDetectionTime -Descending | Select-Object -First 20
 $report.defender = [ordered]@{
@@ -81,7 +81,7 @@ if ($Scan -ne 'none') {
 }
 
 # --- 2. Процессы: подпись, место, нагрузка ------------------------------------
-Write-Host "2/8 Процессы (замер нагрузки $Seconds с)..."
+Write-Host "2/10 Процессы (замер нагрузки $Seconds с)..."
 $p1 = Get-Process | Select-Object Id, Name, Path, CPU, WorkingSet64, StartTime
 Start-Sleep -Seconds $Seconds
 $p2 = Get-Process | Select-Object Id, CPU
@@ -112,7 +112,7 @@ $report.cpuTop = @($procs | Sort-Object CpuPct -Descending | Select-Object -Firs
 $report.memTop = @($procs | Group-Object Name | ForEach-Object { [PSCustomObject]@{ Name=$_.Name; Count=$_.Count; MemMB=($_.Group | Measure-Object MemMB -Sum).Sum } } | Sort-Object MemMB -Descending | Select-Object -First 10)
 
 # --- 3. Сеть ------------------------------------------------------------------
-Write-Host "3/8 Сетевые соединения..."
+Write-Host "3/10 Сетевые соединения..."
 $conns = Get-NetTCPConnection -State Established | Where-Object { $_.RemoteAddress -notmatch '^(127\.|::1|0\.0\.0\.0|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)' }
 $connRows = foreach ($c in $conns) {
     $pr = $procs | Where-Object Id -eq $c.OwningProcess
@@ -138,7 +138,7 @@ foreach ($l in $listen) {
 foreach ($l in $listen) { if ($l.Path -and (In-UserDir $l.Path)) { Add-Finding YELLOW 'Сеть' "Программа из пользовательской папки слушает порт $($l.Port): $($l.Proc) ($($l.Path))" 'Открытый порт = кто-то может подключиться снаружи (бэкдор, удалённый доступ)' 'Если это не ваш сервер/скрипт — завершить и удалить' } }
 
 # --- 4. Автозагрузка и закрепление --------------------------------------------
-Write-Host "4/8 Автозагрузка, задачи, службы, WMI..."
+Write-Host "4/10 Автозагрузка, задачи, службы, WMI..."
 $auto = New-Object System.Collections.Generic.List[object]
 foreach ($k in 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run','HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce','HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run','HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run','HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce') {
     $v = Get-ItemProperty $k; if ($v) { $v.PSObject.Properties | Where-Object { $_.Name -notlike 'PS*' } | ForEach-Object { $auto.Add([PSCustomObject]@{ Place="Реестр $k"; Name=$_.Name; Cmd=$_.Value }) } }
@@ -181,7 +181,7 @@ foreach ($w in $wmi) { Add-Finding RED 'Закрепление' "WMI-подпи�
 $report.wmi = @($wmi | Select-Object Name, CommandLineTemplate, ScriptText)
 
 # --- 5. hosts, DNS, прокси ----------------------------------------------------
-Write-Host "5/8 hosts, DNS, прокси..."
+Write-Host "5/10 hosts, DNS, прокси..."
 $hosts = Get-Content C:\Windows\System32\drivers\etc\hosts | Where-Object { $_ -match '^\s*[0-9a-fA-F:.]+\s+\S' -and $_ -notmatch '^\s*#' }
 $report.hosts = [ordered]@{ count = @($hosts).Count; first = (@($hosts) | Select-Object -First 30) -join "`n" }
 $hostsReal = @($hosts | Where-Object { $_ -notmatch 'localhost' })
@@ -199,7 +199,7 @@ if ($proxy.ProxyEnable -eq 1 -and $proxy.ProxyServer -notmatch '127\.0\.0\.1|loc
 if ($proxy.AutoConfigURL) { Add-Finding YELLOW 'Сеть' "Автонастройка прокси (PAC): $($proxy.AutoConfigURL)" 'Скрипт может перенаправлять часть сайтов' 'Если не ваш — убрать' }
 
 # --- 6. Расширения Chrome -----------------------------------------------------
-Write-Host "6/8 Расширения браузеров..."
+Write-Host "6/10 Расширения браузеров..."
 $ext = foreach ($prof in (Get-ChildItem "$env:LOCALAPPDATA\Google\Chrome\User Data" -Directory | Where-Object { $_.Name -match '^(Default|Profile \d+)$' })) {
     foreach ($e in (Get-ChildItem "$($prof.FullName)\Extensions" -Directory)) {
         $ver = Get-ChildItem $e.FullName -Directory | Select-Object -First 1
@@ -225,7 +225,7 @@ foreach ($e in $ext) { if ($e.Perms -match '<all_urls>|webRequest|clipboardRead|
     Add-Finding INFO 'Браузер' "Расширение «$($e.Name)» ($($e.Profile)) с широкими правами: $($e.Perms)" 'Расширения с доступом ко всем сайтам видят пароли и переписку' 'Оставить только те, которыми пользуетесь: chrome://extensions' } }
 
 # --- 7. Свежие исполняемые файлы в пользовательских папках -------------------
-Write-Host "7/8 Свежие exe/dll в Temp, AppData, ProgramData..."
+Write-Host "7/10 Свежие exe/dll в Temp, AppData, ProgramData..."
 $recent = foreach ($d in @("$env:TEMP","$env:APPDATA","$env:LOCALAPPDATA",'C:\ProgramData','C:\Users\Public','C:\Windows\Temp')) {
     Get-ChildItem $d -Recurse -File -Include *.exe,*.dll,*.scr,*.vbs,*.hta,*.bat,*.ps1 -Depth 3 | Where-Object { $_.LastWriteTime -gt (Get-Date).AddDays(-7) -and $_.FullName -notmatch '\\(Google|Microsoft|Anthropic|Claude|Python|node_modules|venv|\.venv|pip|npm|Programs\\(cursor|whimsical|Comfy)|Package Cache|dolphin_anty|JetBrains|Telegram|Discord|Zoom|Yandex|Opera|Mozilla|NVIDIA|Intel|GitHub|stealth-browser|claude_widget|Temp\\claude)\\' }
 }
@@ -234,7 +234,7 @@ $unsignedRecent = $recent | Where-Object { $_.Extension -in '.exe','.dll','.scr'
 foreach ($f in $unsignedRecent) { Add-Finding INFO 'Файлы' "Свежий неподписанный файл: $($f.FullName) ($($f.LastWriteTime))" 'Появился за последнюю неделю в папке, куда вирусы любят ставиться' 'Если не узнаёте — проверить хэш на virustotal.com (SHA256 в json-отчёте)' }
 
 # --- 8. Прочее: UAC, RDP, скрытые пользователи, удалённый доступ ---------------
-Write-Host "8/8 UAC, удалённый доступ, пользователи..."
+Write-Host "8/10 UAC, удалённый доступ, пользователи..."
 $uac = (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System').EnableLUA
 if ($uac -ne 1) { Add-Finding RED 'Система' 'Контроль учётных записей (UAC) выключен' 'Любая программа получает права администратора без вопроса' 'Включить UAC: Панель управления → Учётные записи → Изменить параметры контроля' }
 $rdp = (Get-ItemProperty 'HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server').fDenyTSConnections
@@ -248,6 +248,73 @@ $remoteTools = Get-Process | Where-Object { $_.Name -match 'anydesk|teamviewer|r
 foreach ($r in $remoteTools) { Add-Finding YELLOW 'Удалённый доступ' "Запущена программа удалённого доступа: $($r.Name) ($($r.Path))" 'Через неё компьютером можно управлять со стороны' 'Если сейчас никому доступ не давали — закрыть и удалить' }
 $remoteInstalled = Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*','HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*','HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*' | Where-Object { $_.DisplayName -match 'anydesk|teamviewer|rustdesk|rudesktop|ammyy|radmin|ultraviewer|supremo|aeroadmin|litemanager|vnc' } | Select-Object -ExpandProperty DisplayName
 foreach ($r in $remoteInstalled) { Add-Finding INFO 'Удалённый доступ' "Установлена программа удалённого доступа: $r" 'Сама по себе не вредна, но это дверь в компьютер' 'Держать только если нужна' }
+
+# --- 9. Папки скиллов и плагинов Claude (12.10: троян пережил переустановку внутри SKILL.md из бэкапа) -----
+Write-Host "9/10 Скиллы и плагины Claude..."
+$claudeDir = "$env:USERPROFILE\.claude"; $skillsDir = "$claudeDir\skills"; $pluginsDir = "$claudeDir\plugins"
+$mirror = "$env:USERPROFILE\ARTMELLIO_SKILLS"   # git-копия скиллов (viiiitaaaaa/artmellio-skills), её делает sync_skills.ps1
+$git = (Get-Command git -ErrorAction SilentlyContinue).Source
+$skillFiles = @(Get-ChildItem $skillsDir -Recurse -File -Force | Where-Object { $_.FullName -notmatch '\\\.git\\' })
+$report.skills = [ordered]@{ files = $skillFiles.Count }
+# a) бинарники в скиллах и плагинах — скиллу они не нужны
+$bin = @(Get-ChildItem $skillsDir, $pluginsDir -Recurse -File -Force -Include *.exe,*.dll,*.scr,*.com,*.msi,*.hta,*.vbs,*.lnk,*.jar,*.node | Where-Object { $_.FullName -notmatch '\\\.git\\' })
+foreach ($b in $bin) { Add-Finding YELLOW 'Скиллы Claude' "Исполняемый файл в папке скиллов/плагинов: $($b.FullName)" 'Скиллу нужны только тексты и скрипты; программа внутри скилла — способ спрятать вредонос, который Claude запустит сам' 'Узнать, откуда он; хэш проверить на virustotal.com. Ничего не удалять без её слова' }
+# b) сверка с GitHub-копией: что изменилось или появилось после последней синхронизации
+if ($git -and (Test-Path "$mirror\.git")) {
+    # копия = рабочая папка ARTMELLIO_SKILLS\skills; сначала убедиться, что она совпадает с тем, что ушло на GitHub
+    $dirty = @(& $git -c safe.directory=* -C $mirror status --porcelain -- skills 2>$null)
+    if ($dirty.Count) { Add-Finding YELLOW 'Скиллы Claude' "Копия скиллов ARTMELLIO_SKILLS отличается от последнего коммита: $($dirty.Count) файлов" 'Сверять не с чем: копию правили мимо sync_skills.ps1' 'Посмотреть git status в ARTMELLIO_SKILLS' }
+    # побайтно (SHA256): git-хэш файла вне репозитория не учитывает перевод строк CRLF и даёт ложные «изменён»
+    $changed = New-Object System.Collections.Generic.List[object]
+    foreach ($f in $skillFiles) {
+        $rel = 'skills\' + $f.FullName.Substring($skillsDir.Length + 1)
+        $copy = Join-Path $mirror $rel
+        $state = if (-not (Test-Path -LiteralPath $copy)) { 'новый' } elseif ((Get-FileHash -LiteralPath $f.FullName).Hash -ne (Get-FileHash -LiteralPath $copy).Hash) { 'изменён' } else { $null }
+        if ($state) { $changed.Add([PSCustomObject]@{ File=$rel; State=$state; Time=$f.LastWriteTime }) }
+    }
+    $report.skills.changedVsGitHub = $changed.ToArray()
+    $scr = @($changed | Where-Object { $_.File -match '\.(ps1|bat|cmd|sh|py|js|mjs|vbs)$' })
+    foreach ($c in ($scr | Select-Object -First 15)) { Add-Finding YELLOW 'Скиллы Claude' "Скрипт скилла $($c.State) после последней синхронизации: $($c.File) ($($c.Time))" 'Скрипт скилла Claude запускает сам. Если правили не мы — это подмена' 'Если правку делали мы — запустить sync_skills.ps1; если нет — сравнить с GitHub-копией (git diff в ARTMELLIO_SKILLS)' }
+    if ($scr.Count -gt 15) { Add-Finding YELLOW 'Скиллы Claude' "Ещё изменённых скриптов скиллов: $($scr.Count - 15) (список в json)" 'См. выше' 'См. выше' }
+    $txt = @($changed | Where-Object { $_.File -notmatch '\.(ps1|bat|cmd|sh|py|js|mjs|vbs)$' })
+    if ($txt.Count) { Add-Finding INFO 'Скиллы Claude' "Тексты скиллов, изменённые/новые после синхронизации: $($txt.Count) (например: $((($txt | Select-Object -First 5).File) -join '; '))" 'Обычно это наши свежие правки' 'Запустить sync_skills.ps1; незнакомое — сверить с GitHub-копией' }
+} else { Add-Finding INFO 'Скиллы Claude' 'Сверка с GitHub-копией не сделана' "Нет git или папки $mirror" 'Проверить установку git и копию скиллов' }
+# c) закладки в скриптах скиллов: скачать-и-запустить, закодированные команды, длинные base64-куски
+$payload = '(iwr|Invoke-WebRequest|curl|wget|DownloadString)[^|\r\n]{0,200}\|\s*(iex|bash|sh|powershell|pwsh)\b|-enc(odedcommand)?\s+[A-Za-z0-9+/=]{40,}|[A-Za-z0-9+/]{400,}={0,2}'
+foreach ($f in ($skillFiles | Where-Object { $_.Extension -match '^\.(ps1|bat|cmd|sh|py|js|mjs|vbs)$' -or $_.Name -eq 'SKILL.md' })) {
+    $hit = Select-String -Path $f.FullName -Pattern $payload -List
+    if ($hit -and -not ($f.Name -eq 'SKILL.md' -and $hit.Line -match '`[^`]*(iwr|curl|wget)[^`]*`')) {
+        Add-Finding YELLOW 'Скиллы Claude' "Подозрительная строка в $($f.FullName):$($hit.LineNumber): $($hit.Line.Trim().Substring(0, [math]::Min(150, $hit.Line.Trim().Length)))" 'Так прячут команду «скачать и запустить» или зашифрованную программу' 'Прочитать строку: если это не наш код — сверить с GitHub-копией' }
+}
+# d) плагины: какие стоят и у каких есть хуки (хук запускается сам при событиях Claude Code)
+$plug = Get-Content "$pluginsDir\installed_plugins.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+$plugNames = @($plug.plugins.PSObject.Properties.Name)
+$hooks = @(Get-ChildItem "$pluginsDir\cache" -Recurse -File -Filter hooks.json | ForEach-Object { $_.FullName.Substring($pluginsDir.Length + 1) })
+$report.skills.plugins = $plugNames; $report.skills.pluginHooks = $hooks
+if ($plugNames) { Add-Finding INFO 'Скиллы Claude' "Плагины Claude Code: $($plugNames -join ', '); файлы хуков: $(if ($hooks) { $hooks -join '; ' } else { 'нет' })" 'Хук плагина запускает команды сам, без вопроса' 'Держать только плагины, которые она одобрила' }
+
+# --- 10. Ключи в истории наших git-репозиториев (12.10: украденный .env, ключи в старых коммитах) -----
+Write-Host "10/10 Ключи в истории git-репозиториев..."
+$keyPat = 'sk-ant-[A-Za-z0-9_-]{20,}|sk-[A-Za-z0-9]{32,}|gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{30,}|AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z_-]{35}|xox[abprs]-[A-Za-z0-9-]{10,}|[0-9]{8,10}:AA[A-Za-z0-9_-]{30,}|apify_api_[A-Za-z0-9]{20,}|shp(at|ss|ca|pa)_[a-fA-F0-9]{32}|-----BEGIN [A-Z ]*PRIVATE KEY'
+$repoDirs = @(Get-ChildItem $env:USERPROFILE, "$env:USERPROFILE\AppData\Local", $skillsDir -Directory -Force | Where-Object { Test-Path "$($_.FullName)\.git" } | ForEach-Object FullName)
+$repoRows = New-Object System.Collections.Generic.List[object]
+if ($git) {
+    foreach ($r in $repoDirs) {
+        $origin = & $git -c safe.directory=* -C $r remote get-url origin 2>$null
+        if ($origin -notmatch 'viiiitaaaaa') { continue }   # только наши репозитории
+        $log = & $git -c safe.directory=* -C $r log --all -p -E -G $keyPat --format='@@@%h %ad' --date=short 2>$null
+        $commit = ''; $hits = @{}
+        foreach ($line in $log) {
+            if ($line -like '@@@*') { $commit = $line.Substring(3); continue }
+            if ($line -match '^\+' -and $line -match $keyPat) { $k = $matches[0]; $mask = $k.Substring(0, [math]::Min(6, $k.Length)) + '***'; if (-not $hits[$mask]) { $hits[$mask] = $commit } }
+        }
+        $envs = @(& $git -c safe.directory=* -C $r log --all --name-only --format= 2>$null | Where-Object { $_ -match '(^|/)\.env(\.|$)' -and $_ -notmatch 'example|sample|template' } | Sort-Object -Unique)
+        $repoRows.Add([PSCustomObject]@{ Repo=$r; Origin=$origin; Keys=@($hits.Keys); Env=$envs })
+        foreach ($m in $hits.Keys) { Add-Finding RED 'Ключи в git' "В истории $r ($origin) есть ключ $m (коммит $($hits[$m]))" 'Ключ из старого коммита виден всем, у кого есть доступ к репозиторию, даже если в файле его уже нет' 'Перевыпустить (отозвать) этот ключ у сервиса; историю git без её слова не переписывать' }
+        foreach ($e in $envs) { Add-Finding YELLOW 'Ключи в git' "Файл $e когда-то попал в git: $r" 'В .env лежат ключи; если он был в коммите — ключи могли утечь' 'Посмотреть, какие ключи там были, и перевыпустить их; .env — в .gitignore' }
+    }
+} else { Add-Finding INFO 'Ключи в git' 'Поиск ключей в git не сделан' 'git не найден' 'Установить git или запустить из Git Bash' }
+$report.gitSecrets = $repoRows.ToArray()
 
 # --- Отчёт ----------------------------------------------------------------------
 $red = @($findings | Where-Object level -eq 'RED'); $yel = @($findings | Where-Object level -eq 'YELLOW'); $inf = @($findings | Where-Object level -eq 'INFO')
