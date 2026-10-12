@@ -69,8 +69,38 @@ def status_of(key, v, manual):
     return "zhdet"
 
 
+def read_study():
+    """Изучение ссылок поста (видео, курсы, статьи, GitHub): tg_monitor\\study_*\\res_*.json и out_*.json."""
+    st = {}
+    for f in list(NOTES.parent.glob("study_*/res_*.json")) + list(NOTES.parent.glob("study_*/out_*.json")):
+        try:
+            rows = json.loads(f.read_text(encoding="utf-8"))
+        except (ValueError, OSError):
+            continue
+        for r in rows if isinstance(rows, list) else []:
+            if not isinstance(r, dict) or not r.get("post"):
+                continue
+            s = str(r.get("status") or r.get("verdict") or "")
+            kind = ("ok" if s.startswith(("изучено", "пропущено", "🟢", "🟡", "🔴")) else
+                    "part" if s.startswith("частично") else "fail")
+            st.setdefault(r["post"], []).append((kind, r.get("link", "")))
+    return st
+
+
+def study_line(rows):
+    if not rows:
+        return ""
+    ok = sum(1 for k, _ in rows if k == "ok")
+    part = sum(1 for k, _ in rows if k == "part")
+    fail = len(rows) - ok - part
+    tail = (f", частично {part}" if part else "") + (f", не открылось {fail}" if fail else "")
+    vid = " (есть видео/курс)" if any("youtu" in l or "course" in l or "playlist" in l for _, l in rows) else ""
+    return f"📖 Материалы по ссылкам: изучено {ok} из {len(rows)}{tail}{vid}"
+
+
 def read_noted():
     notes = json.loads(NOTES.read_text(encoding="utf-8"))
+    study = read_study()
     mf = HERE / "statusy.json"
     manual = json.loads(mf.read_text(encoding="utf-8")) if mf.exists() else {}
     items = []
@@ -80,7 +110,7 @@ def read_noted():
         items.append({
             "key": k, "when": v.get("when", "Прочее"), "title": v.get("noted_title") or v.get("headline", k),
             "what": v.get("noted", ""), "where": v.get("applied") or v.get("installed") or v.get("declined") or "",
-            "status": status_of(k, v, manual), "link": f"https://t.me/{k}" if not k.startswith("c/") else f"https://t.me/{k}",
+            "status": status_of(k, v, manual), "study": study_line(study.get(k)), "link": f"https://t.me/{k}" if not k.startswith("c/") else f"https://t.me/{k}",
         })
     return items
 
@@ -95,6 +125,7 @@ def build():
     noted = read_noted()
     now = datetime.now().strftime("%d.%m.%Y %H:%M")
     cnt = {s: sum(1 for i in noted if i["status"] == s) for s in STATUS}
+    n_study = sum(1 for i in noted if i["study"])
 
     # 1. Что умеем
     grouped = set(n for g in cfg["gruppy_skillov"].values() for n in g)
@@ -126,11 +157,11 @@ def build():
         ev_html.append(event_block("Прочее", [], other))
 
     page = TEMPLATE.format(
-        now=now, n_sk=len(skills), n_no=len(noted), da=cnt["da"], zhdet=cnt["zhdet"], net=cnt["net"],
+        now=now, n_study=n_study, n_sk=len(skills), n_no=len(noted), da=cnt["da"], zhdet=cnt["zhdet"], net=cnt["net"],
         skills="".join(sk_html), events="".join(ev_html))
     OUT.write_text(page, encoding="utf-8")
     print(f"каталог: {OUT} — скиллов {len(skills)}, принятого {len(noted)} "
-          f"(✅ {cnt['da']} / ⏳ {cnt['zhdet']} / ❌ {cnt['net']})")
+          f"(✅ {cnt['da']} / ⏳ {cnt['zhdet']} / ❌ {cnt['net']}), с изученными материалами {n_study}")
     return noted
 
 
@@ -140,6 +171,8 @@ def event_block(name, skilly, its):
     for i in sorted(its, key=lambda x: order[x["status"]]):
         ic, lab = STATUS[i["status"]]
         where = f'<div class="where">{esc(i["where"])}</div>' if i["where"] and i["where"] != i["what"] else ""
+        if i["study"]:
+            where += f'<div class="where">{esc(i["study"])}</div>'
         rows.append(f'<li class="it {i["status"]}" data-s="{esc((i["title"] + i["what"]).lower())}">'
                     f'<span class="ic" title="{lab}">{ic}</span><div><a href="{esc(i["link"])}">{esc(i["title"])}</a>'
                     f'<div class="what">{esc(i["what"])}</div>{where}</div></li>')
@@ -197,7 +230,7 @@ h2{{margin:36px 0 8px;font-size:21px}}h3{{margin:22px 0 8px;font-size:16px;color
 <h1>Что мы умеем и что знаем</h1>
 <div class="muted">Обновлено {now}. Файл открывается в любом браузере, вход в Claude не нужен.</div>
 <div class="stats"><div><b>{n_sk}</b>скиллов</div><div><b>{n_no}</b>принято к сведению</div>
-<div><b>✅ {da}</b>применено</div><div><b>⏳ {zhdet}</b>ждут события</div><div><b>❌ {net}</b>отказались</div></div>
+<div><b>✅ {da}</b>применено</div><div><b>⏳ {zhdet}</b>ждут события</div><div><b>❌ {net}</b>отказались</div><div><b>📖 {n_study}</b>с изученными ссылками, видео, курсами</div></div>
 <input id="q" placeholder="Поиск: реклама, доставка, сайт, 1688…" oninput="f(this.value)">
 <h2>Что умеем — скиллы</h2>
 <p class="muted">Скилл — готовая инструкция для Claude по одной теме. Чтобы вызвать, напишите одну из фраз «Скажите: …».</p>
