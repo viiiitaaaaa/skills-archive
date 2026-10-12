@@ -189,6 +189,11 @@ Code со скиллами. Есть цифра, приём или инстру�
    `cd C:\Users\User\fashion-trend-radar\fashion-trend-radar; .venv\Scripts\python.exe build_dashboard.py --open`
    → Artifact https://claude.ai/artifact/7XN5rKYANe4QX8HwRHKNZF. Отдельную страницу моды (YJuHzoABX1RT98tBBLzWSU)
    больше не публиковать.
+4б. **Знания и копия — всегда в конце цикла** (её решение 12.10: «чтобы мы всегда знали, что обрабатываем, и всё было
+   на GitHub»): `python C:\Users\User\.claude\skills\znaniya\katalog.py` (каталог «Что мы умеем и что знаем»);
+   скопировать *.py, *.js, channels.txt, notes.json, seen.json, post_numbers.json в `C:\Users\User\automation-scripts\tg_monitor`
+   → commit + push; затем `powershell -ExecutionPolicy Bypass -File C:\Users\User\ARTMELLIO_SKILLS\sync_skills.ps1`
+   (скиллы + память + база на Google Диск). Каталог в бот — только по её «что мы умеем» / «пришли каталог».
 5. Коротко в чате: сколько новых постов, 3–5 главных новостей одной строкой каждая, ссылка.
    В конце — **одно напоминание** из списка «Когда будет время» скилла dropship-lessons (по очереди, сверху вниз;
    сделанное там вычёркивается с датой). Если она отмечает на панели «Для нас: …» как урок — дописать его
