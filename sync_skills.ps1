@@ -36,6 +36,25 @@ foreach ($s in @("product-scenes", "shopify-collections", "site-mockups", "room-
     if (Test-Path $f) { Copy-Item $f (Join-Path $prom "${s}__SKILL.md") -Force }
 }
 
+# 3б. Память Claude (её решения) и общий CLAUDE.md — без них новая сессия не помнит договорённостей
+$mem = Join-Path $dst "memory"
+if (Test-Path $mem) { Remove-Item $mem -Recurse -Force }
+New-Item -ItemType Directory -Path $mem -Force | Out-Null
+Copy-Item "C:\Users\User\.claude\projects\C--Users-User\memory\*.md" $mem -Force
+Copy-Item "C:\Users\User\.claude\CLAUDE.md" (Join-Path $dst "CLAUDE_global.md") -Force
+
+# 3в. База новостей (20+ МБ, в git не кладём) — копия на Google Диск, если изменилась
+$db = "C:\Users\User\tg_monitor\tg_monitor.db"
+$dbDir = "G:\Мой диск\Программы и ярлыки (с рабочего стола)\Резерв — база новостей"
+if ((Test-Path $db) -and (Test-Path "G:\Мой диск")) {
+    New-Item -ItemType Directory -Path $dbDir -Force | Out-Null
+    $copy = Join-Path $dbDir "tg_monitor.db"
+    if (-not (Test-Path $copy) -or (Get-Item $db).LastWriteTime -gt (Get-Item $copy).LastWriteTime) {
+        Copy-Item $db $copy -Force
+        Write-Output "База новостей скопирована на Google Диск"
+    }
+}
+
 $stamp = Get-Date -Format "yyyy-MM-dd HH:mm"
 $count = (Get-ChildItem $pack -Directory).Count
 $files = (Get-ChildItem $pack -Recurse -File).Count
