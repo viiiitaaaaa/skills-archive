@@ -59,6 +59,13 @@ description: "Справочная библиотека — конспекты 1
 - Оригиналы — `G:\Мой диск\куплено\` (куплены, не удалять). Открывать конспект, когда нужна модель/формула
   (позиционирование, ценовая линейка, CLV, 5A-воронка, B2B-закупка) или «что говорит Котлер про …».
 - Приёмы для этого скилла (экономика цен, формулы) — `references/iz_knig.md`.
+- **Книги 13.10.2026 — `references/knigi/novye13/`** (13 конспектов; пересказ моделью Hermes, сверка с оригиналом Claude):
+  Mollick «Co-Intelligence», Knaflic «Storytelling with Data: Before and After» (графики), Fitzpatrick «The Mom Test»
+  (разговоры с клиентами/поставщиками), Whalen «Design for How People Think» (сайты), Gulli «Agentic Design Patterns»,
+  «0→1 Loop Engineering Playbook», Hur/Song «Build an AI Agent», Polzer «RAG with Python Cookbook», Mendelevitch/Bao
+  «Hands-On RAG for Production» (поиск по своим документам), Minto «Pyramid Principle» (структура текстов, доводы в исках),
+  Klaff «Pitch Anything» (питч), Agrawal «Prediction Machines» (что отдавать ИИ, цена ошибки отбора), «Mastering OpenVPN».
+  Приёмы разложены по скиллам в `iz_knig_novye13.md` (841 раскладка).
 
 ### Промпты и скиллы — `references/agents-prompts-2026-09.md`
 - **Ревизия скиллов под новые модели** (29.09.2026): выжимки 8 материалов (гайд Fable 5.1 и чистка «костылей» от Anthropic, OpenAI про скиллы, UI от Google, курсы CMU/Stanford по агентам, commerce-агент, `claude plugin eval`, схема Spotify по токенам) с правками по нашим скиллам; в конце чек-лист «Ревизия скилла» (15 пунктов) и шаблон тестов «запрос → каким должен быть итог».
@@ -103,3 +110,5 @@ python ...\check_rekvizity.py --test                                      # са
 **Из книг, третье прочтение (09.10.2026)** — ещё 28 приёмов по книгам в `references/iz_knig_3.md`; открывать при задаче по теме скилла.
 
 **Из книг, новые книги — первое прочтение (09.10.2026)** — ещё 54 приёмов по книгам в `references/iz_knig_novye.md`; открывать при задаче по теме скилла.
+
+**Из книг, книги 13.10 — первое прочтение (09.10.2026)** — ещё 29 приёмов по книгам в `references/iz_knig_novye13.md`; открывать при задаче по теме скилла.

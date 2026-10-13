@@ -95,6 +95,8 @@
 - [Перенос чата в Claude Code](perenos-chata-v-claude-code.md) — чат не выгрузить браузером (фильтр); она сама кладёт «переписка claude.ai <дата>.md» в _служебное; Дела\CLAUDE.md читает журнал+переписку
 - [artmellio-system: ветка dev разошлась](artmellio-system-dev-vetka.md) — работаем в feature/operations-panel; в dev push не идёт, не форсить
 - [Проверка ПК — скилл pc-check](pc-check-skill.md) — «проверь комп»: отчёт без удаления; 07.10 удалены RuDesktop/MuseHub/AlibabaProtect/SoftEther/AliUpdater/активаторы, вечером McAfee и хвосты Ali; полная проверка — 0 угроз; открыты VPN-расширения
+- [Разрешения через Telegram](razresheniya-cherez-telegram.md) — канал telegram@claude-plugins-official, запуск «Claude с Telegram.cmd», отдельный бот
+- [Табло задач агентов](tablo-zadach-agentov.md) — долгие задачи мои и Hermes ставить на табло agent_status.py, видно внизу Claude Code
 - [Hermes — лёгкие задачи](hermes-legkie-zadachi.md) — с 13.10 навсегда: лёгкое отдаю Hermes (скилл hermes), сложное сама, сомневаюсь — спрашиваю вариантами
 - [Ollama установлен](ollama-ustanovlen.md) — 09.10, локальные нейросети на 127.0.0.1:11434; локальных моделей нет, на C: ~13 ГБ; Hermes Desktop на gpt-oss:120b-cloud (бесплатно)
 - [Upscayl: ошибка видеокарты](upscayl-tile-size.md) — «vkQueueSubmit failed -4» → Tile Size 64 (upscayl-bin -t 64)
