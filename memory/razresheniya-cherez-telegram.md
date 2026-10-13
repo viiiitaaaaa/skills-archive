@@ -1,12 +1,16 @@
 ---
 name: razresheniya-cherez-telegram
-description: "13.10 вопросы «разрешить?» Claude Code — в Telegram через официальный канал (plugin telegram@claude-plugins-official, Bun 1.4.3); запуск «C:\\Users\\User\\Claude с Telegram.cmd»"
+description: "ОТКЛЮЧЕНО 13.10 16:10 (боты удалены, плагин выключен). Было: 13.10 вопросы «разрешить?» Claude Code — в Telegram через официальный канал (plugin telegram@claude-plugins-official, Bun 1.4.3); запуск «C:\\Users\\User\\Claude с Telegram.cmd»"
 metadata:
   node_type: memory
   type: project
   originSessionId: e994540f-d5ab-4cfe-8186-497676e3e8a3
-  modified: 2026-10-13T12:28:53.032Z
+  modified: 2026-10-13T13:11:56.444Z
 ---
+
+**13.10 16:10 — ОТКЛЮЧЕНО.** Она удалила все боты, кроме «Дела» (@vita_claude_ok_bot и бот Hermes тоже). Плагин в обычных окнах `claude` всё равно
+брал ключ «Дел» из переменной Windows и с 15:23 перехватывал сообщения бота «Дела» (409 Conflict в case_botot.log).
+В `~/.claude/settings.json` → `enabledPlugins` плагин telegram = false. Без её просьбы не включать; ярлык «Claude с Telegram.cmd» больше не работает.
 
 Её просьба 13.10: вопросы да/нет из командной строки получать в Telegram, отвечать там, а Claude Code отмечает ответ.
 Сделано: Bun (winget Oven-sh.Bun), плагин telegram@claude-plugins-official (scope user), ярлык `C:\Users\User\Claude с Telegram.cmd`
@@ -18,6 +22,10 @@ metadata:
 Проверка «слушает ли кто бота»: getUpdates?timeout=0 — 409 = слушает, список = никто. /mcp Reconnect не поможет: окружение наследуется от окна.
 **13.10 привязка сделана:** её Telegram ID 1388664660 в allowFrom, политика `allowlist` (чужим бот не выдаёт код).
 Нового человека: `/telegram:access allow <ID>` или временно `policy pairing` → `pair <код>` → обратно `policy allowlist`.
+
+**13.10 вечер:** «почему не пришёл запрос в тг» — сессия была открыта простым `claude` (без ярлыка): нет `--channels`,
+плагин взял ключ «Дел» из Windows, бота разрешений никто не слушал (getUpdates → пустой список). Плюс в авто-режиме вопросов почти нет.
+Лечение — только перезапуск ярлыком. Первым делом при таком вопросе: getUpdates бота разрешений + командная строка процесса claude.
 
 **Why:** она отходит от компьютера, а работа стоит на вопросе «разрешить?».
 **How to apply:** relay только для инструментов (Bash/Write/Edit), работает пока окно открыто; на Windows плагин официально не проверен —

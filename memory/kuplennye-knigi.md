@@ -29,6 +29,8 @@ claude-code-priemy, tg-news, dela, knowledge-library. Советы книг, п�
   (Newman), Lean Analytics, Obviously Awesome. Следующие книги — помощники на Sonnet + выборочная сверка (см. скилл hermes).
 - 13.10 вечером: Obviously Awesome + OpenVPN Cookbook → novye13 (Hermes + помощники Sonnet).
   **Битые книги ЗАБЫТЬ** (её 13.10: «мы дофига обработали, про битые забудь»): AI Engineering, Building Resilient, Lean Analytics,
-  Principles of Marketing 18e — не напоминать, не просить перекачать.
+  Principles of Marketing 18e — не напоминать, не просить перекачать. Её перезагрузка 15:15 тоже битая (2–3 КБ, в epub только content.opf);
+  если сама положит новые — признак целой: >1 МБ и в zip есть главы (xhtml), не 3 записи.
+  Грабля: epub без toc.ncx роняет ebooklib → `to_txt_13_10b.py` читает главы по spine прямо из zip.
 - Новые книги в «куплено» → тот же конвейер: текст → агент на книгу → конспект → слияние по скиллам → sync_skills.ps1.
 
