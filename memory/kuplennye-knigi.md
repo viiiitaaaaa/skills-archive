@@ -27,5 +27,8 @@ claude-code-priemy, tg-news, dela, knowledge-library. Советы книг, п�
   агенты по `ZADANIE_13_10.md` → `knigi\novye13\` → `razlozhit_dop.py novye13` (841) → build_books.py (теперь берёт и novye, и novye13)
   → news.py --build → sync. Недокачаны (.tmp, ждут её перекачки): AI Engineering (Huyen), Building Resilient Distributed Systems
   (Newman), Lean Analytics, Obviously Awesome. Следующие книги — помощники на Sonnet + выборочная сверка (см. скилл hermes).
+- 13.10 вечером: Obviously Awesome + OpenVPN Cookbook → novye13 (Hermes + помощники Sonnet).
+  **Битые книги ЗАБЫТЬ** (её 13.10: «мы дофига обработали, про битые забудь»): AI Engineering, Building Resilient, Lean Analytics,
+  Principles of Marketing 18e — не напоминать, не просить перекачать.
 - Новые книги в «куплено» → тот же конвейер: текст → агент на книгу → конспект → слияние по скиллам → sync_skills.ps1.
 

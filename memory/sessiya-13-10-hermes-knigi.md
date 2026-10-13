@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: e994540f-d5ab-4cfe-8186-497676e3e8a3
-  modified: 2026-10-13T12:21:59.834Z
+  modified: 2026-10-13T12:51:00.527Z
 ---
 
 13.10.2026:
@@ -17,5 +17,5 @@ metadata:
 - Бот разрешений @vita_claude_ok_bot создан, токен в .env ([[razresheniya-cherez-telegram]]).
 
 **Хвосты:** (1) она перезапускает «Claude с Telegram.cmd» → pair-код → allowlist; если бот молчит — разбираться (Windows не проверен).
-(2) Перекачать в «куплено»: AI Engineering (Huyen), Building Resilient Distributed Systems, Lean Analytics, Obviously Awesome — потом тем же конвейером.
+(2) Битые книги — закрыто, она велела забыть (см. [[kuplennye-knigi]]).
 (3) Из книг ждут её «да»: поиск по смыслу в znaniya (локальная модель эмбеддингов).
