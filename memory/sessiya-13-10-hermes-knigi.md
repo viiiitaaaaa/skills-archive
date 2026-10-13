@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: e994540f-d5ab-4cfe-8186-497676e3e8a3
-  modified: 2026-10-13T12:51:00.527Z
+  modified: 2026-10-13T13:16:19.605Z
 ---
 
 13.10.2026:
@@ -15,6 +15,8 @@ metadata:
 - Табло задач и вторая строка статуса (сессия/неделя/ЦП/память) — [[tablo-zadach-agentov]].
 - Hermes подключён ею к Telegram; бесплатный Ollama — максимум 3 одновременных, мне 2 потока.
 - Бот разрешений @vita_claude_ok_bot создан, токен в .env ([[razresheniya-cherez-telegram]]).
+
+- 16:00–16:12 бот «Дела» не получал сообщения из-за ошибки «Conflict: terminated by other getUpdates request», к боту подключилась вторая программа. Она удалила Telegram-бота Hermes, я перезапустила start_bot.bat в 16:15, ошибок больше нет. Если «Дела» молчит, первым делом смотреть case_bot\bot.log на Conflict.
 
 **Хвосты:** (1) она перезапускает «Claude с Telegram.cmd» → pair-код → allowlist; если бот молчит — разбираться (Windows не проверен).
 (2) Битые книги — закрыто, она велела забыть (см. [[kuplennye-knigi]]).
