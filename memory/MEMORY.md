@@ -1,129 +1,129 @@
-- [Скрипты Dolphin{anty}](dolphin-anty-scripts.md) — готовая автоматизация профилей и скринов, использовать её, а не писать заново
-- [Профиль Dolphin — только один](dolphin-profile-id.md) — ВСЕГДА 859648353 для всего (AliExpress, магазин, радар); 828976678 нет
-- [Общение по-русски](obshenie-po-russki.md) — отвечать по-русски и объяснять действия до запуска команд
-- [Объяснять как новичку](obyasnyat-kak-novichku.md) — простыми словами и с бытовым примером, термины расшифровывать
-- [AliExpress: десктопная версия](aliexpress-desktop-versiya.md) — магазины открывать только в браузерной версии, не мобильной
-- [AliExpress: никогда не .ru](aliexpress-nikogda-ne-ru.md) — домен aliexpress.ru запрещён в этом браузере/аккаунте, только .com
-- [Нарезка карточек товаров](narezka-kartochek-tovarov.md) — скилл cut-products режет скрины магазина на фото товаров
-- [Коллекции по стилям](kollektsii-po-stilyam.md) — скилл style-collections раскладывает товары по интерьерным стилям 25-26
-- [Ссылки на товары по фото](ssylki-na-tovary-po-foto.md) — скилл product-links находит ссылки AliExpress по картинкам
-- [Подложка сайта в Comfy](podlozhka-sayta-comfy.md) — скилл site-mockups, дизайн-система из двух слоёв: оболочка без цвета + токены коллекций
-- [Интерьерные сцены комнат](maket-perestanovki-poverh-kadra.md) — правки приходят коллажем поверх кадра, скилл room-scenes
-- [Архив скиллов и промтов](arhiv-skillov.md) — C:\Users\User\ARTMELLIO_SKILLS = GitHub viiiitaaaaa/artmellio-skills; sync_skills.ps1 сам пушит; с Google Диска убран 28.09
-- [Скрипты для переписки с мужчинами](nlp-vlyublenie-skripty.md) — скилл love-scripts по конспекту НЛП-влюбление; пополнять после каждого разбора
-- [Новый магазин (профиль 3)](novyy-magazin-shopify-profil3.md) — Dolphin 859648353, домен 2e0bv7-jn.myshopify.com, ещё «My Store»
-- [Парсинг трендов fashion-trend-radar](fashion-trend-radar-parsing.md) — краулер Bright Data для Google Trends, рабочий рецепт + грабля с cat=
-- [Профиль 3 для trend-radar](dolphin-profil3-dlya-trend-radar.md) — весь fashion-trend-radar только через Dolphin 859648353, не 828976678
-- [Trend-radar без автозапуска](trend-radar-bez-avtozapuska.md) — логику тестируем, сборы только по команде, расписания не ставить
-- [Etsy API для trend-radar](etsy-api-trend-radar.md) — 22.09 ключ забанен, канал Etsy закрыт, новых заявок не подавать
-- [Новости одной командой](novosti-tg-odnoy-komandoy.md) — «новости» = скилл tg-news: сбор, разбор, панель, открыть; старое хранить ≥ месяца; скрытое и закрытые каналы — через Telegram Web в Chrome (API не выдали)
-- [Дашборд радара — сам после изменений](radar-dashboard-avtoobnovlenie.md) — после любой правки: пересчёт, публикация, открыть, без просьбы
-- [Логика отбора кандидатов](logika-otbora-kandidatov.md) — 9 правил пользователя (вещь не тема, рост к году, ранний тренд, сезон по Google, аудитория 28+…) — применять к новым
-- [Радар: порог 5%, порядок, кривые](radar-spros-est.md) — MIN_YOY=5; большой спрос без роста = «наблюдать»; отказы и короткие сезоны внизу; карточки с кривыми сразу
-- [treg.to — один ключ к 85 платформам](treg-to.md) — TikTok по нашим хэштегам, только США, $0.001/запрос; ключ в .env радара
-- [Trends MCP для trend-radar](trends-mcp-trend-radar.md) — ключ в .env, клиент готов, 100 запросов/мес и 90 дней истории бесплатно
-- [Reddit API для trend-radar](reddit-api-registration.md) — бот-аккаунт зарегистрирован 22.09, app не создаётся из-за капчи до снятия ограничений
-- [Inspo MCP для дизайна](inspo-mcp.md) — подключён, 832 сайта-примера; скилл no-ai-slop установлен; ax и untidetect отвергнуты
-- [Виджет лимитов Claude](vidzhet-limitov-claude.md) — claude_widget\claude_limits_widget.py над панелью задач, автозапуск ярлыком в Startup
-- [Глобальный CLAUDE.md](globalnyy-claude-md.md) — продолжать самой, решённое не пересматривать, без «подумай»
-- [Дашборд лайков по хэштегу IG](instagram-hashtag-dashboard.md) — instagram_hashtag_dashboard.py, правильный парсер лайков через DOM, грабля с рестартом браузера
-- [Китайские сайты — в Chrome](kitayskie-sayty-v-chrome.md) — 1688, dingtalk и прочие китайские сайты только в обычном Chrome, не в Dolphin
-- [1688 Ньютон недоступен](1688-newton-zakryt.md) — нет аккаунта разработчика и бизнес-Alipay, клиент не пускает аккаунт; инструкция в newton1688
-- [CJdropshipping — отказ](cj-dropshipping.md) — 26.09 «забудь про cj»: не предлагать и не использовать; посредника выбирает она
-- [Отбор товаров 1688 — скилл](1688-dinamika-prodazh.md) — вся цепочка 24–25.09 записана в скилл sourcing-1688 (логика выбора, скрипты, юнит-экономика, грабли)
-- [Динамика продаж 1688](1688-dinamika-prodazh.md) — нужен сервер Happ «1688 напрямую + VPN (#3)»; цифры из панели помощника, график снимком
-- [Перевод запросов в скобках](perevod-zaprosov.md) — английский запрос в таблицах всегда с русским переводом рядом
-- [Её вкус в товарах](vkus-vybora-tovarov.md) — ориентир тренд-радар + изюминка; не мини/комплекты/база; цвет и кардиган/пуловер НЕ критерии
-- [Reddit через ИИ Google](reddit-cherez-google-ai.md) — Reddit заблокирован; обсуждения читать через google.com/search?...&udm=50 в Chrome
-- [Посредники 1688 → США](posredniki-1688-ssha.md) — 26.09: BuckyDrop №1, HyperSKU №2, ZQ №3; ShipAnt/Leeline/Eprolo/Sup — нет
-- [Её выбор — без фильтров](vybor-polzovatelya-bez-filtrov.md) — что выбрала сама, не отсеивать: заявки/действия на всё
-- [Порядок столбцов каталога 1688](poryadok-stolbtsov-katalog-1688.md) — её порядок из itog сохранять во всех новых таблицах; график по образцу 9.PNG, подписи по-русски в картинке
-- [Taobao: блокировка за парсинг](taobao-blokirovka-parsinga.md) — 27.09 аккаунт ограничен; автосборы с Taobao под её аккаунтом запрещены
-- [Разрешения — не переспрашивать](razresheniya-ne-sprashivat.md) — браузер разрешён целиком; не останавливаться ради разрешений
-- [Поставщик 晴雅 на 1688](postavshchik-qingya-1688.md) — её «хороший поставщик» (юбки в клетку), shop36510729p4205.1688.com
-- [Карта всех скиллов](karta-skillov.md) — страница, доска Whimsical, «Карта ·» в n8n; пересобирать после правок скиллов
-- [Юбки 1688: проверка выкупа](yubki-1688-proverka-vykupa.md) — 27.09 прошли: 新女人花 (60%, от 1 шт), 笑彩 (72%, опт от 2)
-- [Сессия 26–27.09: итоги и хвосты](sessiya-27-09-itogi.md) — 4 юбки убраны; юбка 1 — нет ≥60%, юбка 2 — только 1081267036155 (100% на 2 продажах); юбка 3 не искали
-- [Мало остатков = перекуп](ostatki-perekup.md) — 1688: на складе единицы → поштучно не отправит, партия от ~200 шт → не брать; смотреть «库存»
-- [Выкуп модели ≥40%](povtornye-zakupki-60.md) — 1688: 复购率 модели <40% не рассматривать (с 28.09, было 60%); от 1 шт; 25–65 ¥; продажи >0
-- [Уроки из новостей](uroki-iz-novostey.md) — скилл dropship-lessons: напоминать в нужный момент и по одному «когда будет время» после новостей
-- [Новости: её логика отбора](novosti-ne-skipat-lishnee.md) — с 29.09 в дашборд только то, что меняет наше действие (правило в tg-news); чужие площадки/ИИ-хайп/учёба ML — skip
-- [Бот «Дела» в Telegram](bot-dela-telegram.md) — + «Список дел.docx» по командам «+ … дата»; скилл dela, GitHub case-bot; бот молча кладёт всё в Drive «Дела\_Входящие» + _лента.md; по делам раскладываю я по её подписям («разбери входящие»)
-- [1688-юбки — только C:\cj](moi-zadachi-drive.md) — таблица cj\yubka_kletka_otbor60.xlsx, итоги cj\yubki_otbor; Google Диск/Таблицы для темы отменены 27.09
-- [План: PDD × отбор 1688](plan-pdd-vs-1688-otbor.md) — доделать свод PDD, затем сопоставить с yubka_kletka_otbor60.xlsx (важный) и выбрать лучшие
-- [Сверка PDD↔1688 — по ID, не по фото](sverka-po-id-ne-po-foto.md) — поиск по фото на 1688 → пересечь offerId/магазины с «Отбором»; глазами = только кандидаты
-- [Excel не открывать сам](otkryvat-excel-posle-pravok.md) — вносить молча; открывать только когда она скажет «открой»
-- [Не спрашивать в конце](ne-sprashivat-v-kontse.md) — не заканчивать вопросами «продолжить?/какой вариант?», выбрать и сделать
-- [Скилл disk-hygiene](google-drive-struktura.md) — разбор дисков, рефераты вместо учёбы, очистка места; скрипты вхолостую/-Apply; GitHub viiiitaaaaa/disk-hygiene (приватный), личные правила rules.local.json не в git
-- [Drive синхронизирует только Рабочий стол](drive-sinhronizatsiya-kopii.md) — Downloads не синхронизирована; C:→G: перетаскиванием = копия, отсюда дубли и «место не освобождается»
-- [Структура Google Диска](google-drive-struktura.md) — 28.09 разобраны корень и Downloads: Дела (+12 новых)/Мои задачи/Личное/Магазин/Программы/Ключи; «Докукина» — улица; журнал переносов
-- [Посты в бот — отвечать разбором](posty-v-bot-otvechat.md) — пересланный пост канала = ответ в бот: что взять, зачем, что не нужно; молча в папку нельзя
-- [1688 через treg API](treg-1688-api.md) — поиск 1688 без браузера: 60 товаров с повторными закупками ТОВАРА за $0.015; карточка — остатки/代发
-- [Baidu 识图 для поставщиков](baidu-shitu-postavshchiki.md) — только Baidu (не Bing); поиск по ССЫЛКЕ на фото 1688 через graph.baidu.com/details?...&image=
-- [База поставщиков](baza-postavshchikov.md) — «занести в базу» = строка в cj\postavshchiki_baza.tsv → лист «Поставщики» главной таблицы
-- [От 1 шт + скидка на опт](postavshchik-ot-1-sht-skidka.md) — обязательное условие у ВСЕХ поставщиков; отмечать ✅/УТОЧНИТЬ/❌
-- [妙手ERP](miaoshou-erp.md) — Shopify подключён; 17zwd собирает 3 способами после авторизации 17网; расширение в «插件下载»
-- [Данные: кому можно](dannye-komu-mozhno.md) — всегда предупреждать 🟢облаку/🟡только на ПК/🔴никому до отправки наружу; агентам без боевых ключей
-- [Новая сессия — предупреждать заранее](novaya-sessiya-zaranee.md) — перед большой задачей в длинной сессии сказать «перезапусти»: кэш делает длинные сессии дорогими
-- [«Принято к сведению» — прорабатывать](prinyato-k-svedeniyu-prorabatyvat.md) — всё отмеченное: скилл + GitHub как важное + применить к делу; новую пачку — после её «готово»
-- [Принятое — изучать ВСЁ](prinyato-izuchat-vse-ssylki.md) — с 07.10: все ссылки поста, курсы проходить, GitHub ставить если безопасно; не только текст
-- [Хвосты изучения 07.10](hvosty-izucheniya-07-10.md) — 09.10 доделано (приёмы курсов в 16 скиллов, 🟢 поставлены); ждут ЕЁ команды: плагин marketing и opt-out Shopify; «продолжай новости» = изучение, не сбор
-- [Принятое — не на панели](prinyatoe-ne-na-paneli.md) — с 07.10 noted не в дашборд; ВСЕГДА скилл noted-news + рабочий скилл/скрипт по приёму; build сам пересобирает
-- [Комиссия Ozon на юбки](ozon-komissiya-yubki.md) — 48% FBO / 54% FBS +1%; для ≥500 ₽ с юбки цена ~2 800 ₽
-- [Главный проект lead-engine](lead-engine-proekt.md) — мы = Frivent (frivent.ru): с 04.10 инженерная компания полного цикла под ключ, монтаж своими бригадами, только премиум-люкс; GitHub + Диск
-- [Конкуренты Frivent — Европа](lead-engine-konkurenty-evropa.md) — Systemair, York, Menerga, Swegon, Euroclima, PRIME; бризеры/дилеры — не конкуренты
-- [Apify для lead-engine](apify-lead-engine.md) — Яндекс Карты/2ГИС/Авито через Apify, ключ в .env проекта, всегда потолок трат
-- [lead-engine: жителям не писать](lead-engine-ne-pisat-zhitelyam.md) — чаты посёлков только для пересечений групп, без имён и телефонов
-- [lead-engine: всё в дашборд](lead-engine-vse-v-dashboard.md) — новые данные только блоками панели; xlsx на Диск не плодить (apify_run — только с --xlsx)
-- [Сайт не пускает — Happ напрямую](happ-napryamuyu-bez-vpn.md) — 403/тормоза = скорее VPN; сначала обход с адреса Wi-Fi мимо happ-xray (без Happ и буфера — ей буфер недоступен), иначе домен в cj\happ_china_patch.py
-- [«Собрать всё» = досье](sobrat-vse-eto-dosje.md) — не только телефоны/почты: юрлицо, соцсети, отзывы, статьи, вопросы, клиенты, инфо
-- [Долгие сборы — прогресс](dolgie-sbory-progress.md) — счётчик «N из M», сохранение по ходу, прогноз времени по пробе до запуска
-- [Папки дел — понятно человеку](dela-papki-ponyatno.md) — «О деле — кратко и хронология.docx» + 1. Наши готовые / 2. старые / 3. Полученные / _служебное; образец Бандуркина
-- [Документы — по эталону суда](dokumenty-po-etalonu-suda.md) — только суть, без наших вставок и [скобок]; правила в Дела\_образцы; для ВСЕХ дел
-- [Замечание к тексту — только текст](zamechaniya-k-tekstu-tolko-tekst.md) — правки к формулировкам итога = исправить текст + правило, без новых писем/действий
-- [Товар оценивать только на 1688](otsenka-tovara-tolko-1688.md) — PDD по продажам врёт, 17zwd = только поставщик; заказы модели — 1688; держаться радара
-- [1688: без прямых ссылок](1688-ne-pryamye-ssylki.md) — imageAddress-ссылка из пустой вкладки = антибот QR; искать как человек или через treg
-- [Ищем поставщиков, не модели](postavshchik-ne-tovar.md) — конвейер Apify-сбор → hity_*.xlsx → её отметки «1» → логика → новый сбор; 35–70 ¥; без брюк; нишевое
-- [Аналитика 1688: график, 店雷达, 知衣](instrumenty-1688-analitika.md) — график расширения читается только снимком; продвинутые сервисы
-- [Проверять тёзок и цифры](proveryat-tezok-i-cifry.md) — карточка/юрлицо только по сайту или ИНН; жалобы ≠ упоминания; глазами 3–5 отзывов до вывода
-- [«Споки» = сохранить всё](spoki-sohranit-vse.md) — по слову «споки»: память + скиллы + GitHub (sync_skills.ps1) + «спокойной ночи», без вопросов
-- [ARTMELLIO — не её](artmellio-ne-ee.md) — с 02.10 магазин ей не принадлежит; её бизнес — просто ИП <ФИО>
-- [Маркетинг и ИИ в радаре](novosti-marketing-ii-kanaly.md) — 09.10 +38 каналов с tgstat и папки Tech; блок «Маркетинг»; отбор по 20 постам
-- [Новости: больше дизайна и вайбкодинга](novosti-bolshe-dizayn-vaybkoding.md) — с 12.10 каналы+чаты по веб-дизайну и вайбкодингу шире, полезное сразу в скиллы site-design / claude-code-priemy
-- [Сессия 12.10: новости → сайт и скиллы](sessiya-12-10-novosti.md) — 2868 постов, правки Frivent b3e6902, хвосты: Telegram Web не грузился, решения по форме/таблеткам/tenacity
-- [Новости: дизайн сайтов](novosti-dizayn-saytov.md) — с 05.10 каналы intelligentdesign, sitodel, uxlive, tproger_web; блок «Дизайн сайтов» на панели; видео не качать
-- [Перенос чата в Claude Code](perenos-chata-v-claude-code.md) — чат не выгрузить браузером (фильтр); она сама кладёт «переписка claude.ai <дата>.md» в _служебное; Дела\CLAUDE.md читает журнал+переписку
-- [artmellio-system: ветка dev разошлась](artmellio-system-dev-vetka.md) — работаем в feature/operations-panel; в dev push не идёт, не форсить
-- [Проверка ПК — скилл pc-check](pc-check-skill.md) — «проверь комп»: отчёт без удаления; 07.10 удалены RuDesktop/MuseHub/AlibabaProtect/SoftEther/AliUpdater/активаторы, вечером McAfee и хвосты Ali; полная проверка — 0 угроз; открыты VPN-расширения
-- [Сессия 13.10: Hermes и книги](sessiya-13-10-hermes-knigi.md) — 13 книг через Hermes, табло, бот разрешений; хвосты: привязка бота, 4 книги перекачать
-- [Разрешения через Telegram](razresheniya-cherez-telegram.md) — ОТКЛЮЧЕНО 13.10: боты удалены, плагин выключен (перехватывал бот «Дела»); без её слова не включать
-- [Табло задач агентов](tablo-zadach-agentov.md) — долгие задачи мои и Hermes ставить на табло agent_status.py, видно внизу Claude Code
-- [Hermes — лёгкие задачи](hermes-legkie-zadachi.md) — с 13.10 навсегда: лёгкое отдаю Hermes (скилл hermes), сложное сама, сомневаюсь — спрашиваю вариантами
-- [Ollama установлен](ollama-ustanovlen.md) — 09.10, локальные нейросети на 127.0.0.1:11434; локальных моделей нет, на C: ~13 ГБ; Hermes Desktop на gpt-oss:120b-cloud (бесплатно)
-- [Upscayl: ошибка видеокарты](upscayl-tile-size.md) — «vkQueueSubmit failed -4» → Tile Size 64 (upscayl-bin -t 64)
-- [Номера постов на панели](nomera-postov-paneli.md) — с 07.10 «пост N» = ключ в tg_monitor\post_numbers.json; номера постоянные, кружок нейтральный
-- [Замеры линейкой — по местам](zamery-lineykoy-kazhdoe-mesto.md) — её снимки Ruler mode = размер каждого места; не ровнять всё в одно число
-- [Ворда нет](net-word.md) — документы для чтения делать .html для браузера, не .docx
-- [Печать — скилл pechat](pechat-printer.md) — «распечатай» = сразу на RICOH SP 221SNw DDST по Wi-Fi 192.168.0.104; Xprinter — этикетки, не для документов
-- [Сканы — ничего не срезать](skany-nichego-ne-srezat.md) — выравнивать и чистить фон можно, обрезать/стирать содержимое нельзя; сверять с исходником
-- [Сессия 07–08.10: печать и скан](sessiya-08-10-pechat-skan.md) — Ricoh Wi-Fi+USB-скан, сканы Шиловой; хвосты: порядок листов в двусторонней, лишнее фото в деле, бот перезапущен
-- [Лимит 70% — стоп и в скилл](limit-70-stop.md) — на 70% остановить агентов, всё сохранить в скиллы; процент через claude_widget fetch()
-- [Питч партнёру v7 (WB, ТЯК)](pitch-pravki-golosovym.md) — схема с китайским партнёром (товар ТЯК под реализацию, юрист 10 %), все её цифры/решения; финал: «— для компьютера.html», «— для печати.pdf», «— для телефона.html» (отправлен в бот)
-- [Питч — полный, не сокращать](pitch-polnyy-ne-sokrashchat.md) — все разделы + графики + картинки + словарь; упор WB, США коротко, 17zwd отдельно
-- [Книги — применять на практике](knigi-primenyat-na-praktike.md) — приёмы из iz_knig*.md делать на её сайтах, потом лишнее убираем вместе
-- [Купленные книги](kuplennye-knigi.md) — 17 книг ×3 прочтения + 18 новых (10.10, knigi\novye) — всё разложено в iz_knig*.md скиллов; оружие/Market Garden/Art Market не берём; Principles 18e битый
-- [lead-engine: без контактов](lead-engine-bez-kontaktov.md) — на сайте ни телефона, ни почты, ни адреса, ни ссылок на frivent.ru/Яндекс: всё через заявку с UTM (чей клиент и процент)
-- [lead-engine: исследования не показывать](lead-engine-issledovaniya-ne-pokazyvat.md) — на сайте ни «мы разобрали N отзывов», ни % из наших сборов; боли голосом эксперта
-- [Сессия 10–12.10: сайт Frivent](sessiya-10-10-sayt-frivent.md) — каталоги с картинками, ровные ряды, без контактов и исследований; хвосты: политика юристу, примеры→настоящие
-- [AI Horde — картинки бесплатно](ai-horde-kartinki.md) — замена зависшему Gemini: stablehorde.net, ключ 0000000000, очередь 10–20 мин
-- [Сайт Frivent: адрес и автопроверка](frivent-preview-i-avtoproverka.md) — frivent-site.frivent-dom.workers.dev (Cloudflare, deploy_cf.ps1); GitHub-превью выключено; после правок deploy + qa_site
-- [Gemini в Chrome для картинок](gemini-v-chrome-kartinki.md) — с 12.10 Gemini Pro без лимита; сайт Frivent на 3 домах, AI Horde больше не нужен
-- [Картинки тихо, не в бот](kartinki-tiho-ne-v-bot.md) — пробы и рабочие картинки в бот «Дела» не дублировать (12.10)
-- [Сессия 12.10: сайт и картинки](sessiya-12-10-sayt-kartinki.md) — сайт сдан на Cloudflare, слайдер 13 кадров, дома 2–3; хвосты: техника/команда/дом 1 после лимита Gemini, услуги — она сама
-- [Система знаний znaniya](sistema-znaniy.md) — каталог «что умеем» в бот, поиск «что мы знаем про», в начале проекта поднять наше; память и база в копиях; автоРазбор ждёт её слова
-- [Неизученное — писать прямо](neizuchennoe-pisat-pryamo.md) — что не открылось/не изучено = важно, отдельной строкой и в блоке «⚠️» каталога; Сливакер не качать
-- [Сессия 12–13.10: система знаний](sessiya-12-10-sistema-znaniy.md) — радар в бот файлом, znaniya, дочитка; хвосты: автоРазбор, чаты TeachBK США — по её слову
-- [Рабочий стол = метки порядка](rabochiy-stol-metki-poryadka.md) — её номера на файлах стола задают порядок; брать наши полноразмерные исходники, смотреть все файлы, не только свежие
-- [Резюме и питч по книгам](rezyume-i-pitch-po-knigam.md) — после книг 13.10: резюме партнёр/менеджер, сводка «кто я» инвестору, пересмотр питча; чеклист в knigi_kupleno
-- [Резюме — без тех. деталей](rezyume-bez-tehnicheskih-detaley.md) — все её навыки с ИИ деловым языком (по списку скиллов), автоматизация — большой раздел со схемой лидогенерации; счётчики — не туда
-- [Сессия 13.10 вечер: резюме и питчи](sessiya-13-10-vecher-rezyume-pitch.md) — резюме ИИ-маркетолог, питч WB v8, автозапчасти; хвосты: цифры 2 кейсов, китайский, её «ок» → три версии v8
+- [Скрипты Dolphin{anty}](dolphin-anty-scripts.md) — готовая автоматизация профилей и скринов, не писать заново
+- [Профиль Dolphin — только один](dolphin-profile-id.md) — ВСЕГДА 859648353 (AliExpress, магазин, trend-radar); 828976678 нет
+- [Общение по-русски](obshenie-po-russki.md) — по-русски, объяснять действия до запуска команд
+- [Объяснять как новичку](obyasnyat-kak-novichku.md) — простыми словами, бытовой пример, термины расшифровывать
+- [AliExpress: десктопная версия](aliexpress-desktop-versiya.md) — магазины только в браузерной версии
+- [AliExpress: никогда не .ru](aliexpress-nikogda-ne-ru.md) — aliexpress.ru запрещён, только .com
+- [Нарезка карточек товаров](narezka-kartochek-tovarov.md) — скилл cut-products
+- [Коллекции по стилям](kollektsii-po-stilyam.md) — скилл style-collections, стили 25-26
+- [Ссылки на товары по фото](ssylki-na-tovary-po-foto.md) — скилл product-links
+- [Подложка сайта в Comfy](podlozhka-sayta-comfy.md) — скилл site-mockups, оболочка без цвета + токены коллекций
+- [Интерьерные сцены комнат](maket-perestanovki-poverh-kadra.md) — правки коллажем поверх кадра, скилл room-scenes
+- [Архив скиллов и промтов](arhiv-skillov.md) — ARTMELLIO_SKILLS = GitHub artmellio-skills; sync_skills.ps1 пушит сам
+- [Скрипты для переписки с мужчинами](nlp-vlyublenie-skripty.md) — скилл love-scripts; пополнять после разбора
+- [Новый магазин (профиль 3)](novyy-magazin-shopify-profil3.md) — Dolphin 859648353, 2e0bv7-jn.myshopify.com
+- [Парсинг трендов fashion-trend-radar](fashion-trend-radar-parsing.md) — Bright Data для Google Trends + грабля с cat=
+- [Trend-radar без автозапуска](trend-radar-bez-avtozapuska.md) — сборы только по команде, без расписаний
+- [Etsy API для trend-radar](etsy-api-trend-radar.md) — ключ забанен 22.09, заявок не подавать
+- [Новости одной командой](novosti-tg-odnoy-komandoy.md) — «новости» = скилл tg-news; закрытые каналы — Telegram Web в Chrome
+- [Дашборд радара — сам после изменений](radar-dashboard-avtoobnovlenie.md) — после правки: пересчёт, публикация, открыть
+- [Логика отбора кандидатов](logika-otbora-kandidatov.md) — 9 её правил (вещь не тема, рост к году, сезон, 28+…)
+- [Радар: порог 5%, порядок, кривые](radar-spros-est.md) — MIN_YOY=5; спрос без роста = «наблюдать»
+- [treg.to — один ключ к 85 платформам](treg-to.md) — TikTok по хэштегам США, ключ в .env радара
+- [Trends MCP для trend-radar](trends-mcp-trend-radar.md) — 100 запросов/мес бесплатно, ключ в .env
+- [Reddit API для trend-radar](reddit-api-registration.md) — app не создаётся из-за капчи
+- [Inspo MCP для дизайна](inspo-mcp.md) — 832 сайта-примера; no-ai-slop стоит; ax/untidetect отвергнуты
+- [Виджет лимитов Claude](vidzhet-limitov-claude.md) — claude_widget\claude_limits_widget.py, автозапуск
+- [Глобальный CLAUDE.md](globalnyy-claude-md.md) — продолжать самой, решённое не пересматривать
+- [Дашборд лайков по хэштегу IG](instagram-hashtag-dashboard.md) — парсер лайков через DOM, грабля с рестартом
+- [Китайские сайты — в Chrome](kitayskie-sayty-v-chrome.md) — 1688, dingtalk — обычный Chrome, не Dolphin
+- [1688 Ньютон недоступен](1688-newton-zakryt.md) — нет аккаунта разработчика и бизнес-Alipay
+- [CJdropshipping — отказ](cj-dropshipping.md) — «забудь про cj»; посредника выбирает она
+- [Отбор и динамика продаж 1688](1688-dinamika-prodazh.md) — цепочка в скилле sourcing-1688; сервер Happ «1688 напрямую + VPN (#3)»
+- [Перевод запросов в скобках](perevod-zaprosov.md) — английский запрос всегда с русским переводом
+- [Её вкус в товарах](vkus-vybora-tovarov.md) — радар + изюминка; не мини/комплекты/база
+- [Reddit через ИИ Google](reddit-cherez-google-ai.md) — google.com/search?...&udm=50 в Chrome
+- [Посредники 1688 → США](posredniki-1688-ssha.md) — BuckyDrop №1, HyperSKU №2, ZQ №3
+- [Её выбор — без фильтров](vybor-polzovatelya-bez-filtrov.md) — что выбрала сама, не отсеивать
+- [Порядок столбцов каталога 1688](poryadok-stolbtsov-katalog-1688.md) — её порядок из itog; график по 9.PNG
+- [Taobao: блокировка за парсинг](taobao-blokirovka-parsinga.md) — автосборы под её аккаунтом запрещены
+- [Разрешения — не переспрашивать](razresheniya-ne-sprashivat.md) — браузер разрешён целиком
+- [Поставщик 晴雅 на 1688](postavshchik-qingya-1688.md) — юбки в клетку, shop36510729p4205
+- [Карта всех скиллов](karta-skillov.md) — страница, Whimsical, n8n; пересобирать после правок
+- [Юбки 1688: проверка выкупа](yubki-1688-proverka-vykupa.md) — прошли 新女人花 (60%), 笑彩 (72%)
+- [Сессия 26–27.09: итоги и хвосты](sessiya-27-09-itogi.md) — юбки 1–3: что найдено и нет
+- [Мало остатков = перекуп](ostatki-perekup.md) — единицы на складе → не брать; смотреть «库存»
+- [Выкуп модели ≥40%](povtornye-zakupki-60.md) — 复购率 <40% не брать; от 1 шт; 25–65 ¥
+- [Уроки из новостей](uroki-iz-novostey.md) — скилл dropship-lessons, напоминать к месту
+- [Новости: её логика отбора](novosti-ne-skipat-lishnee.md) — в дашборд только то, что меняет наше действие
+- [Бот «Дела» в Telegram](bot-dela-telegram.md) — скилл dela, case-bot; «Список дел.docx»; бот молча кладёт в Дела\_Входящие
+- [1688-юбки — только C:\cj](moi-zadachi-drive.md) — cj\yubka_kletka_otbor60.xlsx; Google для темы отменён
+- [План: PDD × отбор 1688](plan-pdd-vs-1688-otbor.md) — свод PDD → сопоставить с otbor60 → лучшие
+- [Сверка PDD↔1688 — по ID, не по фото](sverka-po-id-ne-po-foto.md) — пересечь offerId/магазины с «Отбором»
+- [Excel не открывать сам](otkryvat-excel-posle-pravok.md) — открывать только по её «открой»
+- [Не спрашивать в конце](ne-sprashivat-v-kontse.md) — без «продолжить?/какой вариант?», выбрать и сделать
+- [Google Диск: структура и disk-hygiene](google-drive-struktura.md) — разложено 28.09; скилл disk-hygiene, rules.local.json не в git
+- [Drive синхронизирует только Рабочий стол](drive-sinhronizatsiya-kopii.md) — C:→G: перетаскиванием = копия
+- [Посты в бот — отвечать разбором](posty-v-bot-otvechat.md) — что взять, зачем, что не нужно
+- [1688 через treg API](treg-1688-api.md) — 60 товаров с повторными закупками за $0.015
+- [Baidu 识图 для поставщиков](baidu-shitu-postavshchiki.md) — только Baidu, поиск по ссылке на фото
+- [База поставщиков](baza-postavshchikov.md) — «занести в базу» = cj\postavshchiki_baza.tsv
+- [От 1 шт + скидка на опт](postavshchik-ot-1-sht-skidka.md) — обязательно у всех; ✅/УТОЧНИТЬ/❌
+- [妙手ERP](miaoshou-erp.md) — Shopify подключён; 17zwd после авторизации 17网
+- [Данные: кому можно](dannye-komu-mozhno.md) — 🟢облаку/🟡на ПК/🔴никому — предупреждать до отправки
+- [Новая сессия — предупреждать заранее](novaya-sessiya-zaranee.md) — перед большой задачей сказать «перезапусти»
+- [«Принято к сведению» — прорабатывать](prinyato-k-svedeniyu-prorabatyvat.md) — скилл + GitHub + применить
+- [Принятое — изучать ВСЁ](prinyato-izuchat-vse-ssylki.md) — все ссылки, курсы, безопасный GitHub
+- [Хвосты изучения 07.10](hvosty-izucheniya-07-10.md) — ждут её: плагин marketing, opt-out Shopify
+- [Принятое — не на панели](prinyatoe-ne-na-paneli.md) — noted не в дашборд; скилл noted-news
+- [Комиссия Ozon на юбки](ozon-komissiya-yubki.md) — 48% FBO / 54% FBS; цена ~2 800 ₽
+- [Главный проект lead-engine](lead-engine-proekt.md) — сайт и лидогенерация (был Frivent → «Смарт Люкс»); GitHub + Диск
+- [Конкуренты Frivent — Европа](lead-engine-konkurenty-evropa.md) — Systemair, York, Menerga, Swegon…
+- [Apify для lead-engine](apify-lead-engine.md) — ключ в .env, всегда потолок трат
+- [lead-engine: жителям не писать](lead-engine-ne-pisat-zhitelyam.md) — чаты посёлков без имён и телефонов
+- [lead-engine: всё в дашборд](lead-engine-vse-v-dashboard.md) — данные блоками панели, xlsx не плодить
+- [Сайт не пускает — Happ напрямую](happ-napryamuyu-bez-vpn.md) — обход мимо happ-xray, иначе happ_china_patch.py
+- [«Собрать всё» = досье](sobrat-vse-eto-dosje.md) — юрлицо, соцсети, отзывы, статьи, клиенты
+- [Долгие сборы — прогресс](dolgie-sbory-progress.md) — «N из M», сохранение по ходу, прогноз
+- [Папки дел — понятно человеку](dela-papki-ponyatno.md) — «О деле…docx» + 1/2/3/_служебное; образец Бандуркина
+- [Документы — по эталону суда](dokumenty-po-etalonu-suda.md) — только суть, без [скобок]; Дела\_образцы
+- [Замечание к тексту — только текст](zamechaniya-k-tekstu-tolko-tekst.md) — исправить текст + правило
+- [Товар оценивать только на 1688](otsenka-tovara-tolko-1688.md) — PDD врёт, 17zwd = поставщик
+- [1688: без прямых ссылок](1688-ne-pryamye-ssylki.md) — imageAddress = антибот QR
+- [Ищем поставщиков, не модели](postavshchik-ne-tovar.md) — Apify → hity_*.xlsx → её «1» → новый сбор
+- [Аналитика 1688: график, 店雷达, 知衣](instrumenty-1688-analitika.md) — график только снимком
+- [Проверять тёзок и цифры](proveryat-tezok-i-cifry.md) — юрлицо по сайту/ИНН; 3–5 отзывов глазами
+- [«Споки» = сохранить всё](spoki-sohranit-vse.md) — память + скиллы + GitHub + «спокойной ночи»
+- [ARTMELLIO — не её](artmellio-ne-ee.md) — магазин не её; её бизнес — ИП
+- [Маркетинг и ИИ в радаре](novosti-marketing-ii-kanaly.md) — +38 каналов, блок «Маркетинг»
+- [Новости: больше дизайна и вайбкодинга](novosti-bolshe-dizayn-vaybkoding.md) — полезное в site-design / claude-code-priemy
+- [Сессия 12.10: новости → сайт и скиллы](sessiya-12-10-novosti.md) — 2868 постов; хвосты по форме/tenacity
+- [Новости: дизайн сайтов](novosti-dizayn-saytov.md) — каналы дизайна, блок на панели; видео не качать
+- [Перенос чата в Claude Code](perenos-chata-v-claude-code.md) — она кладёт «переписка claude.ai <дата>.md» в _служебное
+- [artmellio-system: ветка dev разошлась](artmellio-system-dev-vetka.md) — работаем в feature/operations-panel
+- [Проверка ПК — скилл pc-check](pc-check-skill.md) — отчёт без удаления; 07.10 чистка, 0 угроз
+- [Сессия 13.10: Hermes и книги](sessiya-13-10-hermes-knigi.md) — 13 книг, табло; хвосты: 4 книги перекачать
+- [Разрешения через Telegram](razresheniya-cherez-telegram.md) — ОТКЛЮЧЕНО 13.10, без её слова не включать
+- [Табло задач агентов](tablo-zadach-agentov.md) — долгие задачи на табло agent_status.py
+- [Hermes — лёгкие задачи](hermes-legkie-zadachi.md) — лёгкое Hermes, сложное сама, сомнение — спросить
+- [Ollama установлен](ollama-ustanovlen.md) — 127.0.0.1:11434; Hermes на gpt-oss:120b-cloud
+- [Upscayl: ошибка видеокарты](upscayl-tile-size.md) — «vkQueueSubmit failed -4» → -t 64
+- [Номера постов на панели](nomera-postov-paneli.md) — tg_monitor\post_numbers.json, постоянные
+- [Замеры линейкой — по местам](zamery-lineykoy-kazhdoe-mesto.md) — размер каждого места, не одно число
+- [Ворда нет](net-word.md) — документы для чтения в .html
+- [Печать — скилл pechat](pechat-printer.md) — RICOH 192.168.0.104; Xprinter — этикетки
+- [Сканы — ничего не срезать](skany-nichego-ne-srezat.md) — выравнивать можно, обрезать нельзя
+- [Сессия 07–08.10: печать и скан](sessiya-08-10-pechat-skan.md) — хвосты: двусторонняя, лишнее фото
+- [Лимит 70% — стоп и в скилл](limit-70-stop.md) — на 70% остановить агентов, сохранить
+- [Питч партнёру v7 (WB, ТЯК)](pitch-pravki-golosovym.md) — схема с китайским партнёром, её цифры; три формата
+- [Питч — полный, не сокращать](pitch-polnyy-ne-sokrashchat.md) — все разделы, графики, словарь; упор WB
+- [Книги — применять на практике](knigi-primenyat-na-praktike.md) — приёмы iz_knig*.md на её сайтах
+- [Купленные книги](kuplennye-knigi.md) — 35 книг разложены в iz_knig*.md скиллов
+- [lead-engine: без контактов](lead-engine-bez-kontaktov.md) — на сайте только заявка с UTM
+- [lead-engine: исследования не показывать](lead-engine-issledovaniya-ne-pokazyvat.md) — боли голосом эксперта
+- [Сессия 10–12.10: сайт Frivent](sessiya-10-10-sayt-frivent.md) — хвосты: политика юристу, примеры→настоящие
+- [AI Horde — картинки бесплатно](ai-horde-kartinki.md) — запасной вариант, ключ 0000000000
+- [Сайт Frivent: адрес и автопроверка](frivent-preview-i-avtoproverka.md) — frivent-site.frivent-dom.workers.dev; deploy_cf + qa_site
+- [Gemini в Chrome для картинок](gemini-v-chrome-kartinki.md) — Gemini Pro без лимита
+- [Картинки тихо, не в бот](kartinki-tiho-ne-v-bot.md) — пробы картинок в бот не слать
+- [Сессия 12.10: сайт и картинки](sessiya-12-10-sayt-kartinki.md) — сайт на Cloudflare; хвосты по картинкам
+- [Система знаний znaniya](sistema-znaniy.md) — «что умеем/знаем», в начале проекта поднять наше
+- [Неизученное — писать прямо](neizuchennoe-pisat-pryamo.md) — отдельной строкой и в «⚠️» каталога
+- [Сессия 12–13.10: система знаний](sessiya-12-10-sistema-znaniy.md) — хвосты: автоРазбор, TeachBK — по её слову
+- [Рабочий стол = метки порядка](rabochiy-stol-metki-poryadka.md) — её номера задают порядок; смотреть все файлы
+- [Резюме и питч по книгам](rezyume-i-pitch-po-knigam.md) — чеклист в knigi_kupleno
+- [Резюме — без тех. деталей](rezyume-bez-tehnicheskih-detaley.md) — деловым языком, автоматизация большим разделом
+- [Правки сайта от Паши 13.10](pravki-sayta-pasha-13-10.md) — УТП раскрывающимися блоками, Frivent→«Смарт Люкс», Kol Gali; делать по её «делай»
+- [Договорённости до работы](dogovorennosti-do-raboty.md) — скилл dogovorennosti: условия → «да»/платёж → работа; учимся на её случаях
+- [Сначала каркас, потом дизайн](snachala-karkas-potom-dizayn.md) — любой сайт: структура на согласование, большое — этапами
+- [Сессия 13.10 вечер: резюме и питчи](sessiya-13-10-vecher-rezyume-pitch.md) — хвосты: цифры кейсов, китайский, три версии v8
