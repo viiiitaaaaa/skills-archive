@@ -33,4 +33,4 @@ claude-code-priemy, tg-news, dela, knowledge-library. Советы книг, п�
   если сама положит новые — признак целой: >1 МБ и в zip есть главы (xhtml), не 3 записи.
   Грабля: epub без toc.ncx роняет ebooklib → `to_txt_13_10b.py` читает главы по spine прямо из zip.
 - Новые книги в «куплено» → тот же конвейер: текст → агент на книгу → конспект → слияние по скиллам → sync_skills.ps1.
-
+- 13.10 16:24 через бот «Дела» пришла Alan Weiss «Million Dollar Consulting» (2016) → `куплено\Million Dollar Consulting (Alan Weiss, 2016).epub`, тот же конвейер (to_txt_13_10b ep_zip → hermes_pereskaz → помощник Sonnet → novye13\million_dollar_consulting.md, 71 приём, 33 в b2b-sbor). Книги, присланные в бот, класть в «куплено» и прогонять так же без вопросов.
