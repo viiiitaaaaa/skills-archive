@@ -100,6 +100,7 @@
 - [Upscayl: ошибка видеокарты](upscayl-tile-size.md) — «vkQueueSubmit failed -4» → -t 64
 - [Номера постов на панели](nomera-postov-paneli.md) — tg_monitor\post_numbers.json, постоянные
 - [Замеры линейкой — по местам](zamery-lineykoy-kazhdoe-mesto.md) — размер каждого места, не одно число
+- [Сессия 14.10: циклы, вакансии, резюме](sessiya-14-10-cikl-vakansii-rezyume.md) — Frivent v2, автозапчасти, 30 вакансий, резюме; хвосты
 - [LinkedIn: ограничен за автосбор](linkedin-ogranichen-avtosbor.md) — под её аккаунтом скриптами не собирать; вакансии — открытые API
 - [Ворда нет](net-word.md) — документы для чтения в .html
 - [Печать — скилл pechat](pechat-printer.md) — RICOH 192.168.0.104; Xprinter — этикетки
