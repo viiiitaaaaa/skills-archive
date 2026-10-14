@@ -309,6 +309,8 @@ document.querySelectorAll('.grid').forEach(g=>{{const h=g.previousElementSibling
 
 if __name__ == "__main__":
     noted = build()
+    import katalog_md  # копия для Context проектов Claude Desktop (Рабочий стол\Файлы для проектов Claude)
+    katalog_md.main()
     if "--list" in sys.argv:
         for i in noted:
             print(STATUS[i["status"]][0], i["key"], "|", i["when"], "|", i["title"][:70], "|", i["what"][:90])
