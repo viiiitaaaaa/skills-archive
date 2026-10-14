@@ -43,6 +43,39 @@ New-Item -ItemType Directory -Path $mem -Force | Out-Null
 Copy-Item "C:\Users\User\.claude\projects\C--Users-User\memory\*.md" $mem -Force
 Copy-Item "C:\Users\User\.claude\CLAUDE.md" (Join-Path $dst "CLAUDE_global.md") -Force
 
+# 3д. Память каждого проекта (с 14.10 у каждой папки своя) — memory_proektov\<папка>\*.md; временные scratch-папки пропускаем
+# Выключатели (15.10.2026): новые данные на GitHub — включать ($true) только после её «да»
+$vklMemProektov = $false
+$vklNastroyki   = $false
+$memP = Join-Path $dst "memory_proektov"
+if ($vklMemProektov) {
+if (Test-Path $memP) { Remove-Item $memP -Recurse -Force }
+Get-ChildItem "C:\Users\User\.claude\projects" -Directory | Where-Object { $_.Name -ne "C--Users-User" -and $_.Name -notlike "*scratch*" } | ForEach-Object {
+    $m = Join-Path $_.FullName "memory"
+    if ((Test-Path $m) -and (Get-ChildItem $m -Filter *.md)) {
+        $to = Join-Path $memP ($_.Name -replace '^C--Users-User-', '')
+        New-Item -ItemType Directory -Path $to -Force | Out-Null
+        Copy-Item (Join-Path $m "*.md") $to -Force
+    }
+}
+}
+
+# 3е. Настройки Claude Code для восстановления на новом ПК. settings.local.json НЕ берём — в нём ключ бота.
+$cfg = Join-Path $dst "nastroyki_claude"
+if ($vklNastroyki) {
+if (Test-Path $cfg) { Remove-Item $cfg -Recurse -Force }
+New-Item -ItemType Directory -Path $cfg -Force | Out-Null
+foreach ($f in @("settings.json", "statusline.py", "agent_status.py")) {
+    $p = Join-Path "C:\Users\User\.claude" $f
+    if (Test-Path $p) { Copy-Item $p $cfg -Force }
+}
+foreach ($d in @("agents", "sounds")) {
+    $p = Join-Path "C:\Users\User\.claude" $d
+    if (Test-Path $p) { Copy-Item $p (Join-Path $cfg $d) -Recurse -Force }
+}
+if (Test-Path "C:\Users\User\komputer\CLAUDE.md") { Copy-Item "C:\Users\User\komputer\CLAUDE.md" (Join-Path $cfg "komputer_CLAUDE.md") -Force }
+}
+
 # 3г. Файлы для проектов Claude Desktop (правила веток + «Что мы умеем и знаем.md») — копия с рабочего стола
 $cd  = "C:\Users\User\Desktop\Файлы для проектов Claude"
 $cdA = Join-Path $dst "proekty_claude_desktop"
