@@ -755,7 +755,7 @@ Excel, чтобы не потерять картинки. Когда листы 
 
 Вручную, в PowerShell:
 
-  powershell -ExecutionPolicy Bypass -File "C:\Users\User\claude-skills\sync_skills.ps1"
+  powershell -ExecutionPolicy Bypass -File "C:\Users\User\skills-archive\sync_skills.ps1"
 
 
 

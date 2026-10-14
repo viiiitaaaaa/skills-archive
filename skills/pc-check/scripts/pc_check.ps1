@@ -252,7 +252,7 @@ foreach ($r in $remoteInstalled) { Add-Finding INFO 'Удалённый дост
 # --- 9. Папки скиллов и плагинов Claude (12.10: троян пережил переустановку внутри SKILL.md из бэкапа) -----
 Write-Host "9/10 Скиллы и плагины Claude..."
 $claudeDir = "$env:USERPROFILE\.claude"; $skillsDir = "$claudeDir\skills"; $pluginsDir = "$claudeDir\plugins"
-$mirror = "$env:USERPROFILE\claude-skills"   # git-копия скиллов (viiiitaaaaa/claude-skills), её делает sync_skills.ps1
+$mirror = "$env:USERPROFILE\skills-archive"   # git-копия скиллов (viiiitaaaaa/skills-archive), её делает sync_skills.ps1
 $git = (Get-Command git -ErrorAction SilentlyContinue).Source
 $skillFiles = @(Get-ChildItem $skillsDir -Recurse -File -Force | Where-Object { $_.FullName -notmatch '\\\.git\\' })
 $report.skills = [ordered]@{ files = $skillFiles.Count }

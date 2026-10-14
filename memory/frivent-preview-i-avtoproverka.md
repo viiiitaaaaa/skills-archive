@@ -5,7 +5,7 @@ metadata:
   type: project
 ---
 12.10 по её просьбе («ссылку, чтобы любой открыл на телефоне без входа в Claude») — https://viiiitaaaaa.github.io/frivent-preview/
-(открытый репозиторий viiiitaaaaa/frivent-preview, только готовые страницы, noindex). Обновление: `python site/build.py` →
+(открытый репозиторий viiiitaaaaa/ventilation-site-preview, только готовые страницы, noindex). Обновление: `python site/build.py` →
 `powershell -File site/publish_preview.ps1`. Её «устала сама искать баги» → после правок сайта прогонять `python site/qa_site.py
 <адрес> site` (все страницы × 3 ширины) и смотреть скрины телефона, не ждать её скринов. Агент design-review (OneRedOak) +
 Playwright MCP установлены 12.10, заработают после перезапуска.

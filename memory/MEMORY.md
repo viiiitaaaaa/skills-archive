@@ -9,7 +9,7 @@
 - [Ссылки на товары по фото](ssylki-na-tovary-po-foto.md) — скилл product-links
 - [Подложка сайта в Comfy](podlozhka-sayta-comfy.md) — скилл site-mockups, оболочка без цвета + токены коллекций
 - [Интерьерные сцены комнат](maket-perestanovki-poverh-kadra.md) — правки коллажем поверх кадра, скилл room-scenes
-- [Архив скиллов и промтов](arhiv-skillov.md) — claude-skills = GitHub claude-skills; sync_skills.ps1 пушит сам
+- [Архив скиллов и промтов](arhiv-skillov.md) — skills-archive = GitHub skills-archive; sync_skills.ps1 пушит сам
 - [Скрипты для переписки с мужчинами](nlp-vlyublenie-skripty.md) — скилл love-scripts; пополнять после разбора
 - [Новый магазин (профиль 3)](novyy-magazin-shopify-profil3.md) — Dolphin 859648353, 2e0bv7-jn.myshopify.com
 - [Парсинг трендов fashion-trend-radar](fashion-trend-radar-parsing.md) — Bright Data для Google Trends + грабля с cat=
@@ -133,3 +133,4 @@
 - [Сначала каркас, потом дизайн](snachala-karkas-potom-dizayn.md) — любой сайт: структура на согласование, большое — этапами
 - [Сессия 13.10 вечер: резюме и питчи](sessiya-13-10-vecher-rezyume-pitch.md) — 14.10 сделаны 2 резюме: «партнёр по маркетплейсам» и «ИИ-автоматизация продаж» (ARTMELLIO — инвесторы)
 - [Новости применять глубоко](novosti-primenyat-gluboko.md) — ссылки и код открыть, проверить замером, вписать в шаги скиллов
+- [Сессия 14.10: книги и новости](sessiya-14-10-knigi-novosti.md) — 6 книг, новости применены; хвосты: заголовки сайта, Serverless, юрист

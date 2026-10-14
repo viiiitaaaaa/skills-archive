@@ -1,6 +1,6 @@
 ﻿# Синхронизация скиллов в архивную папку.
-# Запуск: powershell -ExecutionPolicy Bypass -File "C:\Users\User\claude-skills\sync_skills.ps1"
-# Архив — git-репозиторий viiiitaaaaa/claude-skills (приватный); после синхронизации изменения сами уходят на GitHub.
+# Запуск: powershell -ExecutionPolicy Bypass -File "C:\Users\User\skills-archive\sync_skills.ps1"
+# Архив — git-репозиторий viiiitaaaaa/skills-archive (приватный); после синхронизации изменения сами уходят на GitHub.
 
 $src  = "C:\Users\User\.claude\skills"
 $dst  = $PSScriptRoot
@@ -67,6 +67,6 @@ git add -A
 if (git status --porcelain) {
     git -c user.name="viiiitaaaaa" -c user.email="tehrez21@gmail.com" commit -q -m "Синхронизация скиллов $stamp"
     git push -q
-    Write-Output "Отправлено на GitHub: viiiitaaaaa/claude-skills"
+    Write-Output "Отправлено на GitHub: viiiitaaaaa/skills-archive"
 } else { Write-Output "Изменений нет, на GitHub отправлять нечего" }
 Pop-Location
