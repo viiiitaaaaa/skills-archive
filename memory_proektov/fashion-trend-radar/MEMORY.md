@@ -1,0 +1,16 @@
+- [Парсинг трендов fashion-trend-radar](fashion-trend-radar-parsing.md) — Bright Data для Google Trends + грабля с cat=
+- [Trend-radar без автозапуска](trend-radar-bez-avtozapuska.md) — сборы только по команде, без расписаний
+- [Etsy API для trend-radar](etsy-api-trend-radar.md) — ключ забанен 22.09, заявок не подавать
+- [Дашборд радара — сам после изменений](radar-dashboard-avtoobnovlenie.md) — после правки: пересчёт, публикация, открыть
+- [Логика отбора кандидатов](logika-otbora-kandidatov.md) — 9 её правил (вещь не тема, рост к году, сезон, 28+…)
+- [Радар: порог 5%, порядок, кривые](radar-spros-est.md) — MIN_YOY=5; спрос без роста = «наблюдать»
+- [treg.to — один ключ к 85 платформам](treg-to.md) — TikTok по хэштегам США, ключ в .env радара
+- [Trends MCP для trend-radar](trends-mcp-trend-radar.md) — 100 запросов/мес бесплатно, ключ в .env
+- [Reddit API для trend-radar](reddit-api-registration.md) — app не создаётся из-за капчи
+- [Reddit через ИИ Google](reddit-cherez-google-ai.md) — google.com/search?...&udm=50 в Chrome
+- [dolphin-profil3-dlya-trend-radar](dolphin-profil3-dlya-trend-radar.md) — Проект fashion-trend-radar и парсинг AliExpress для нового магазина должны использовать ТОЛЬКО профиль Dolphin 859648353 (профиль 3), никогда 828976678
+- [Профиль Dolphin — только один](dolphin-profile-id.md) — ВСЕГДА 859648353 (AliExpress, магазин, trend-radar); 828976678 нет
+- [Дашборд лайков по хэштегу IG](instagram-hashtag-dashboard.md) — парсер лайков через DOM, грабля с рестартом
+- [Её вкус в товарах](vkus-vybora-tovarov.md) — радар + изюминка; не мини/комплекты/база
+- [Её выбор — без фильтров](vybor-polzovatelya-bez-filtrov.md) — что выбрала сама, не отсеивать
+- [1688 через treg API](treg-1688-api.md) — 60 товаров с повторными закупками за $0.015

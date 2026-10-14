@@ -44,9 +44,9 @@ Copy-Item "C:\Users\User\.claude\projects\C--Users-User\memory\*.md" $mem -Force
 Copy-Item "C:\Users\User\.claude\CLAUDE.md" (Join-Path $dst "CLAUDE_global.md") -Force
 
 # 3д. Память каждого проекта (с 14.10 у каждой папки своя) — memory_proektov\<папка>\*.md; временные scratch-папки пропускаем
-# Выключатели (15.10.2026): новые данные на GitHub — включать ($true) только после её «да»
-$vklMemProektov = $false
-$vklNastroyki   = $false
+# Выключатели: включены 15.10.2026 по её слову («все включаем настройки, все абсолютно»)
+$vklMemProektov = $true
+$vklNastroyki   = $true
 $memP = Join-Path $dst "memory_proektov"
 if ($vklMemProektov) {
 if (Test-Path $memP) { Remove-Item $memP -Recurse -Force }
@@ -74,6 +74,8 @@ foreach ($d in @("agents", "sounds")) {
     if (Test-Path $p) { Copy-Item $p (Join-Path $cfg $d) -Recurse -Force }
 }
 if (Test-Path "C:\Users\User\komputer\CLAUDE.md") { Copy-Item "C:\Users\User\komputer\CLAUDE.md" (Join-Path $cfg "komputer_CLAUDE.md") -Force }
+# список MCP-подключений: ключи вырезаются скриптом (нашёл ключ — файл не пишется)
+python -I "C:\Users\User\komputer\rezerv\eksport_mcp.py" (Join-Path $cfg "mcp_servers.json")
 }
 
 # 3г. Файлы для проектов Claude Desktop (правила веток + «Что мы умеем и знаем.md») — копия с рабочего стола
@@ -106,9 +108,15 @@ Write-Output "OK: $count скиллов, $files файлов -> $dst"
 # 4. Отправить изменения на GitHub
 Push-Location $dst
 git add -A
+# проверка на ключи перед выгрузкой (её правило 15.10: ключи — только на ПК); нашёл — не отправляем
+python -I "C:\Users\User\komputer\rezerv\proverka_klyuchey.py" --staged
+if ($LASTEXITCODE -ne 0) { git reset -q; Pop-Location; Write-Output "НЕ ОТПРАВЛЕНО: найден похожий на ключ текст"; exit 1 }
 if (git status --porcelain) {
     git -c user.name="viiiitaaaaa" -c user.email="tehrez21@gmail.com" commit -q -m "Синхронизация скиллов $stamp"
     git push -q
     Write-Output "Отправлено на GitHub: viiiitaaaaa/skills-archive"
 } else { Write-Output "Изменений нет, на GitHub отправлять нечего" }
 Pop-Location
+
+# 5. Полная проверка всех папок и истории git на ключи + что все хранилища на GitHub закрытые
+python -I "C:\Users\User\komputer\rezerv\proverka_klyuchey.py"

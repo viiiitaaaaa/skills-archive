@@ -1,0 +1,150 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(node *)",
+      "PowerShell(npm run *)",
+      "PowerShell(npm ls *)",
+      "PowerShell(npx *)",
+      "PowerShell(git status)",
+      "PowerShell(git diff *)",
+      "PowerShell(git log *)",
+      "PowerShell(git add *)",
+      "PowerShell(git commit *)",
+      "PowerShell(git push *)",
+      "Bash(git push *)",
+      "PowerShell(cd *)",
+      "PowerShell(Get-ChildItem *)",
+      "PowerShell(Get-Content *)",
+      "PowerShell(Get-Item *)",
+      "PowerShell(Get-Process *)",
+      "PowerShell(Test-Path *)",
+      "PowerShell(Select-String *)",
+      "PowerShell(Measure-Object *)",
+      "Bash(node *)",
+      "Bash(npm run *)",
+      "Bash(npx *)",
+      "Bash(git status)",
+      "Bash(git diff *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Read(**)",
+      "Edit(**)",
+      "mcp__claude-in-chrome"
+    ],
+    "deny": [
+      "PowerShell(Remove-Item -Recurse *)",
+      "Bash(rm -rf *)",
+      "Read(.env*)",
+      "Read(**/.env*)",
+      "Read(**/id_rsa*)",
+      "Read(**/.ssh/**)"
+    ],
+    "defaultMode": "auto"
+  },
+  "model": "opus",
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell.exe -NoProfile -Command \"(New-Object Media.SoundPlayer 'C:\\Users\\User\\.claude\\sounds\\cc-notify.wav').PlaySync()\"",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell.exe -NoProfile -Command \"(New-Object Media.SoundPlayer 'C:\\Users\\User\\.claude\\sounds\\cc-done.wav').PlaySync()\"",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python C:/Users/User/pult/hooks/zhdat10.py",
+            "timeout": 30
+          },
+          {
+            "type": "command",
+            "command": "python C:/Users/User/.claude/sounds/murr.py",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "python C:/Users/User/.claude/statusline.py"
+  },
+  "enabledPlugins": {
+    "shopify-ai-toolkit@claude-plugins-official": true,
+    "cloudflare@cloudflare": true,
+    "telegram@claude-plugins-official": false
+  },
+  "extraKnownMarketplaces": {
+    "cloudflare": {
+      "source": {
+        "source": "github",
+        "repo": "cloudflare/skills"
+      }
+    }
+  },
+  "language": "russian",
+  "effortLevel": "medium",
+  "autoUpdatesChannel": "latest",
+  "voice": {
+    "enabled": true,
+    "mode": "tap"
+  },
+  "skipDangerousModePermissionPrompt": true,
+  "skipWorkflowUsageWarning": true,
+  "theme": "dark-daltonized",
+  "switchModelsOnFlag": true,
+  "autoMode": {
+    "allow": [
+      "$defaults",
+      "Uploading files from G:\\Мой диск\\Дела (and its subfolders) into the user's own claude.ai chats via mcp__claude-in-chrome__file_upload is explicitly and permanently authorized by the user (28.09.2026: «разрешаю всегда») — this is the dela skill's step of sending case documents and итоги to the case chat."
+    ],
+    "environment": [
+      "### Org-wide",
+      "**Organization**: None configured",
+      "**Cloud provider(s)**: None configured",
+      "**Repository visibility**: assume private unless the remote host and repo name indicate otherwise, or a visibility check in the transcript shows public (no remote configured for this repo; visibility not queryable)",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: None configured",
+      "**Default / protected branches**: unknown — origin/HEAD unset, no remotes configured",
+      "**CI/CD deploy targets**: None configured",
+      "**Network posture**: None configured",
+      "**Host containment**: None configured — assume Claude Code runs on an ordinary developer machine or CI runner with open internet",
+      "**Source control**: The trusted repo and its remote(s) only (no additional orgs configured) — as scoped by the Trusted repo and Repository visibility entries above",
+      "**Trusted internal domains**: None configured",
+      "**Trusted cloud buckets**: None configured",
+      "**Key internal services**: None configured",
+      "**Internal package registry**: None configured",
+      "**Sensitive data locations & audiences**: any file or store holding personal data, confidential business data, credentials, regulated data, or similarly sensitive material; preserve exact handles when known and share only with audiences cleared at the [named+specifics] bar; includes G:\\Мой диск\\Дела (case documents) per user's standing authorization for upload to the user's own claude.ai chats only",
+      "**Data retention / declassification**: None configured",
+      "**Sensitive remote targets**: any namespace, host, or container whose name carries `prod` or `production` as a whole word or name segment",
+      "**Protected deployment namespaces / environments**: None configured — fall back to the Sensitive remote targets heuristic",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries `prod` or `production` as a whole word or name segment",
+      "### User-specific",
+      "**Primary use of Claude Code**: personal/hobby use and household task automation (per user's ~/.claude/CLAUDE.md: multiple personal projects — suppliers, trend tracking, Telegram news/bot, book purchases, lead generation, a personal site, resume/job search, a personal case-tracking bot, and general computer/skills tasks)",
+      "**Trusted repo**: The git repository the agent started in (C:\\Users\\User\\pult) — no remotes are configured, so there is no remote destination to scope trust to; treat this repo as local-only until a remote is added",
+      "**Org-specific CLIs**: None configured",
+      "**Routine under C:\\Users\\User\\ prefix**: the user's personal project folders listed in ~/.claude/CLAUDE.md (cj, fashion-trend-radar, tg_monitor, knigi_kupleno, lead-engine, rezyume-vakansii, decor-store-ops, case-bot, pult) are the user's own personal workspaces, not an org-wide trust grant"
+    ]
+  },
+  "voiceEnabled": true,
+  "cleanupPeriodDays": 90
+}

@@ -1,0 +1,3 @@
+- [Perplexity для глубокого поиска](perplexity-poisk.md) — только по её прямой просьбе; я сама спрашиваю на perplexity.ai в её Chrome, по одному; риск бана её выбор; API отложен
+- [Резервные копии](rezervnye-kopii.md) — аудит 15.10: отчёт rezerv\otchet.html, тема магазина main=живой Shopify, выключатели в sync_skills
+- [NotebookLM — подключение](notebooklm-podklyuchenie.md) — нет API для обычного, Enterprise платный; страна аккаунта мешает; ждёт её решения

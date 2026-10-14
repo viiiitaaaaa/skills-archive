@@ -1,0 +1,42 @@
+{
+  "obshchie": {
+    "inspo": {
+      "type": "http",
+      "url": "https://inspomcp.dev/api/mcp"
+    },
+    "stealth-browser": {
+      "type": "stdio",
+      "command": "C:\\Users\\User\\tools\\stealth-browser-mcp\\venv\\Scripts\\python.exe",
+      "args": [
+        "C:\\Users\\User\\tools\\stealth-browser-mcp\\src\\server.py",
+        "--disable-cdp-functions",
+        "--disable-dynamic-hooks"
+      ],
+      "env": {}
+    },
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@0.0.83"
+      ],
+      "env": {}
+    }
+  },
+  "po_proektam": {
+    "C:/Users/User/lead-engine": {
+      "apify": {
+        "type": "stdio",
+        "command": "npx",
+        "args": [
+          "mcp-remote",
+          "https://mcp.apify.com/?tools=m_mamaev/yandex-maps-places-scraper,johnvc/yandex-reverse-image-search,fetch_cat/yandex-maps-reviews-scraper,johnvc/Scrape-Yandex,zen-studio/yandex-maps-scraper,zen-studio/yandex-maps-reviews-scraper,dami_studio/yandex-maps-scraper,sashaebashu/yandex-zen-scraper,normdata/yandex-realty-scraper,m_mamaev/2gis-places-scraper,dami_studio/2gis-reviews-scraper,igolaizola/cian-ru-scraper,one-api/cian-scraper,agentx/telegram-member-scraper,zen-studio/avito-listings-scraper,abotapi/avito-ru-scraper,zen-studio/avito-realty-scraper,fatihtahta/avito-russia-scraper,zen-studio/avito-seller-profile-scraper,lofomachines/telegram-keyword-search-scraper,truefetch/telegram-channel-message,vdrmota/contact-info-scraper,webfinity/telegram-channel-content-media-scraper-v2,maximedupre/vk-posts-scraper,easyapi/vk-people-scraper,endspec/vk-instant-content-scraper,easyapi/vk-videos-search-scraper,khadinakbar/vk-groups-scraper,jupri/vkontakte,apify/instagram-scraper,apify/instagram-profile-scraper,apify/instagram-reel-scraper,apify/instagram-post-scraper,apify/instagram-hashtag-scraper,apify/instagram-comment-scraper,apify/instagram-search-scraper,scraping_solutions/instagram-scraper-followers-following-no-cookies,data-slayer/instagram-post-details,coderx/instagram-profile-scraper-bio-posts,apidojo/instagram-scraper,sones/instagram-posts-scraper-lowcost,apple_yang/instagram-transcripts-scraper,datadoping/instagram-followers-scraper,apify/instagram-tagged-scraper,apify/instagram-followers-count-scraper,patient_discovery/instagram-search-reels,apify/instagram-followers-following-scraper,apidojo/instagram-scraper-api,datadoping/instagram-likes-scraper,patient_discovery/instagram-reel-analytics-by-url,coderx/instagram-profile-scraper-api,thenetaji/instagram-followers-followings-scraper,streamers/youtube-scraper,pintostudio/youtube-transcript-scraper,streamers/youtube-comments-scraper,streamers/youtube-shorts-scraper,streamers/youtube-channel-scraper,grow_media/youtube-channel-video-scraper,codepoetry/youtube-transcript-ai-scraper,apidojo/youtube-channel-information-scraper,grow_media/youtube-channel-scraper,api-ninja/youtube-comments-scraper,lurkapi/youtube-channel-email-scraper,grow_media/youtube-search-api,dataovercoffee/youtube-channel-lookalike-finder,dz_omar/youtube-transcript-metadata-extractor,zen-studio/douyin-search-scraper,easyapi/vk-video-scraper,apple_yang/douyin-video-audio-downloader,agentflow/wechat-channels-video-downloader,novi/fast-tiktok-api,lofomachines/bilibili-scraper,apple_yang/instagram-video-scraper-api,scrapestorm/vk-video-scraper-vkontakte,marielise.dev/video-intelligence,themineworks/meta-ad-library-scraper",
+          "--header",
+          "Authorization: <КЛЮЧ — выпустить заново>"
+        ],
+        "env": {}
+      }
+    }
+  }
+}

@@ -1,0 +1,30 @@
+- [Отбор и динамика продаж 1688](1688-dinamika-prodazh.md) — цепочка в скилле sourcing-1688; сервер Happ «1688 напрямую + VPN (#3)»
+- [1688: без прямых ссылок](1688-ne-pryamye-ssylki.md) — imageAddress = антибот QR
+- [1688 Ньютон недоступен](1688-newton-zakryt.md) — нет аккаунта разработчика и бизнес-Alipay
+- [Baidu 识图 для поставщиков](baidu-shitu-postavshchiki.md) — только Baidu, поиск по ссылке на фото
+- [База поставщиков](baza-postavshchikov.md) — «занести в базу» = cj\postavshchiki_baza.tsv
+- [CJdropshipping — отказ](cj-dropshipping.md) — «забудь про cj»; посредника выбирает она
+- [Аналитика 1688: график, 店雷达, 知衣](instrumenty-1688-analitika.md) — график только снимком
+- [Китайские сайты — в Chrome](kitayskie-sayty-v-chrome.md) — 1688, dingtalk — обычный Chrome, не Dolphin
+- [妙手ERP](miaoshou-erp.md) — Shopify подключён; 17zwd после авторизации 17网
+- [1688-юбки — только C:\cj](moi-zadachi-drive.md) — cj\yubka_kletka_otbor60.xlsx; Google для темы отменён
+- [Мало остатков = перекуп](ostatki-perekup.md) — единицы на складе → не брать; смотреть «库存»
+- [Товар оценивать только на 1688](otsenka-tovara-tolko-1688.md) — PDD врёт, 17zwd = поставщик
+- [Комиссия Ozon на юбки](ozon-komissiya-yubki.md) — 48% FBO / 54% FBS; цена ~2 800 ₽
+- [План: PDD × отбор 1688](plan-pdd-vs-1688-otbor.md) — свод PDD → сопоставить с otbor60 → лучшие
+- [Порядок столбцов каталога 1688](poryadok-stolbtsov-katalog-1688.md) — её порядок из itog; график по 9.PNG
+- [Посредники 1688 → США](posredniki-1688-ssha.md) — BuckyDrop №1, HyperSKU №2, ZQ №3
+- [Ищем поставщиков, не модели](postavshchik-ne-tovar.md) — Apify → hity_*.xlsx → её «1» → новый сбор
+- [От 1 шт + скидка на опт](postavshchik-ot-1-sht-skidka.md) — обязательно у всех; ✅/УТОЧНИТЬ/❌
+- [Поставщик 晴雅 на 1688](postavshchik-qingya-1688.md) — юбки в клетку, shop36510729p4205
+- [Выкуп модели ≥40%](povtornye-zakupki-60.md) — 复购率 <40% не брать; от 1 шт; 25–65 ¥
+- [Сессия 26–27.09: итоги и хвосты](sessiya-27-09-itogi.md) — юбки 1–3: что найдено и нет
+- [Сверка PDD↔1688 — по ID, не по фото](sverka-po-id-ne-po-foto.md) — пересечь offerId/магазины с «Отбором»
+- [Taobao: блокировка за парсинг](taobao-blokirovka-parsinga.md) — автосборы под её аккаунтом запрещены
+- [1688 через treg API](treg-1688-api.md) — 60 товаров с повторными закупками за $0.015
+- [treg.to — один ключ к 85 платформам](treg-to.md) — TikTok по хэштегам США, ключ в .env радара
+- [Её вкус в товарах](vkus-vybora-tovarov.md) — радар + изюминка; не мини/комплекты/база
+- [Её выбор — без фильтров](vybor-polzovatelya-bez-filtrov.md) — что выбрала сама, не отсеивать
+- [Юбки 1688: проверка выкупа](yubki-1688-proverka-vykupa.md) — прошли 新女人花 (60%), 笑彩 (72%)
+- [Сайт не пускает — Happ напрямую](happ-napryamuyu-bez-vpn.md) — обход мимо happ-xray, иначе happ_china_patch.py
+- [Долгие сборы — прогресс](dolgie-sbory-progress.md) — «N из M», сохранение по ходу, прогноз

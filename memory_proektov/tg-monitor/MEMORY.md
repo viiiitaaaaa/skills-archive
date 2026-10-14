@@ -1,0 +1,17 @@
+- [Новости одной командой](novosti-tg-odnoy-komandoy.md) — «новости» = скилл tg-news; закрытые каналы — Telegram Web в Chrome
+- [Новости: её логика отбора](novosti-ne-skipat-lishnee.md) — в дашборд только то, что меняет наше действие
+- [Посты в бот — отвечать разбором](posty-v-bot-otvechat.md) — что взять, зачем, что не нужно
+- [Уроки из новостей](uroki-iz-novostey.md) — скилл dropship-lessons, напоминать к месту
+- [«Принято к сведению» — прорабатывать](prinyato-k-svedeniyu-prorabatyvat.md) — скилл + GitHub + применить
+- [Принятое — изучать ВСЁ](prinyato-izuchat-vse-ssylki.md) — все ссылки, курсы, безопасный GitHub
+- [Хвосты изучения 07.10](hvosty-izucheniya-07-10.md) — ждут её: плагин marketing, opt-out Shopify
+- [Принятое — не на панели](prinyatoe-ne-na-paneli.md) — noted не в дашборд; скилл noted-news
+- [Маркетинг и ИИ в радаре](novosti-marketing-ii-kanaly.md) — +38 каналов, блок «Маркетинг»
+- [Новости: больше дизайна и вайбкодинга](novosti-bolshe-dizayn-vaybkoding.md) — полезное в site-design / claude-code-priemy
+- [Сессия 12.10: новости → сайт и скиллы](sessiya-12-10-novosti.md) — 2868 постов; хвосты по форме/tenacity
+- [Новости: дизайн сайтов](novosti-dizayn-saytov.md) — каналы дизайна, блок на панели; видео не качать
+- [Номера постов на панели](nomera-postov-paneli.md) — tg_monitor\post_numbers.json, постоянные
+- [Новости применять глубоко](novosti-primenyat-gluboko.md) — ссылки и код открыть, проверить замером, вписать в шаги скиллов
+- [Сессия 14.10: книги и новости](sessiya-14-10-knigi-novosti.md) — 6 книг, новости применены; хвосты: заголовки сайта, Serverless, юрист
+- [Система знаний znaniya](sistema-znaniy.md) — «что умеем/знаем», в начале проекта поднять наше
+- [Inspo MCP для дизайна](inspo-mcp.md) — 832 сайта-примера; no-ai-slop стоит; ax/untidetect отвергнуты

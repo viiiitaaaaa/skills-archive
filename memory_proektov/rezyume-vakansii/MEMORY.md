@@ -1,0 +1,12 @@
+- [Питч партнёру v7 (WB, ТЯК)](pitch-pravki-golosovym.md) — схема с китайским партнёром, её цифры; три формата
+- [Питч — полный, не сокращать](pitch-polnyy-ne-sokrashchat.md) — все разделы, графики, словарь; упор WB
+- [Сессия 13.10 вечер: резюме и питчи](sessiya-13-10-vecher-rezyume-pitch.md) — 14.10 сделаны 2 резюме: «партнёр по маркетплейсам» и «ИИ-автоматизация продаж» (ARTMELLIO — инвесторы)
+- [Сессия 14.10: циклы, вакансии, резюме](sessiya-14-10-cikl-vakansii-rezyume.md) — Frivent v2, автозапчасти, парсер вакансий, сверка 22 вакансий ✅/🟡/❌, резюме RU+EN
+- [Вакансии — приоритет США](vakansii-prioritet-ssha.md) — Россия последней или мимо; ITAR = стоп
+- [Английский — A2 (pre-intermediate)](uroven-angliyskogo-a2.md) — не завышать; роли письменные, не созвоны
+- [Резюме — без тех. деталей](rezyume-bez-tehnicheskih-detaley.md) — деловым языком, автоматизация большим разделом
+- [LinkedIn: ограничен за автосбор](linkedin-ogranichen-avtosbor.md) — под её аккаунтом скриптами не собирать; вакансии — открытые API
+- [ARTMELLIO — не её](artmellio-ne-ee.md) — магазин не её; её бизнес — ИП
+- [Резюме и питч по книгам](rezyume-i-pitch-po-knigam.md) — чеклист в knigi_kupleno
+- [Договорённости до работы](dogovorennosti-do-raboty.md) — скилл dogovorennosti: условия → «да»/платёж → работа; учимся на её случаях
+- [Аналитика 14.10: рынок + 40 вручную](sessiya-14-10-analitika-40.md) — analitika_dannye_2026-10-14.json; без пометок по стране
