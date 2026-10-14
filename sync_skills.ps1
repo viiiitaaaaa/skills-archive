@@ -43,6 +43,15 @@ New-Item -ItemType Directory -Path $mem -Force | Out-Null
 Copy-Item "C:\Users\User\.claude\projects\C--Users-User\memory\*.md" $mem -Force
 Copy-Item "C:\Users\User\.claude\CLAUDE.md" (Join-Path $dst "CLAUDE_global.md") -Force
 
+# 3г. Файлы для проектов Claude Desktop (правила веток + «Что мы умеем и знаем.md») — копия с рабочего стола
+$cd  = "C:\Users\User\Desktop\Файлы для проектов Claude"
+$cdA = Join-Path $dst "proekty_claude_desktop"
+if (Test-Path $cd) {
+    if (Test-Path $cdA) { Remove-Item $cdA -Recurse -Force }
+    New-Item -ItemType Directory -Path $cdA -Force | Out-Null
+    Copy-Item (Join-Path $cd "*") $cdA -Force
+}
+
 # 3в. База новостей (20+ МБ, в git не кладём) — копия на Google Диск, если изменилась
 $db = "C:\Users\User\tg_monitor\tg_monitor.db"
 $dbDir = "G:\Мой диск\Программы и ярлыки (с рабочего стола)\Резерв — база новостей"

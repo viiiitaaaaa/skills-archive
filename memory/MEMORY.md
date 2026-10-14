@@ -1,3 +1,4 @@
+- [Проекты по папкам](proekty-po-papkam.md) — 14.10: 10 веток, у каждой своя папка, таблица в глобальном CLAUDE.md
 - [Скрипты Dolphin{anty}](dolphin-anty-scripts.md) — готовая автоматизация профилей и скринов, не писать заново
 - [Профиль Dolphin — только один](dolphin-profile-id.md) — ВСЕГДА 859648353 (AliExpress, магазин, trend-radar); 828976678 нет
 - [Общение по-русски](obshenie-po-russki.md) — по-русски, объяснять действия до запуска команд
@@ -126,6 +127,7 @@
 - [Резюме и питч по книгам](rezyume-i-pitch-po-knigam.md) — чеклист в knigi_kupleno
 - [Вакансии — приоритет США](vakansii-prioritet-ssha.md) — Россия последней или мимо; ITAR = стоп
 - [Английский — A2 (pre-intermediate)](uroven-angliyskogo-a2.md) — не завышать; роли письменные, не созвоны
+- [Скилл vakansii-ssha](vakansii-prioritet-ssha.md) — сбор по 9 открытым API, сверка в 3 столбца, правила резюме
 - [Резюме — без тех. деталей](rezyume-bez-tehnicheskih-detaley.md) — деловым языком, автоматизация большим разделом
 - [Правки сайта от Паши 13.10](pravki-sayta-pasha-13-10.md) — УТП раскрывающимися блоками, Frivent→«Смарт Люкс», Kol Gali; делать по её «делай»
 - [Договорённости до работы](dogovorennosti-do-raboty.md) — скилл dogovorennosti: условия → «да»/платёж → работа; учимся на её случаях

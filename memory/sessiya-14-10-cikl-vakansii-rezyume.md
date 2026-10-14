@@ -14,13 +14,13 @@ metadata:
 - «Полный цикл: автозапчасти» (опт СТО/мастерским/магазинам/паркам + розница), 128 приёмов, без Frivent:
   https://claude.ai/artifact/4aiFNKWsuksEjw3asVHvWq (knigi_kupleno\avtozapchasti\; Диск «ARTMELLIO — инвесторы»). Только RU.
 - 30 удалённых вакансий США/Европа с разбором «что делают / что уметь / что есть / чего нет»:
-  https://claude.ai/artifact/UEB8cT4w1UjAUithRmSFwG (knigi_kupleno\vakansii_30.json, build_vakansii.py). Из России реально 16.
+  https://claude.ai/artifact/UEB8cT4w1UjAUithRmSFwG (rezyume-vakansii\vakansii_30.json, build_vakansii.py). Из России реально 16.
   Частые требования: ИИ 15/30, отчёты 12, английский 12, HubSpot/CRM 11, Google/Meta Ads 9.
 - Резюме обезличенное универсальное (RU по умолчанию + EN кнопкой): https://claude.ai/artifact/QhT8e3Xc1SiXSmrqLSduKG
-  (knigi_kupleno\rezyume_universal.html). В MEMORY есть план другой сессии «2 резюме (А WB, Б ИИ-продажи)» — сверить.
+  (rezyume-vakansii\rezyume_universal.html). В MEMORY есть план другой сессии «2 резюме (А WB, Б ИИ-продажи)» — сверить.
 
 Второй заход 14.10 (вечер):
-- Парсер вакансий `knigi_kupleno\sbor_vakansiy.py` — открытые API без ключей: Himalayas, Remotive,
+- Парсер вакансий `rezyume-vakansii\sbor_vakansiy.py` — открытые API без ключей: Himalayas, Remotive,
   RemoteOK, Jobicy, Arbeitnow. Фильтр: наш профиль ролей + от 75 000 $/год; зарплату берёт из полей,
   а где нет — из текста (с проверкой контекста, чтобы не поймать выручку или бюджет). Итог
   `vakansii_sbor_<дата>.json`. Грабли: Himalayas отдаёт ~200 свежих, у половины зарплаты нет;

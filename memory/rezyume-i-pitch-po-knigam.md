@@ -13,7 +13,7 @@ metadata:
 мы сделали вместе; написать краткую сводку о ней — «очень хорошо продать себя инвестору». Затем пересмотреть питч
 китайскому партнёру ([[pitch-pravki-golosovym]], [[pitch-polnyy-ne-sokrashchat]]) на основе этих книг.
 
-**How to apply:** шаги и «готово» — `C:\Users\User\knigi_kupleno\CHECKLIST_rezyume_pitch.md`. Начинать сразу после книг,
+**How to apply:** шаги и «готово» — `C:\Users\User\rezyume-vakansii\CHECKLIST_rezyume_pitch.md`. Начинать сразу после книг,
 без её напоминания; в начале — скилл znaniya ([[sistema-znaniy]]). Документы — .html ([[net-word]]).
 
 **Её 13.10 (уточнила):** Shopify и дропшип в США — В РЕЗЮМЕ писать (это её опыт); в питче китайскому партнёру — НЕ добавлять, там это лишнее.

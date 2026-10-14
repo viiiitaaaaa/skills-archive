@@ -27,7 +27,7 @@ Himalayas, Remotive (общий список **и поиск по словам**
 RemoteOK, Jobicy (в том числе `geo=usa`), Arbeitnow (8 страниц), Working Nomads,
 The Muse (только нужные разделы). Итог — `vakansii_sbor_<дата>.json`.
 
-Запуск: `cd C:\Users\User\knigi_kupleno && python -I sbor_vakansiy.py`
+Запуск: `cd C:\Users\User\rezyume-vakansii && python -I sbor_vakansiy.py`
 
 **Грабли, на которые уже наступили:**
 
@@ -51,7 +51,7 @@ The Muse (только нужные разделы). Итог — `vakansii_sbor
 `match` / `partial` / `gap` и строка `vyvod`. Процент = совпадения плюс половина частичных.
 Правь текстом, страница пересобирается командой:
 
-`cd C:\Users\User\knigi_kupleno && python -I build_sravnenie.py`
+`cd C:\Users\User\rezyume-vakansii && python -I build_sravnenie.py`
 
 Страница группирует вакансии: **США → другие страны → можно из России**, открывается сразу
 на американских. Сопоставление разбора с данными сбора идёт **по компании и по названию** —
@@ -68,7 +68,7 @@ The Muse (только нужные разделы). Итог — `vakansii_sbor
 ## Резюме
 
 Файл `rezyume_pro.html` (русский + английский кнопкой). Правила, по которым оно собрано, —
-из разбора 18 живых и образцовых резюме (`knigi_kupleno\primery_rezyume_linkedin.md`):
+из разбора 18 живых и образцовых резюме (`rezyume-vakansii\primery_rezyume_linkedin.md`):
 
 1. Заголовок = роль + область + метод через «|».
 2. Достижения первым блоком, формула «с A до B за срок + способ». Цифра без способа выглядит
