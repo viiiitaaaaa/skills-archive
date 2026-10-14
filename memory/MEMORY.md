@@ -100,6 +100,7 @@
 - [Upscayl: ошибка видеокарты](upscayl-tile-size.md) — «vkQueueSubmit failed -4» → -t 64
 - [Номера постов на панели](nomera-postov-paneli.md) — tg_monitor\post_numbers.json, постоянные
 - [Замеры линейкой — по местам](zamery-lineykoy-kazhdoe-mesto.md) — размер каждого места, не одно число
+- [LinkedIn: ограничен за автосбор](linkedin-ogranichen-avtosbor.md) — под её аккаунтом скриптами не собирать; вакансии — открытые API
 - [Ворда нет](net-word.md) — документы для чтения в .html
 - [Печать — скилл pechat](pechat-printer.md) — RICOH 192.168.0.104; Xprinter — этикетки
 - [Сканы — ничего не срезать](skany-nichego-ne-srezat.md) — выравнивать можно, обрезать нельзя
@@ -108,7 +109,7 @@
 - [Питч партнёру v7 (WB, ТЯК)](pitch-pravki-golosovym.md) — схема с китайским партнёром, её цифры; три формата
 - [Питч — полный, не сокращать](pitch-polnyy-ne-sokrashchat.md) — все разделы, графики, словарь; упор WB
 - [Книги — применять на практике](knigi-primenyat-na-praktike.md) — приёмы iz_knig*.md на её сайтах
-- [Купленные книги](kuplennye-knigi.md) — 35 книг разложены в iz_knig*.md скиллов
+- [Купленные книги](kuplennye-knigi.md) — 43 книги в iz_knig*.md скиллов; 14.10 +8 по НЛП и переговорам → dogovorennosti
 - [lead-engine: без контактов](lead-engine-bez-kontaktov.md) — на сайте только заявка с UTM
 - [lead-engine: исследования не показывать](lead-engine-issledovaniya-ne-pokazyvat.md) — боли голосом эксперта
 - [Сессия 10–12.10: сайт Frivent](sessiya-10-10-sayt-frivent.md) — хвосты: политика юристу, примеры→настоящие
@@ -126,4 +127,4 @@
 - [Правки сайта от Паши 13.10](pravki-sayta-pasha-13-10.md) — УТП раскрывающимися блоками, Frivent→«Смарт Люкс», Kol Gali; делать по её «делай»
 - [Договорённости до работы](dogovorennosti-do-raboty.md) — скилл dogovorennosti: условия → «да»/платёж → работа; учимся на её случаях
 - [Сначала каркас, потом дизайн](snachala-karkas-potom-dizayn.md) — любой сайт: структура на согласование, большое — этапами
-- [Сессия 13.10 вечер: резюме и питчи](sessiya-13-10-vecher-rezyume-pitch.md) — хвосты: цифры кейсов, китайский, три версии v8
+- [Сессия 13.10 вечер: резюме и питчи](sessiya-13-10-vecher-rezyume-pitch.md) — 14.10 её «солянка» → переделка на 2 резюме (А WB, Б ИИ-продажи), план в CHECKLIST_rezyume_pitch.md
