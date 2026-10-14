@@ -110,7 +110,7 @@
 - [Питч партнёру v7 (WB, ТЯК)](pitch-pravki-golosovym.md) — схема с китайским партнёром, её цифры; три формата
 - [Питч — полный, не сокращать](pitch-polnyy-ne-sokrashchat.md) — все разделы, графики, словарь; упор WB
 - [Книги — применять на практике](knigi-primenyat-na-praktike.md) — приёмы iz_knig*.md на её сайтах
-- [Купленные книги](kuplennye-knigi.md) — 50 книг в iz_knig*.md; ХВОСТ 6 книг → knigi_kupleno/CHECKLIST_knigi_14_10.md (в новой сессии)
+- [Купленные книги](kuplennye-knigi.md) — 50 книг в iz_knig*.md; книги 14.10 дочитаны, хвостов нет
 - [lead-engine: без контактов](lead-engine-bez-kontaktov.md) — на сайте только заявка с UTM
 - [lead-engine: исследования не показывать](lead-engine-issledovaniya-ne-pokazyvat.md) — боли голосом эксперта
 - [Сессия 10–12.10: сайт Frivent](sessiya-10-10-sayt-frivent.md) — хвосты: политика юристу, примеры→настоящие
