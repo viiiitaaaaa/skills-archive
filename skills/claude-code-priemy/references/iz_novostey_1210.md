@@ -20,7 +20,7 @@
 
 ## Чистка скиллов и CLAUDE.md
 - `/claude-api prompt-audit` ищет противоречивые и устаревшие правила в CLAUDE.md и скиллах (notboring_tech/4379,
-  ei_ai_channel/251) → прогнать по глобальному CLAUDE.md, памяти и ARTMELLIO_SKILLS, затем sync_skills.ps1.
+  ei_ai_channel/251) → прогнать по глобальному CLAUDE.md, памяти и claude-skills, затем sync_skills.ps1.
 - `/insights` разбирает последние 200 сессий → раз в месяц по отчёту дописывать правила (projplus/4920).
 - `/skill-doctor` и промпт «разбери, как я тобой пользуюсь» — где теряем лимит (ai4svoi/122, ppprompt/3234).
 - skill-cleaner (steipete) — дубли и неиспользуемые скиллы; описания всех скиллов едят контекст каждого запроса —

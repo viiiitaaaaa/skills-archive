@@ -9,7 +9,7 @@ metadata:
 ---
 
 23.09.2026 по статье Anthropic «Getting the most out of Opus 5.5» создан глобальный `C:\Users\User\.claude\CLAUDE.md`
-(копии: архив ARTMELLIO_SKILLS и automation-scripts/claude-skills/CLAUDE.md).
+(копии: архив claude-skills и automation-scripts/claude-skills/CLAUDE.md).
 
 07.10.2026 добавлено правило «что значит готово»: сначала писать, каким должен быть итог; длинную задачу отдавать
 целиком, чеклист шагов — отдельным файлом (пункт №2 «когда будет время» из dropship-lessons, выполнен по её «сделай»).

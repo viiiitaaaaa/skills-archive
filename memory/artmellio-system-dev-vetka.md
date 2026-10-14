@@ -8,7 +8,7 @@ metadata:
   modified: 2026-10-07T13:31:17.607Z
 ---
 
-07.10.2026: в репозитории `C:\Users\User\artmellio-system` текущая ветка — `feature/operations-panel`. Ветка `dev`
+07.10.2026: в репозитории `C:\Users\User\decor-store-ops` текущая ветка — `feature/operations-panel`. Ветка `dev`
 разошлась с ней, обычный `git push origin HEAD:dev` отклоняется (non-fast-forward). Документ уроков
 `docs/uroki-iz-novostey.md` ушёл только в рабочую ветку.
 

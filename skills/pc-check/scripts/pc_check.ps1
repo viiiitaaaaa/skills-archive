@@ -252,7 +252,7 @@ foreach ($r in $remoteInstalled) { Add-Finding INFO 'Удалённый дост
 # --- 9. Папки скиллов и плагинов Claude (12.10: троян пережил переустановку внутри SKILL.md из бэкапа) -----
 Write-Host "9/10 Скиллы и плагины Claude..."
 $claudeDir = "$env:USERPROFILE\.claude"; $skillsDir = "$claudeDir\skills"; $pluginsDir = "$claudeDir\plugins"
-$mirror = "$env:USERPROFILE\ARTMELLIO_SKILLS"   # git-копия скиллов (viiiitaaaaa/artmellio-skills), её делает sync_skills.ps1
+$mirror = "$env:USERPROFILE\claude-skills"   # git-копия скиллов (viiiitaaaaa/claude-skills), её делает sync_skills.ps1
 $git = (Get-Command git -ErrorAction SilentlyContinue).Source
 $skillFiles = @(Get-ChildItem $skillsDir -Recurse -File -Force | Where-Object { $_.FullName -notmatch '\\\.git\\' })
 $report.skills = [ordered]@{ files = $skillFiles.Count }
@@ -261,9 +261,9 @@ $bin = @(Get-ChildItem $skillsDir, $pluginsDir -Recurse -File -Force -Include *.
 foreach ($b in $bin) { Add-Finding YELLOW 'Скиллы Claude' "Исполняемый файл в папке скиллов/плагинов: $($b.FullName)" 'Скиллу нужны только тексты и скрипты; программа внутри скилла — способ спрятать вредонос, который Claude запустит сам' 'Узнать, откуда он; хэш проверить на virustotal.com. Ничего не удалять без её слова' }
 # b) сверка с GitHub-копией: что изменилось или появилось после последней синхронизации
 if ($git -and (Test-Path "$mirror\.git")) {
-    # копия = рабочая папка ARTMELLIO_SKILLS\skills; сначала убедиться, что она совпадает с тем, что ушло на GitHub
+    # копия = рабочая папка claude-skills\skills; сначала убедиться, что она совпадает с тем, что ушло на GitHub
     $dirty = @(& $git -c safe.directory=* -C $mirror status --porcelain -- skills 2>$null)
-    if ($dirty.Count) { Add-Finding YELLOW 'Скиллы Claude' "Копия скиллов ARTMELLIO_SKILLS отличается от последнего коммита: $($dirty.Count) файлов" 'Сверять не с чем: копию правили мимо sync_skills.ps1' 'Посмотреть git status в ARTMELLIO_SKILLS' }
+    if ($dirty.Count) { Add-Finding YELLOW 'Скиллы Claude' "Копия скиллов claude-skills отличается от последнего коммита: $($dirty.Count) файлов" 'Сверять не с чем: копию правили мимо sync_skills.ps1' 'Посмотреть git status в claude-skills' }
     # побайтно (SHA256): git-хэш файла вне репозитория не учитывает перевод строк CRLF и даёт ложные «изменён»
     $changed = New-Object System.Collections.Generic.List[object]
     foreach ($f in $skillFiles) {
@@ -274,7 +274,7 @@ if ($git -and (Test-Path "$mirror\.git")) {
     }
     $report.skills.changedVsGitHub = $changed.ToArray()
     $scr = @($changed | Where-Object { $_.File -match '\.(ps1|bat|cmd|sh|py|js|mjs|vbs)$' })
-    foreach ($c in ($scr | Select-Object -First 15)) { Add-Finding YELLOW 'Скиллы Claude' "Скрипт скилла $($c.State) после последней синхронизации: $($c.File) ($($c.Time))" 'Скрипт скилла Claude запускает сам. Если правили не мы — это подмена' 'Если правку делали мы — запустить sync_skills.ps1; если нет — сравнить с GitHub-копией (git diff в ARTMELLIO_SKILLS)' }
+    foreach ($c in ($scr | Select-Object -First 15)) { Add-Finding YELLOW 'Скиллы Claude' "Скрипт скилла $($c.State) после последней синхронизации: $($c.File) ($($c.Time))" 'Скрипт скилла Claude запускает сам. Если правили не мы — это подмена' 'Если правку делали мы — запустить sync_skills.ps1; если нет — сравнить с GitHub-копией (git diff в claude-skills)' }
     if ($scr.Count -gt 15) { Add-Finding YELLOW 'Скиллы Claude' "Ещё изменённых скриптов скиллов: $($scr.Count - 15) (список в json)" 'См. выше' 'См. выше' }
     $txt = @($changed | Where-Object { $_.File -notmatch '\.(ps1|bat|cmd|sh|py|js|mjs|vbs)$' })
     if ($txt.Count) { Add-Finding INFO 'Скиллы Claude' "Тексты скиллов, изменённые/новые после синхронизации: $($txt.Count) (например: $((($txt | Select-Object -First 5).File) -join '; '))" 'Обычно это наши свежие правки' 'Запустить sync_skills.ps1; незнакомое — сверить с GitHub-копией' }

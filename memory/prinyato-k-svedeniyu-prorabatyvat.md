@@ -10,7 +10,7 @@ metadata:
 
 Карточки, которые она пересылает с панели новостей (и все прошлые с пометкой «📌 Принято к сведению»), — важная
 информация. Всегда: (1) пометить `noted` в notes.json и пересобрать скилл noted-news (`noted_to_skill.py`; с 07.10 на панель принятое не выводится — [[prinyatoe-ne-na-paneli]]), (2) записать в скилл dropship-lessons (или
-knowledge-library для справочников), (3) сохранить на GitHub как важное (artmellio-system/docs/uroki-iz-novostey.md +
+knowledge-library для справочников), (3) сохранить на GitHub как важное (decor-store-ops/docs/uroki-iz-novostey.md +
 automation-scripts), (4) **проработать** — не только записать, а применить: что можно сделать сразу для нашего магазина,
 скиллов, сборщиков, дел — сделать или разложить в план с конкретным шагом.
 

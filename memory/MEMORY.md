@@ -9,7 +9,7 @@
 - [Ссылки на товары по фото](ssylki-na-tovary-po-foto.md) — скилл product-links
 - [Подложка сайта в Comfy](podlozhka-sayta-comfy.md) — скилл site-mockups, оболочка без цвета + токены коллекций
 - [Интерьерные сцены комнат](maket-perestanovki-poverh-kadra.md) — правки коллажем поверх кадра, скилл room-scenes
-- [Архив скиллов и промтов](arhiv-skillov.md) — ARTMELLIO_SKILLS = GitHub artmellio-skills; sync_skills.ps1 пушит сам
+- [Архив скиллов и промтов](arhiv-skillov.md) — claude-skills = GitHub claude-skills; sync_skills.ps1 пушит сам
 - [Скрипты для переписки с мужчинами](nlp-vlyublenie-skripty.md) — скилл love-scripts; пополнять после разбора
 - [Новый магазин (профиль 3)](novyy-magazin-shopify-profil3.md) — Dolphin 859648353, 2e0bv7-jn.myshopify.com
 - [Парсинг трендов fashion-trend-radar](fashion-trend-radar-parsing.md) — Bright Data для Google Trends + грабля с cat=
@@ -100,7 +100,7 @@
 - [Upscayl: ошибка видеокарты](upscayl-tile-size.md) — «vkQueueSubmit failed -4» → -t 64
 - [Номера постов на панели](nomera-postov-paneli.md) — tg_monitor\post_numbers.json, постоянные
 - [Замеры линейкой — по местам](zamery-lineykoy-kazhdoe-mesto.md) — размер каждого места, не одно число
-- [Сессия 14.10: циклы, вакансии, резюме](sessiya-14-10-cikl-vakansii-rezyume.md) — Frivent v2, автозапчасти, 30 вакансий, резюме; хвосты
+- [Сессия 14.10: циклы, вакансии, резюме](sessiya-14-10-cikl-vakansii-rezyume.md) — Frivent v2, автозапчасти, парсер вакансий, сверка 22 вакансий ✅/🟡/❌, резюме RU+EN
 - [LinkedIn: ограничен за автосбор](linkedin-ogranichen-avtosbor.md) — под её аккаунтом скриптами не собирать; вакансии — открытые API
 - [Ворда нет](net-word.md) — документы для чтения в .html
 - [Печать — скилл pechat](pechat-printer.md) — RICOH 192.168.0.104; Xprinter — этикетки
@@ -124,6 +124,7 @@
 - [Сессия 12–13.10: система знаний](sessiya-12-10-sistema-znaniy.md) — хвосты: автоРазбор, TeachBK — по её слову
 - [Рабочий стол = метки порядка](rabochiy-stol-metki-poryadka.md) — её номера задают порядок; смотреть все файлы
 - [Резюме и питч по книгам](rezyume-i-pitch-po-knigam.md) — чеклист в knigi_kupleno
+- [Английский — A2 (pre-intermediate)](uroven-angliyskogo-a2.md) — не завышать; роли письменные, не созвоны
 - [Резюме — без тех. деталей](rezyume-bez-tehnicheskih-detaley.md) — деловым языком, автоматизация большим разделом
 - [Правки сайта от Паши 13.10](pravki-sayta-pasha-13-10.md) — УТП раскрывающимися блоками, Frivent→«Смарт Люкс», Kol Gali; делать по её «делай»
 - [Договорённости до работы](dogovorennosti-do-raboty.md) — скилл dogovorennosti: условия → «да»/платёж → работа; учимся на её случаях

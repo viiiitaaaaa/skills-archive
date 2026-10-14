@@ -5,7 +5,7 @@ description: "Юридические дела из Telegram-бота «Дела�
 
 # Дела: бот → Drive → документы → итог (скилл `dela`)
 
-Код бота: `C:\Users\User\case_bot` (GitHub, приватный: https://github.com/viiiitaaaaa/case-bot).
+Код бота: `C:\Users\User\case-bot` (GitHub, приватный: https://github.com/viiiitaaaaa/case-bot).
 База: `G:\Мой диск\Дела` (Google Drive для компьютера) — **единственный источник правды**; правила для всех
 Claude — `Дела\_ПРАВИЛА.md`. Сравнение правок и история — в `_служебное\_итоги.md` каждого дела; для людей — `О деле — кратко и хронология.docx`.
 
@@ -32,8 +32,8 @@ Claude — `Дела\_ПРАВИЛА.md`. Сравнение правок и и�
 
 ## Список дел (с 01.10)
 
-`case_bot\todo_list.py` — бот сам ведёт `G:\Мой диск\Дела\Список дел.docx` (данные — `Дела\_Входящие\_список_дел.json`).
-Постоянная ссылка: https://drive.google.com/file/d/1j_gmEyiGp5O1kk5-SOK-t64yDbPlTi6x/view (в `case_bot\todo_link.txt`).
+`case-bot\todo_list.py` — бот сам ведёт `G:\Мой диск\Дела\Список дел.docx` (данные — `Дела\_Входящие\_список_дел.json`).
+Постоянная ссылка: https://drive.google.com/file/d/1j_gmEyiGp5O1kk5-SOK-t64yDbPlTi6x/view (в `case-bot\todo_link.txt`).
 Команды в бот (текст или голос, не пересланные): «+ дело 05.10» / «Список дел: …» / «в список: …» (дата: 05.10,
 5 октября, завтра, в пятницу, через 3 дня; время 15:00) · «готово 3» · «перенести 3 на 10.10» · «убрать 3» · «список».
 Такие сообщения НЕ пишутся в `_лента.md` и не запускают авторазбор — бот отвечает сам. Документ пересобирается
@@ -54,17 +54,17 @@ PDF > 12 МБ сжимать в копию в `_служебное\для поч
 Telegram, Claude, ИИ, «автоматического письма»; от первого лица; текста письма НЕТ вообще (ни «Добрый день», ни «С уважением», ни подписи) — только вложение, а в ТЕМЕ: что за документ, кому, № дела и суд (её правило 02.10); `--body` — только если она сама попросила текст. Вложение — с понятным именем (как в папке дела). `draft` сам отказывает при
 таких словах (список FORBIDDEN в mail_out.py) — переписать текст, не обходить.
 ```
-python C:\Users\User\case_bot\mail_out.py draft --to <адрес> [--cc …] --subject "<тема>" --body <письмо.txt> --reply <msg_id> <файлы.docx/pdf>
+python C:\Users\User\case-bot\mail_out.py draft --to <адрес> [--cc …] --subject "<тема>" --body <письмо.txt> --reply <msg_id> <файлы.docx/pdf>
 ```
 В бот приходит превью с кнопками «✅ Отправить» / «✖ Отмена» — уходит только по её нажатию (отправляет бот,
 Gmail SMTP, пароль приложения — переменная Windows `GMAIL_APP_PASSWORD`; `mail_out.py check` — проверка входа).
-Журнал — `case_bot\_письма\_журнал.md`. VPN Happ режет порты 465/587 — `smtp_login()` сам выходит с адреса
+Журнал — `case-bot\_письма\_журнал.md`. VPN Happ режет порты 465/587 — `smtp_login()` сам выходит с адреса
 Wi-Fi мимо адаптера happ-xray (проверено 02.10: «235 Accepted»); Happ и буфер обмена для этого НЕ нужны. Адрес не нашёлся — черновик не делать, написать в бот, чего не хватает.
 В `_итоги.md` дела — строку «черновик письма на <адрес> — ждёт подтверждения».
 
 ## Авторазбор (с 27.09)
 
-`case_bot\auto_razbor.py` — сторож лент: новые `msg_id` в любой ленте + 90 с тишины → сам запускает
+`case-bot\auto_razbor.py` — сторож лент: новые `msg_id` в любой ленте + 90 с тишины → сам запускает
 `claude -p "<разбери входящие по скиллу dela>" --permission-mode auto --chrome` (один разбор за раз, лимит 1 ч).
 Стартует из `start_bot.bat` (ярлык «Бот Дела» в автозагрузке). Журнал — `auto_razbor.log`, вывод разборов — `runs\`.
 В интерактивной сессии Monitor на ленты НЕ включать — будет двойной разбор. Если её сообщение осталось без ответа —
@@ -119,7 +119,7 @@ Wi-Fi мимо адаптера happ-xray (проверено 02.10: «235 Accep
    Копию класть в `_служебное\ОБЩИЙ_ВЫВОД_<дата>.md` дела →
    ```
    $env:TELEGRAM_BOT_TOKEN=[Environment]::GetEnvironmentVariable('TELEGRAM_BOT_TOKEN','User'); $env:OWNER_ID=[Environment]::GetEnvironmentVariable('OWNER_ID','User'); $env:PYTHONIOENCODING='utf-8'
-   python C:\Users\User\case_bot\send_result.py --text <итог.md> --reply <msg_id запроса> <файлы.docx>
+   python C:\Users\User\case-bot\send_result.py --text <итог.md> --reply <msg_id запроса> <файлы.docx>
    ```
    **Файлы документов в бот — можно, без вопросов** (02.10 вечером она сняла свой же запрет: «разрешаю кидать
    файлы ботом в телеграм, отменяю запрет и спрашивания»). Если в голосовом прямо сказано «на почту» — черновик
@@ -166,15 +166,15 @@ Wi-Fi мимо адаптера happ-xray (проверено 02.10: «235 Accep
 - VPN Happ иногда не резолвит `googleapis.com` → Drive «offline»; перезапуск `GoogleDriveFS.exe` помогает,
   когда сеть вернулась. Весь Google через прокси (routing «1688», globalProxy) — это нормально.
 - Диск G: иногда пропадает на минуту (02.10 15:06 — 5 сообщений потеряно, «не найден путь G:\»). С 02.10 бот
-  в этом случае пишет в `case_bot\_буфер\` и раз в минуту сам переносит на Drive. Если её сообщение «пропало» —
+  в этом случае пишет в `case-bot\_буфер\` и раз в минуту сам переносит на Drive. Если её сообщение «пропало» —
   смотреть `bot.log` (ERROR) и `_буфер\`; пришедшее до исправления нужно переслать заново.
 - «Скинула в бот», а во `_Входящих` пусто → проверить, жив ли бот: процесса `python case_bot.py` нет (10.10:
   последняя запись `bot.log` — httpx.ReadError 09.10 15:53, весь `start_bot.bat` был закрыт). Запуск —
-  `Start-Process C:\Users\User\case_bot\start_bot.bat -WindowStyle Minimized`; Telegram хранит непрочитанное сутки,
+  `Start-Process C:\Users\User\case-bot\start_bot.bat -WindowStyle Minimized`; Telegram хранит непрочитанное сутки,
   бот заберёт его сам. Файлы не по делам (питчи и т. п.) он кладёт в `Мои задачи\_Входящие`.
 - Сторож авторазбора может зависнуть живым (10.10: в `auto_razbor.log` последняя строка «запускаю разбор» в 03:39 без
   «завершён», файла в `runs\` нет, новые сообщения не видит 16 ч). Проверка в шаге 1; лечение — убить процесс
-  `python auto_razbor.py` и `Start-Process python -ArgumentList auto_razbor.py -WorkingDirectory C:\Users\User\case_bot -WindowStyle Minimized`.
+  `python auto_razbor.py` и `Start-Process python -ArgumentList auto_razbor.py -WorkingDirectory C:\Users\User\case-bot -WindowStyle Minimized`.
 - Голосовое «длиной 1 с» при файле 8–30 КБ — не обрыв: Telegram-клиент Zebrik пишет короткие фразы с высоким битрейтом
   (проверено 10.10 по пакетам opus), расшифровка полная.
 - Файл `.env` мне закрыт правилами доступа; токен и `OWNER_ID` — в переменных окружения Windows (User).

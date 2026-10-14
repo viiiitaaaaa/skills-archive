@@ -12,12 +12,12 @@ metadata:
 подключить через n8n и Whimsical (оба установлены, Whimsical открыт в Chrome, аккаунт «VI»).
 - Страница: https://claude.ai/artifact/WZp11Ran7n2ib77RobkAmJ (вкладки по группам, схема + правила + фразы запуска).
 - Whimsical: доска «Карта всех скиллов ARTMELLIO» (team «Everyone at VI»); вставляется Mermaid-текстом через Ctrl+V
-  на холст — Whimsical сам рисует схему с цветами. Отдельные схемы: artmellio-system\docs\skill-map\whimsical\*.mmd,
+  на холст — Whimsical сам рисует схему с цветами. Отдельные схемы: decor-store-ops\docs\skill-map\whimsical\*.mmd,
   всё на одну доску — ALL_ONE_BOARD.mmd.
 - n8n: 29 выключенных сценариев «Карта · <скилл>» (узлы-заглушки + заметка с правилами), импорт
-  `n8n import:workflow --separate --input=artmellio-system\n8n\map`. При первом запуске n8n просил создать
+  `n8n import:workflow --separate --input=decor-store-ops\n8n\map`. При первом запуске n8n просил создать
   учётку владельца — это делает она сама (пароль).
-- Сборщик: artmellio-system\docs\skill-map\build_skill_map.py (из skills_all.json; схемы написаны строго по тексту скиллов).
+- Сборщик: decor-store-ops\docs\skill-map\build_skill_map.py (из skills_all.json; схемы написаны строго по тексту скиллов).
 - Найдено расхождение: dolphin-shots, dsers-import, product-links — в тексте старые профили Dolphin (828976678/836461485),
   а правило — всегда 859648353 ([[dolphin-profile-id]]). 27.09 ИСПРАВЛЕНО во всех скиллах и скриптах (в т.ч.
   shopify-admin, shopify-collections, artmellio-system, dropship-audit — там был «Декор» 836461485); карта пересобрана.

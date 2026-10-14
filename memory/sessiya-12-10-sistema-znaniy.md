@@ -9,7 +9,7 @@ metadata:
 ---
 
 12–13.10.2026:
-- Радар новостей отправлен в бот файлом `news_panel.html` (открывается без входа в Claude) через case_bot\send_result.py.
+- Радар новостей отправлен в бот файлом `news_panel.html` (открывается без входа в Claude) через case-bot\send_result.py.
 - Сделана система знаний — см. [[sistema-znaniy]]; неизученное писать прямо — [[neizuchennoe-pisat-pryamo]].
 - Дочитаны в Chrome закрытые ссылки (OpenAI, Businesswire, x.com Карпати, Meta, Notion = реклама интенсива).
 - Telegram Web вечером грузился ~35 с (сначала пустой зелёный экран) — ждать, а не бросать.

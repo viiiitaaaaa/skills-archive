@@ -660,7 +660,7 @@ Excel, чтобы не потерять картинки. Когда листы 
 
 на claude.ai бот не упоминается; старые версии документов — в «Архив».
 
-Код бота: C:\Users\User\case_bot, GitHub (приватный) viiiitaaaaa/case-bot.
+Код бота: C:\Users\User\case-bot, GitHub (приватный) viiiitaaaaa/case-bot.
 
 Запуск: «разбери входящие», «я скинула в бот», «по делу Шиловой …».
 
@@ -755,7 +755,7 @@ Excel, чтобы не потерять картинки. Когда листы 
 
 Вручную, в PowerShell:
 
-  powershell -ExecutionPolicy Bypass -File "C:\Users\User\ARTMELLIO_SKILLS\sync_skills.ps1"
+  powershell -ExecutionPolicy Bypass -File "C:\Users\User\claude-skills\sync_skills.ps1"
 
 
 

@@ -19,5 +19,5 @@ Orca) и попросила «записать в скиллы, сохранит
 одно напоминание из «Когда будет время».
 Её просьба 27.09 «обязательно выделяй, чтобы я не забыла; помечай на дашборде, что установили и приняли к сведению»:
 на панели новостей — отметка «📌 Принято к сведению» (notes: noted/when/noted_title) и блок «Не забыть» в шапке;
-в GitHub — artmellio-system/docs/uroki-iz-novostey.md + ссылка в начале README (ветки feature/operations-panel и dev),
+в GitHub — decor-store-ops/docs/uroki-iz-novostey.md + ссылка в начале README (ветки feature/operations-panel и dev),
 automation-scripts/claude-skills. Порядок обновления всех мест — в самом скилле, раздел «Где ещё это должно быть видно». Связано: [[1688-dinamika-prodazh]], [[novyy-magazin-shopify-profil3]].

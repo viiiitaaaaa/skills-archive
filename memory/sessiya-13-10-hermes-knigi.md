@@ -16,7 +16,7 @@ metadata:
 - Hermes подключён ею к Telegram; бесплатный Ollama — максимум 3 одновременных, мне 2 потока.
 - Бот разрешений @vita_claude_ok_bot создан, токен в .env ([[razresheniya-cherez-telegram]]).
 
-- 16:00–16:12 бот «Дела» не получал сообщения из-за ошибки «Conflict: terminated by other getUpdates request», к боту подключилась вторая программа. Она удалила Telegram-бота Hermes, я перезапустила start_bot.bat в 16:15, ошибок больше нет. Если «Дела» молчит, первым делом смотреть case_bot\bot.log на Conflict.
+- 16:00–16:12 бот «Дела» не получал сообщения из-за ошибки «Conflict: terminated by other getUpdates request», к боту подключилась вторая программа. Она удалила Telegram-бота Hermes, я перезапустила start_bot.bat в 16:15, ошибок больше нет. Если «Дела» молчит, первым делом смотреть case-bot\bot.log на Conflict.
 
 **Хвосты:** (1) она перезапускает «Claude с Telegram.cmd» → pair-код → allowlist; если бот молчит — разбираться (Windows не проверен).
 (2) Битые книги — закрыто, она велела забыть (см. [[kuplennye-knigi]]).
