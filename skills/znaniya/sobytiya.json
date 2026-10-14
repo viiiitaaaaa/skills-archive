@@ -5,7 +5,7 @@
     "Frivent и заявки": ["b2b-sbor"],
     "Новости, книги, курсы": ["znaniya", "tg-news", "noted-news", "knowledge-library", "kursy-konspekty", "claude-code-priemy"],
     "Дела, документы, компьютер": ["dela", "pechat", "disk-hygiene", "pc-check", "love-scripts"],
-    "Помощники для работы Claude": ["dolphin-shots", "browser-skill", "asd-ste100", "no-ai-slop", "writing-for-agents", "security-audit", "brag-slim", "orx"]
+    "Помощники для работы Claude": ["pult", "dolphin-shots", "browser-skill", "asd-ste100", "no-ai-slop", "writing-for-agents", "security-audit", "brag-slim", "orx"]
   },
   "sobytiya": [
     {"id": "tovar", "nazvanie": "Считаем товар, цену, тест рекламы", "slova": ["цена", "маржа", "юнит", "тест товара", "наценка", "roas"],

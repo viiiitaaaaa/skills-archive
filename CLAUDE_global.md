@@ -29,7 +29,7 @@
 | Сайт «Смарт Люкс» (был Frivent) | `C:\Users\User\lead-engine\site` |
 | Вакансии, резюме, питч | `C:\Users\User\rezyume-vakansii` |
 | Shopify / ARTMELLIO (уже ведётся в Claude Desktop) | `C:\Users\User\decor-store-ops` |
-| Бот «Дела» для Telegram | `C:\Users\User\case-bot` |
+| Мой личный бот в Telegram (личные дела; судебные дела больше не ведём, 14.10.2026) | `C:\Users\User\case-bot` |
 | Скиллы, компьютер (печать, диск, Hermes) и прочее | `C:\Users\User` (домашняя) |
 
 Полная старая память по всем темам — `C:\Users\User\.claude\projects\C--Users-User\memory\`
@@ -46,6 +46,9 @@
 - Перед большой задачей — заранее сказать «перезапусти сессию» (novaya-sessiya-zaranee).
 - Лимит 70% — остановить агентов, сохранить в скилл (limit-70-stop). Долгие задачи — на табло
   agent_status.py (tablo-zadach-agentov); долгие сборы — «N из M», сохранять по ходу (dolgie-sbory-progress).
+  Во вкладке «Пульта агентов» (есть переменная PULT_SESSION) — любую задачу из 3+ шагов ставить на табло
+  с `--total <шагов>` и обновлять `--done N --stage "<что делаю>"` после каждого шага, в конце `done`:
+  так в пульте видно % и кто что делает (pult-agentov).
 - Лёгкое объёмное — отдать Hermes, сложное — самой (скилл hermes).
 - Неизученное писать прямо, отдельной строкой (neizuchennoe-pisat-pryamo).
 - Проверять тёзок и цифры: юрлицо по сайту/ИНН, отзывы глазами (proveryat-tezok-i-cifry).

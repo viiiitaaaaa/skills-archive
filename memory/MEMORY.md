@@ -97,6 +97,8 @@
 - [Разрешения через Telegram](razresheniya-cherez-telegram.md) — ОТКЛЮЧЕНО 13.10, без её слова не включать
 - [Табло задач агентов](tablo-zadach-agentov.md) — долгие задачи на табло agent_status.py
 - [Hermes — лёгкие задачи](hermes-legkie-zadachi.md) — лёгкое Hermes, сложное сама, сомнение — спросить
+- [Работаем в Code, не в Desktop](rabota-v-code-ne-desktop.md) — /voice по-русски; проекты и файлы — Cursor «Мои проекты.code-workspace»
+- [Gemini CLI отключён → Antigravity](gemini-cli-otklyuchen-antigravity.md) — Pro в Gemini CLI мёртв с 18.06; agy стоит, gokjhfrr «не та страна»
 - [Ollama установлен](ollama-ustanovlen.md) — 127.0.0.1:11434; Hermes на gpt-oss:120b-cloud
 - [Upscayl: ошибка видеокарты](upscayl-tile-size.md) — «vkQueueSubmit failed -4» → -t 64
 - [Номера постов на панели](nomera-postov-paneli.md) — tg_monitor\post_numbers.json, постоянные
@@ -135,4 +137,5 @@
 - [Сначала каркас, потом дизайн](snachala-karkas-potom-dizayn.md) — любой сайт: структура на согласование, большое — этапами
 - [Сессия 13.10 вечер: резюме и питчи](sessiya-13-10-vecher-rezyume-pitch.md) — 14.10 сделаны 2 резюме: «партнёр по маркетплейсам» и «ИИ-автоматизация продаж» (ARTMELLIO — инвесторы)
 - [Новости применять глубоко](novosti-primenyat-gluboko.md) — ссылки и код открыть, проверить замером, вписать в шаги скиллов
+- [Пульт агентов](pult-agentov.md) — своя программа C:\Users\User\pult: вкладки с живым Claude Code по категориям, ярлык на рабочем столе
 - [Сессия 14.10: книги и новости](sessiya-14-10-knigi-novosti.md) — 6 книг, новости применены; хвосты: заголовки сайта, Serverless, юрист
