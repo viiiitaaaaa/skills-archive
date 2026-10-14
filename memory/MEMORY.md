@@ -110,7 +110,7 @@
 - [Питч партнёру v7 (WB, ТЯК)](pitch-pravki-golosovym.md) — схема с китайским партнёром, её цифры; три формата
 - [Питч — полный, не сокращать](pitch-polnyy-ne-sokrashchat.md) — все разделы, графики, словарь; упор WB
 - [Книги — применять на практике](knigi-primenyat-na-praktike.md) — приёмы iz_knig*.md на её сайтах
-- [Купленные книги](kuplennye-knigi.md) — 43 книги в iz_knig*.md скиллов; 14.10 +8 по НЛП и переговорам → dogovorennosti
+- [Купленные книги](kuplennye-knigi.md) — 50 книг в iz_knig*.md; ХВОСТ 6 книг → knigi_kupleno/CHECKLIST_knigi_14_10.md (в новой сессии)
 - [lead-engine: без контактов](lead-engine-bez-kontaktov.md) — на сайте только заявка с UTM
 - [lead-engine: исследования не показывать](lead-engine-issledovaniya-ne-pokazyvat.md) — боли голосом эксперта
 - [Сессия 10–12.10: сайт Frivent](sessiya-10-10-sayt-frivent.md) — хвосты: политика юристу, примеры→настоящие
@@ -128,4 +128,4 @@
 - [Правки сайта от Паши 13.10](pravki-sayta-pasha-13-10.md) — УТП раскрывающимися блоками, Frivent→«Смарт Люкс», Kol Gali; делать по её «делай»
 - [Договорённости до работы](dogovorennosti-do-raboty.md) — скилл dogovorennosti: условия → «да»/платёж → работа; учимся на её случаях
 - [Сначала каркас, потом дизайн](snachala-karkas-potom-dizayn.md) — любой сайт: структура на согласование, большое — этапами
-- [Сессия 13.10 вечер: резюме и питчи](sessiya-13-10-vecher-rezyume-pitch.md) — 14.10 её «солянка» → переделка на 2 резюме (А WB, Б ИИ-продажи), план в CHECKLIST_rezyume_pitch.md
+- [Сессия 13.10 вечер: резюме и питчи](sessiya-13-10-vecher-rezyume-pitch.md) — 14.10 сделаны 2 резюме: «партнёр по маркетплейсам» и «ИИ-автоматизация продаж» (ARTMELLIO — инвесторы)
