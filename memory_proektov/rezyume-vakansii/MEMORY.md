@@ -10,3 +10,5 @@
 - [Резюме и питч по книгам](rezyume-i-pitch-po-knigam.md) — чеклист в knigi_kupleno
 - [Договорённости до работы](dogovorennosti-do-raboty.md) — скилл dogovorennosti: условия → «да»/платёж → работа; учимся на её случаях
 - [Аналитика 14.10: рынок + 40 вручную](sessiya-14-10-analitika-40.md) — analitika_dannye_2026-10-14.json; без пометок по стране
+- [План делового английского](angliyskiy-plan.md) — angliyskiy/plan.html, 4 сферы, только бесплатно, B1 5–7 мес
+- [Список книг — коротко](spisok-knig-format.md) — «Название — Author», без русских имён и пояснений

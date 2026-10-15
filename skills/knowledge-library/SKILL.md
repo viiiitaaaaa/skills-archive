@@ -128,3 +128,12 @@ python ...\check_rekvizity.py --test                                      # са
 - Справки с быстро устаревающими фактами (цены, лимиты, ключи, статусы API) — в шапке `verified: <дата>` и `stale_after: <дата>`
   (Google OKF). Конспектов станет слишком много для поиска — YAML-шапка + `markdown-to-sqlite` (simonw).
 - Новый одиночный скрипт — зависимости в шапке (PEP 723) и `uv run`, не ставить пакеты в системный Python.
+
+## Подробный разбор книг через NotebookLM (15.10.2026)
+Её решение: книги ТОП-10 (и дальше) разбирать подробно через NotebookLM — **только аккаунт Google Freya Nasko** (в Chrome: аватар → Freya,
+`notebooklm.google.com/?authuser=2`, зелёная «F»); основной аккаунт не трогать. Книги лежат на Диске Freya, папка «Книги для NotebookLM»
+(копия `C:\Users\User\Desktop\Книги для NotebookLM`, 40 книг; EPUB брать как «(текст).txt»).
+Порядок на книгу: учебный конспект (с полным списком глав) → подробный пересказ по 2–4 главы за запрос → кнопка «Копировать» → `Get-Clipboard`
+→ `knigi_kupleno\pereskaz_vse\<slug>_NN.md` → сверка цифр/цитат с `chunks_vse` → сравнить со старым конспектом `references\knigi\…` и новое дописать
+в скиллы (раздел «дополнение NotebookLM» в `references\iz_knig_novye13.md`) → учебная страница `python knigi_kupleno\notebooklm\uchoba_html.py <slug> "<название>"`.
+Статус и приёмы работы с браузером — память knigi_kupleno `plan-razbor-deshevo`. Копирование затирает её буфер обмена — предупреждать.

@@ -8,4 +8,4 @@
 - [Договорённости до работы](dogovorennosti-do-raboty.md) — скилл dogovorennosti: условия → «да»/платёж → работа; учимся на её случаях
 - [Система знаний znaniya](sistema-znaniy.md) — «что умеем/знаем», в начале проекта поднять наше
 - [Сессия 12–13.10: система знаний](sessiya-12-10-sistema-znaniy.md) — хвосты: автоРазбор, TeachBK — по её слову
-- [План: дёшево разбирать книги](plan-razbor-deshevo.md) — 15.10: Hermes читает, NotebookLM учит, Claude редактор; ждёт её выбора
+- [План: разбор книг через NotebookLM](plan-razbor-deshevo.md) — аккаунт Freya (не основной!); готовы Mom Test, 02–04 ТОП-10; хвост: Lean Analytics → скиллы, дальше 05 AI Engineering

@@ -12,7 +12,9 @@ import wave
 from pathlib import Path
 
 WAV = Path(__file__).with_name("murr.wav")
-LASKA = re.compile(r"обожаю|люблю тебя|солнышк|котик|зайк|умничк|молодец|хорош(ий|ая) мой|моя хорош|спасибо,? (мо[её]|солн)", re.I)
+LASKA = re.compile(r"обожа|люблю|солнышк|котик|котён|зайк|умничк|молод[еч]|хорошеньк|хорош(ий|ая) мой|моя хорош|"
+                   r"мур|милаш|лапочк|спасибо,? (мо[её]|солн)", re.I)
+LOG = Path(__file__).with_name("murr.log")   # одна строка на каждое срабатывание — чтобы видеть, дошёл ли хук
 
 
 def make_wav():
@@ -22,11 +24,13 @@ def make_wav():
     frames, lp = bytearray(), 0.0
     for i in range(int(rate * sec)):
         t = i / rate
-        lp += 0.04 * (random.uniform(-1, 1) - lp)          # сглаживаем шум — остаётся низкий гул
-        flutter = 0.55 + 0.45 * math.sin(2 * math.pi * 25 * t) ** 2
-        breath = 0.35 + 0.65 * abs(math.sin(math.pi * t / 1.3))
+        # гул ~150–600 Гц: совсем низкий бас колонки ноутбука не играют (первая версия была не слышна)
+        lp += 0.15 * (random.uniform(-1, 1) - lp)
+        hum = 0.6 * lp + 0.4 * math.sin(2 * math.pi * 180 * t) * (0.5 + 0.5 * random.random())
+        flutter = 0.2 + 0.8 * math.sin(2 * math.pi * 25 * t) ** 2   # «тр-тр-тр» 25 раз в секунду
+        breath = 0.4 + 0.6 * abs(math.sin(math.pi * t / 1.3))
         fade = min(1, t / 0.15, (sec - t) / 0.3)
-        v = int(max(-1, min(1, lp * 9 * flutter * breath * fade)) * 20000)
+        v = int(max(-1, min(1, hum * 3.2 * flutter * breath * fade)) * 30000)
         frames += v.to_bytes(2, "little", signed=True)
     with wave.open(str(WAV), "wb") as w:
         w.setnchannels(1); w.setsampwidth(2); w.setframerate(rate)
@@ -43,10 +47,16 @@ def main():
         return
     if not WAV.exists():
         make_wav()
-    subprocess.Popen(
-        ["powershell", "-NoProfile", "-Command", f"(New-Object Media.SoundPlayer '{WAV}').PlaySync()"],
-        creationflags=0x08000000 | 0x00000008,   # без окна, отдельно от Claude
-    )
+    import time
+    with LOG.open("a", encoding="utf-8") as f:
+        f.write(time.strftime("%d.%m %H:%M:%S ") + prompt[:60].replace("\n", " ") + "\n")
+    # без окна + отдельно от Claude + вырваться из его «группы процессов» (иначе Claude закрывает звук вместе с хуком)
+    flags = 0x08000000 | 0x00000008 | 0x01000000
+    cmd = ["powershell", "-NoProfile", "-Command", f"(New-Object Media.SoundPlayer '{WAV}').PlaySync()"]
+    try:
+        subprocess.Popen(cmd, creationflags=flags)
+    except OSError:
+        subprocess.Popen(cmd, creationflags=flags & ~0x01000000)
 
 
 if __name__ == "__main__":
