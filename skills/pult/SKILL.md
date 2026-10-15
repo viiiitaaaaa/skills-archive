@@ -15,7 +15,7 @@ description: Пульт агентов — её программа C:\Users\User
 | `app\app.js`, `app\style.css`, `app\index.html` | интерфейс: «Главная», категории со списком задач, вкладки (dockview, полоса вкладок скрыта по её слову) |
 | `categories.json` | категории = папки проектов; правятся в программе (✎) или `razdat.py newcat` |
 | `dispatcher.md` | роль «Главной» (передаётся `--append-system-prompt-file`) — править здесь, если раздаёт не так |
-| `razdat.py` | `list` / `new --cat --name --task` / `send --to <tabId> --task` / `newcat` → json в `inbox\` |
+| `razdat.py` | `list` / `new --cat --name --task` / `send --to <tabId> --task` / `close --to <tabId>` (как крестик + `state.closeReq`, после перезапуска не поднимется; spoki/list её пропускают) / `todo --text --task <tabId>` (дело с кнопкой «⤴ Поднять») / `newcat` → json в `inbox\` |
 | `state.json` | задачи и раскладка (не в git) |
 | `PLAN.md` | чеклист |
 Ярлык: `Desktop\Пульт агентов.lnk` (electron.exe "C:\Users\User\pult").
@@ -75,10 +75,16 @@ description: Пульт агентов — её программа C:\Users\User
 - Пульт закрыли при работающих вкладках → `busyNow`→`interrupted` в state.json, после запуска вкладке пишется «продолжи».
 - Прокрутка: вкладки с `CLAUDE_CODE_NO_FLICKER=1` + полоса справа; выделение мышью — с Shift.
 
+- Голос: F9 — запасная кнопка (работает и при тексте в поле). Встроенный /voice Claude Code во вкладках выключен
+  флагом `--settings pult\golosez_voice_claude.json` (он тоже ловил пробел и падал «Failed to start audio capture»).
+
+- Пробел → голос только если поле пустое (inputEmpty: курсор сразу после «❯ » или после ❯ лишь бледное). Не включается — смотреть `pult\golos\zhurnal.log` (пишет main.js из строк консоли «[golos]»). F9 включает всегда.
+
 ## Грабли
 - Электрон не скачался при npm install → `node node_modules\electron\install.js`.
 - В папке-категории Claude один раз спрашивает «trust this folder»; в домашней `C:\Users\User` — каждый запуск.
 - Распознавание речи браузера (webkitSpeechRecognition) в Electron не работает — поэтому свой голос golos.js.
+- Пробную копию закрывать СРАЗУ и добивать её Claude: 15.10 забытая копия съела память, у ПК кончилась виртуальная память, микрофон и служба звука зависли.
 - Проверочные фразы в копии — только безобидные: «Спроси у Perplexity…» ушло в её Pro настоящим вопросом.
 - `--resume` пустого разговора сразу выходит → пульт сам начинает новый (проверка «вышел за 6 с»).
 - Подписку Claude в сторонние оболочки (Hermes, OpenClaw) не подключать — бан; пульт запускает сам `claude.exe`, это можно.

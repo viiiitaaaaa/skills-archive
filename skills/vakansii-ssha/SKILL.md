@@ -85,6 +85,23 @@ The Muse (только нужные разделы). Итог — `vakansii_sbor
 автоматизация и Claude Code — для Zuora, Karbon, Mozilla; реклама и юнит-экономика — для
 Herewith, Boldin, Wpromote.
 
+## Пакет резюме и пакет партнёру (с 15.10.2026)
+
+Всё собирается скриптами, тексты — в одном месте; правка текста → пересборка, руками HTML не трогать.
+
+- `rezyume-vakansii\rezyume\`: `dannye.py` (тексты EN/RU) → `python -I build_paket.py` → общее резюме RU/EN,
+  для инвестора RU/EN, отклики `otklik_ecom_en` / `otklik_ai_en`, `linkedin_profil.html`, `README.md` (GitHub),
+  `pisma_soprovod.html`; `python -I build_svodka.py` → `svodka.html` (всё о ней + рынок + 40 вакансий).
+  Контакты — `kontakty.json` (в .gitignore); пустые поля печатаются жёлтыми заглушками `[phone]` — с ними не отправлять.
+- `rezyume\kitay\`: пакет китайскому партнёру (中文 сверху, RU снизу, стиль из питча WB v8): `dop.py` (резюме, «почему я»,
+  гарантии по питчам, доказательства, экосистема Frivent), `dop_pitchi.py` (США/Shopify, запчасти), `teksty.py` (общие
+  функции и CSS) → `python -I build_kitay.py` → копии на Диск «ARTMELLIO — инвесторы\Пакет партнёру 15.10».
+  Фото, скрины кабинетов (`dokaz\`), снимки сайта — вне git (личное).
+- **Грабли PDF:** Chrome headless зависает или падает, если рядом открыт её Chrome — всегда `--user-data-dir=<scratchpad>\chrome_pdf`.
+  PIL нет: замазать имя на скрине — HTML-страница с canvas (drawImage + roundRect) и снимок Chrome `--screenshot`.
+- Фото — только в русских резюме и у партнёра; в английских для США — без фото.
+- Английский: в резюме для вакансий — A2; партнёру по её решению — Upper-Intermediate.
+
 ## Что видно по собранным данным (14.10.2026)
 
 Собрано 48 вакансий, в сверке 37: США 21, другие страны 7, можно из России 9.

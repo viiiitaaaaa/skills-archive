@@ -43,6 +43,14 @@
   },
   "model": "opus",
   "hooks": {
+"PermissionRequest": [
+      {
+        "matcher": "",
+        "hooks": [
+          { "type": "command", "command": "python C:/Users/User/pult/hooks/razreshenie_tg.py", "timeout": 3600 }
+        ]
+      }
+    ],
     "Notification": [
       {
         "matcher": "",
