@@ -1,0 +1,2 @@
+- [Маркетплейсы через Chrome](marketpleysy-cherez-chrome.md) — Ozon/WB/Авито не пускают WebFetch, в её Chrome открываются
+- [Отчёт со снимками](otchet-so-snimkami.md) — каждая цифра со снимком источника, сверена дважды, словарик

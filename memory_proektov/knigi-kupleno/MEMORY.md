@@ -8,4 +8,6 @@
 - [Договорённости до работы](dogovorennosti-do-raboty.md) — скилл dogovorennosti: условия → «да»/платёж → работа; учимся на её случаях
 - [Система знаний znaniya](sistema-znaniy.md) — «что умеем/знаем», в начале проекта поднять наше
 - [Сессия 12–13.10: система знаний](sessiya-12-10-sistema-znaniy.md) — хвосты: автоРазбор, TeachBK — по её слову
-- [План: разбор книг через NotebookLM](plan-razbor-deshevo.md) — аккаунт Freya (не основной!); готовы Mom Test, 02–04 ТОП-10; Lean закрыта 16.10; дальше 05 AI Engineering (блокнот создан, книга не вставлена — Chrome отвалился)
+- [План: разбор книг через NotebookLM](plan-razbor-deshevo.md) — аккаунт Freya (не основной!); готовы Mom Test, 02–08 ТОП-10 (08 Восс закрыта 16.10); дальше 09 8-Figure Ecommerce
+- [Капля Python — проще](python-kaplya-proshe.md) — псевдокод + сравнение из жизни (карман, коробка), без subprocess/байтов
+- [На прощание — убрать за собой](ya-spat-ubrat-za-soboy.md) — «я спать»: закрыть свои вкладки Chrome, табло done, сохранить
