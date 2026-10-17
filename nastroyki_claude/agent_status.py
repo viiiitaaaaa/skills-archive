@@ -88,6 +88,34 @@ def lines():
     return [l for l in (line(t) for t in load()) if l]
 
 
+def env_user(name):
+    """Переменная Windows (User) — у вкладок пульта её может не быть в окружении."""
+    if os.environ.get(name):
+        return os.environ[name]
+    try:
+        import winreg
+        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, "Environment") as k:
+            return winreg.QueryValueEx(k, name)[0]
+    except OSError:
+        return None
+
+
+def remind(t):
+    """Её слово 16.10: задача готова — всегда напоминание ей в личку бота «Дела», в группу — никогда.
+    Шлёт не сам: ставит в очередь pult/gotovo_tg.py — тот копит 90 с, шлёт пачкой и без повторов."""
+    import subprocess
+    cmd = [sys.executable, "C:/Users/User/pult/gotovo_tg.py", "add", "--key", f"st:{t.get('id')}",
+           "--task", t.get("title") or t.get("id", ""), "--stage", t.get("stage", "")]
+    if t.get("session"):
+        cmd += ["--session", t["session"]]
+    if t.get("files"):
+        cmd += ["--file", t["files"][-1]]
+    try:
+        subprocess.run(cmd, timeout=20, capture_output=True)
+    except Exception as e:
+        print(f"напоминание в личку не встало в очередь: {type(e).__name__}", file=sys.stderr)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("cmd", choices=["set", "done", "rm", "list", "json", "log"])
@@ -120,6 +148,7 @@ def main():
     if a.cmd == "log":
         print(trace(t)); return
     prev_stage = t.get("stage") if not t.get("finished") else None
+    was_done = bool(t.get("finished"))   # повторный done той же задачи — без нового напоминания
     if os.environ.get("PULT_SESSION") and not t.get("session"):   # запущено из вкладки Пульта
         t["session"] = os.environ["PULT_SESSION"]
     if a.cmd == "rm":
@@ -147,6 +176,8 @@ def main():
         t.setdefault("log", []).append({"t": t["updated"], "stage": t.get("stage", ""), "done": t.get("done")})
         t["log"] = t["log"][-50:]
     f.write_text(json.dumps(t, ensure_ascii=False), "utf-8")
+    if a.cmd == "done" and not was_done:
+        remind(t)
     print(line(t) or "")
 
 

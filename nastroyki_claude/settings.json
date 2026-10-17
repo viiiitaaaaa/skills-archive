@@ -43,11 +43,15 @@
   },
   "model": "opus",
   "hooks": {
-"PermissionRequest": [
+    "PermissionRequest": [
       {
         "matcher": "",
         "hooks": [
-          { "type": "command", "command": "python C:/Users/User/pult/hooks/razreshenie_tg.py", "timeout": 3600 }
+          {
+            "type": "command",
+            "command": "python C:/Users/User/pult/hooks/razreshenie_tg.py",
+            "timeout": 3600
+          }
         ]
       }
     ],
@@ -86,6 +90,30 @@
           {
             "type": "command",
             "command": "python C:/Users/User/.claude/sounds/murr.py",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python -I -X utf8 C:/Users/User/pult/hooks/storozh.py",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "WebFetch|mcp__claude-in-chrome__get_page_text|mcp__claude-in-chrome__read_page|mcp__claude_ai_Google_Drive__read_file_content|mcp__claude_ai_Google_Drive__download_file_content|mcp__claude_ai_Gmail__.*|mcp__stealth-browser__get_page_content|mcp__playwright__browser_snapshot",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python -I -X utf8 C:/Users/User/pult/hooks/storozh.py",
             "timeout": 10
           }
         ]

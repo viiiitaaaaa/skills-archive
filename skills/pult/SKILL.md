@@ -71,6 +71,12 @@ description: Пульт агентов — её программа C:\Users\User
 профиль без её входов, sandbox, без node (main.js will-attach-webview). Открывают: Ctrl+щелчок по пути в терминале (registerLinkProvider),
 файлы на Карте и в Моих делах, `razdat.py show --file|--url`. Текстовые файлы читает main.js `viewer:read`; «Открыть в Chrome» — её Chrome.
 Копия для проверок делит с её пультом localStorage — список недавних файлов просмотрщика общий.
+С 16.10 (вечер): у каждого дела свой набор файлов просмотра (state.viewers; чужое дело — группа прячется `group.api.setVisible`,
+не закрывается; razdat show кладёт файл во вкладку по PULT_SESSION), значок 🗂 у дела. dockview 8: onDidActivePanelChange шлёт `{panel}`, не панель.
+«📊 Статистика лимитов» — щелчок по «Неделя» (limity_stat.py → app/limity.js). Модель категории — `categories.json → model`
+(`sonnet+advisor` = `--model sonnet --advisor opus`, только новым разговорам). Шапка — короткие надписи в одну строку.
+При запуске пульт сам шлёт вкладке «Мой бот» проверку бота (botStartup, case-bot/novoe_v_bote.py), в копии — только PULT_BOT=1.
+«🧩 Скиллы» — кнопка под «Картой», skilly.py + app/skilly.js; новый скилл → строка в SVOI (skilly.py), иначе «Разное».
 Колонка слева: закрытые задачи в категориях не показываются, только свёрнутая строка «Архив · N» внизу (`archHtml`).
 
 ## Вид и шапка (15.10.2026)

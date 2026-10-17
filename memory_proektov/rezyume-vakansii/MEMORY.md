@@ -16,3 +16,4 @@
 - [Короткий питч китайцу 15.10](pitch-kitay-korotkiy-15-10.md) — rezyume-vakansii\pitch: питч EN/中文/RU, резюме, текст отправки; книги Klaff/Voss/Hill
 - [Пакет китайцу — формат](paket-kitaycu-format.md) — PDF с китайским именем, системные шрифты, кнопки EN/中文/RU
 - [Пакеты резюме и партнёру — статус 16.10](paket-status-16-10.md) — где лежит, что сделано, что ждёт её (контакты, LinkedIn, README)
+- [Поднятие вкладки — сверить все дела](podnyatie-sveryat-vse-dela.md) — сначала все открытые дела темы в pult\dela.json, не только №N
