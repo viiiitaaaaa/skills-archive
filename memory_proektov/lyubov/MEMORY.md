@@ -1,1 +1,4 @@
 - [Папка lyubov](papka-lyubov.md) — копии материалов про любовь и НЛП, оглавление; ждём её идеи
+- [Убирать сразу после задачи](ubirat-srazu-posle-zadachi.md) — табло done, вкладки Chrome, без напоминаний; файлы не удалять
+- [Бот про любовь в облаке](bot-lyubov-oblako.md) — Worker + распорядок Claude, ключи у неё, чеклист lyubov\bot\chek_bot.md
+- [Ответ из Google — брак](otvet-iz-google-brak.md) — только приёмы её курсов с разделом; дыхание и общие советы нельзя

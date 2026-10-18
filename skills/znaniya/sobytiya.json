@@ -1,5 +1,6 @@
 {
   "gruppy_skillov": {
+    "Здоровье и облачные боты": ["hudeem-bot"],
     "Магазин и товары": ["sourcing-1688", "trend-radar", "shopify-admin", "shopify-collections", "dropship-audit", "dropship-lessons", "dsers-import", "product-links", "cut-products", "style-collections", "vendor-check", "artmellio-system"],
     "Сайты и картинки": ["site-design", "site-mockups", "product-scenes", "room-scenes"],
     "Frivent и заявки": ["b2b-sbor"],

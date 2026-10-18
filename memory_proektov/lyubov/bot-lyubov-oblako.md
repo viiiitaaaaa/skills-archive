@@ -1,0 +1,26 @@
+---
+name: bot-lyubov-oblako
+description: "Telegram-бот про любовь (мужчины, НЛП, ОКР) живёт в облаке — Cloudflare Worker + распорядок Claude; ПК-вариант отменён 18.10.2026"
+metadata:
+  node_type: memory
+  type: project
+  originSessionId: dae927a5-4161-474b-91b0-b0bef266c645
+  modified: 2026-10-17T22:47:26.738Z
+---
+
+18.10.2026 её слово: ПК выключен, боты — в облаке (задание `C:\Users\User\pult\oblako_boty_zadanie.md`). ПК-вариант (claude -p на ПК) отменён.
+Устройство и чеклист — `C:\Users\User\lyubov\bot\chek_bot.md`; код и знания — `lyubov\bot\repo` = приватный github.com/viiiitaaaaa/lyubov-bot
+(папка `bot/` в .gitignore у lyubov). Worker `lyubov-bot.frivent-dom.workers.dev`, распорядок `trig_01JAdV7J61jWwBbN1dSaGJuT` (Opus 5.5 с 18.10).
+ОКР = обсессивно-компульсивное расстройство; знания — реферат `G:\Мой диск\Учёба — маркетплейсы, дропшиппинг, бизнес\11 Реферат — ОКР — психология и самопомощь.docx`
+(там же 10 — НЛП-влюбление), в боте как `znaniya/referat_okr.md`.
+
+**Why:** ей нужен моментальный помощник в телефоне; Claude API (console) ей недоступен — мозг = облачный распорядок, ответ ~30–60 с.
+**How to apply:** ключи только в секретах Worker, вставляет она (`vstavit_klyuchi.bat`); её разборы и дневник в облаке бота — по её «да» 18.10 (раньше было «только ПК»).
+Среде Default облака нужен домен Worker в Allowed domains, иначе ответ не доходит (403 connect_rejected). Следующий — бот похудения по этому образцу.
+Бот @lyubov48_bot работает с 18.10 01:39 (ответ ~13 с). Cloudflare без заголовка user-agent отвечает «1010» — в otvet.py он стоит.
+Долгая память включена 18.10 (её запуск vklyuchit_pamyat.py): `pamyat/razbory.md` + `pamyat/dnevnik.md`, бот сам пушит в main.
+Голосовые ещё не проверяли.
+18.10: бот шлёт 1–3 слайда курса (106 jpg из 6_prezentacii в `repo/slaidy`, опись `slaidy/index.md`, почтальон /photo).
+Ссылки claude.ai с телефона она НЕ открывает — часто не в аккаунте (18.10). Каждый ответ: сначала короткий текст + слайды, следом (~1 мин) подробная HTML-страница файлом (`sdelat_stranicu.py` → `otvet.py --dop`, почтальон пускает её 30 мин после ответа по ключу d:). Ждать «10 минут PDF» она не хочет. Страница «Почему он молчит» для ПК — https://claude.ai/artifact/GHF87S6wffyEQwbfdab9wt.
+Текст её голосового в чат не дублировать (её слово 18.10) — «Слушаю…» удаляется, текст только в памяти разговора.
+Связано: [[papka-lyubov]], [[otvet-iz-google-brak]].
