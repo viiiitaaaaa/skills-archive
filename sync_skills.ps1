@@ -50,7 +50,8 @@ $vklNastroyki   = $true
 $memP = Join-Path $dst "memory_proektov"
 if ($vklMemProektov) {
 if (Test-Path $memP) { Remove-Item $memP -Recurse -Force }
-Get-ChildItem "C:\Users\User\.claude\projects" -Directory | Where-Object { $_.Name -ne "C--Users-User" -and $_.Name -notlike "*scratch*" } | ForEach-Object {
+Get-ChildItem "C:\Users\User\.claude\projects" -Directory | Where-Object { $_.Name -ne "C--Users-User" -and $_.Name -notlike "*scratch*" -and $_.Name -notlike "*zdorovie*" } | ForEach-Object {
+    # zdorovie — данные о здоровье: в GitHub нельзя (правило zdorovie\CLAUDE.md), исключено 18.10
     $m = Join-Path $_.FullName "memory"
     if ((Test-Path $m) -and (Get-ChildItem $m -Filter *.md)) {
         $to = Join-Path $memP ($_.Name -replace '^C--Users-User-', '')
