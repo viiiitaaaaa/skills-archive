@@ -75,6 +75,11 @@
             "type": "command",
             "command": "powershell.exe -NoProfile -Command \"(New-Object Media.SoundPlayer 'C:\\Users\\User\\.claude\\sounds\\cc-done.wav').PlaySync()\"",
             "async": true
+          },
+          {
+            "type": "command",
+            "command": "python -I -X utf8 C:/Users/User/pult/hooks/gotovo_stop.py",
+            "async": true
           }
         ]
       }
@@ -91,6 +96,11 @@
             "type": "command",
             "command": "python C:/Users/User/.claude/sounds/murr.py",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "python C:/Users/User/pult/hooks/ozvuch.py",
+            "timeout": 15
           }
         ]
       }
