@@ -16,7 +16,7 @@
 ## Сайт Смарт Люкс (папка site)
 - [Сессия 10–12.10: сайт Frivent](sessiya-10-10-sayt-frivent.md) — хвосты: политика юристу, примеры→настоящие
 - [Сайт Frivent: адрес и автопроверка](frivent-preview-i-avtoproverka.md) — frivent-site.frivent-dom.workers.dev; deploy_cf + qa_site
-- [Правки сайта от Паши 13.10](pravki-sayta-pasha-13-10.md) — УТП раскрывающимися блоками, Frivent→«Смарт Люкс», Kol Gali; делать по её «делай»
+- [Правки сайта от Паши 13.10](pravki-sayta-pasha-13-10.md) — сделаны 19.10 (Смарт Люкс, УТП-блоки); ждём тексты Паши и «да» на выкладку
 - [lead-engine: без контактов](lead-engine-bez-kontaktov.md) — на сайте только заявка с UTM
 - [lead-engine: исследования не показывать](lead-engine-issledovaniya-ne-pokazyvat.md) — боли голосом эксперта
 - [Сначала каркас, потом дизайн](snachala-karkas-potom-dizayn.md) — любой сайт: структура на согласование, большое — этапами
