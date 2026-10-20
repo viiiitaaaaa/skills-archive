@@ -204,6 +204,8 @@ Code со скиллами. Есть цифра, приём или инстру�
 2б. **Проверка разбора — скриптом, не вторым агентом** (14.10): `python check_razbor.py <папка с in_*.txt и out_*.json>` →
    «совпало M из M»; дыры (пост пропущен, нет headline/for_us, модный пост без radar, пачка целиком skip) — вернуть пачку
    помощнику с причиной. Сливать в notes.json только после «совпало M из M». Проверен канарейкой (убранный пост ловится).
+   Ссылки и сборы с JSON на входе (`in_*.json` → `out_*.json`) — `python C:\Users\User\komputer\proverki\sverka.py --vhod "in_*.json"
+   --vyhod "out_*.json" --klyuch link --pole what,for_us --tolko status=изучено` (20.10: study_links_2010 — 464 из 464, одна пустая for_us).
 3. `python noted_to_skill.py` (память принятого), затем `python news.py --build` — пересобрать панель с пересказами (заодно пересобирается `fashion_panel.html`).
 4. **Всегда** открыть свежую локальную копию `Start-Process C:\Users\User\tg_monitor\news_panel.html`
    (у пользователя просмотрщик claude.ai часто показывает старую копию — решение 23.09), затем опубликовать

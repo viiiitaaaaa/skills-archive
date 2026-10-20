@@ -86,3 +86,12 @@ $null = $p.WaitForExit(540000); Get-Content $log -Encoding UTF8
   Сначала в блокнот; в Windows Terminal включить `multiLinePasteWarning` (habr 1076416).
 - Поиск забытых ключей в наших скриптах: Bearer CLI `bearer scan <папка>` — 🟡, ставить только бинарник из Releases и только по её слову.
 - Локальные боты и панели не должны слушать наружу; на API-ключи — лимит расходов (кража ключей Claude — частая цель, пишут).
+
+**Скрипты-проверки (20.10.2026, `C:\Users\User\komputer\proverki\`, ничего не удаляют и не ставят):**
+- Команда с сайта/из поста → сначала `python proverit_komandu.py` (читает буфер обмена, показывает, что там на самом деле,
+  ловит `| iex`, `-enc`, скрытые символы, русские буквы в латинской команде, удаление папок, автозапуск; 🔴/🟡/🟢). `--test` 11 из 11.
+- Утёк ли пароль — `python parol_utechka.py` (ввод скрытый; уходят только 5 знаков отпечатка SHA-1, api.pwnedpasswords.com).
+- Раз в месяц и при «проверь комп» — `python pakety_proverka.py`: дыры в Python-пакетах по базе OSV + устаревшие. 20.10: 8 пакетов с
+  известными дырами в системном Python (aiohttp, urllib3, certifi, pypdf, setuptools, multidict, PyPDF2, nltk), 3 — в .venv радара.
+  Обновлять — по её слову, по одному, с проверкой сборщика после.
+- Код проектов — `python proverka_koda.py` (правила Bandit через ruff + свои грабли), подробно в knowledge-library.

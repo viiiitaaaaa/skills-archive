@@ -128,6 +128,14 @@ python ...\check_rekvizity.py --test                                      # са
 - Справки с быстро устаревающими фактами (цены, лимиты, ключи, статусы API) — в шапке `verified: <дата>` и `stale_after: <дата>`
   (Google OKF). Конспектов станет слишком много для поиска — YAML-шапка + `markdown-to-sqlite` (simonw).
 - Новый одиночный скрипт — зависимости в шапке (PEP 723) и `uv run`, не ставить пакеты в системный Python.
+- **Проверка кода после правки сборщика/бота** — `python C:\Users\User\komputer\proverki\proverka_koda.py [папка]` (20.10):
+  ruff с правилами Bandit (pickle, eval/exec, SQL из f-строки, shell=True, verify=False, запрос без timeout, блокирующие
+  requests/time.sleep в `async def`) + свои: `if x.find("слово"):`, `gather` без `return_exceptions`, секрет из `random`.
+  Проверенное глазами — пометка `# ok-proverka` в строке. 20.10 по 339 файлам: нашёл `gather` без защиты в `async_fetch.py`
+  (исправлено: ошибка одного адреса больше не роняет весь сбор) и 2 `exec` своего файла в cj (оставлено, в исключениях).
+- **Долгий скрипт — сначала замер, не догадка:** `python -m cProfile -s tottime script.py | head -25`. 20.10 на `mcp_raskhod.py`
+  (1058 журналов): 63 с, из них 14 с — json.loads и 9 с — раскодирование всех строк → чтение байтами + фильтр по `b"..."`
+  до разбора + `orjson` (уже стоит) → 13–35 с, итог тот же.
 
 ## Подробный разбор книг через NotebookLM (15.10.2026)
 Её решение: книги ТОП-10 (и дальше) разбирать подробно через NotebookLM — **только аккаунт Google Freya Nasko** (в Chrome: аватар → Freya,
