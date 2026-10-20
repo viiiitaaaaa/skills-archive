@@ -636,3 +636,5 @@ Shopify-скилла отправляет событие на `https://shopify.d
 
 ## Build an AI Agent From Scratch — 19.10.2026
 Правила — `references/build_ai_agent_pravila.md`; карточки — `references/karty/build_ai_agent/`. Бэкап: `knigi_kupleno\sistemaekap_skillov_agent`.
+
+**Из новостей 20.10 (подробно — `references/iz_novostey_2010.md`)** — контекст и лимиты (idleCompaction, /export), безопасность агента (пароли, фишинг, prompt injection), как Anthropic проверяет код, Python-приёмы для учёбы (TaskGroup, uv, pydantic), чужие инструменты — только в карантин.

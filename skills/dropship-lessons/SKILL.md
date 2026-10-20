@@ -776,3 +776,6 @@ YouTube с этого компьютера не открывается — см�
 
 ## Entrepreneurial Marketing (Kotler) — 19.10.2026
 Правила — `references/entrepreneurial_marketing_pravila.md`; карточки — `references/karty/entrepreneurial_marketing/`. Бэкап: `knigi_kupleno\sistemaekap_skillov_em`.
+
+## Из новостей 20.10
+Подробно — `references/iz_novostey_2010.md`: Q4 и подарочные наборы ($39→$59→$79), Google Universal Cart (США, нужен UCP), считать прибыль на оборот денег, ориентиры для радара, WB/Ozon «к сведению».
