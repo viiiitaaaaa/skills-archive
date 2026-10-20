@@ -70,7 +70,7 @@ foreach ($f in @("settings.json", "statusline.py", "agent_status.py")) {
     $p = Join-Path "C:\Users\User\.claude" $f
     if (Test-Path $p) { Copy-Item $p $cfg -Force }
 }
-foreach ($d in @("agents", "sounds")) {
+foreach ($d in @("agents", "sounds", "notfair-common")) {  # notfair-common — общие справочники скиллов seo-/ads- (20.10)
     $p = Join-Path "C:\Users\User\.claude" $d
     if (Test-Path $p) { Copy-Item $p (Join-Path $cfg $d) -Recurse -Force }
 }
