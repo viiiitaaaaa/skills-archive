@@ -21,6 +21,7 @@ description: "Справочная библиотека — конспекты 1
 
 ### Python — `references/python/`
 - `asyncio.md` — параллельные запросы: gather/TaskGroup, Semaphore (лимит одновременных), таймауты, `to_thread` для старого кода на requests, готовый шаблон «скачать N страниц с лимитом и повторами» на aiohttp.
+- **Большой CSV — кусками** (журнал 21.10, Selectel): `pd.read_csv("big.csv", chunksize=100_000)` — читать по 100 000 строк, а не весь файл в память; Excel сначала сохранить в CSV.
 - `pandas.md` — чтение/запись xlsx/csv, фильтры, новые столбцы, groupby, merge (ВПР и сверка по ID), сводные, даты; таблица «что изменилось в pandas 3.0» (у нас стоит 3.0.6).
 - `praktiki.md` — два правила: ресурсы закрывать через `with`, а не `__del__`; кеш без утечек памяти — `weakref` / `lru_cache`.
 - **Логи вместо `print`** — готовый модуль `scripts/log_setup.py`: `log = get_logger("tg_news")` → консоль INFO+, файл

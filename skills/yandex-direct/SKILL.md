@@ -339,6 +339,7 @@ Read the reference file matching the area you need:
 - **Reports** (Report service, report types, field names, date ranges, filters, headers) -- [references/reports.md](references/reports.md)
 - **Other Services** (Dictionaries, Changes, Clients, AgencyClients, Feeds, Strategies, NegativeKeywordSharedSets, TurboPages, Businesses, Leads, KeywordsResearch) -- [references/other-services.md](references/other-services.md)
 - **Common Use Cases** (bash script examples for frequent tasks) -- [references/use-cases.md](references/use-cases.md)
+- **Практика по-русски: защита от ботов, офлайн-конверсии, регион, автостратегии** (её «да» 21.10) -- [references/praktika_ru.md](references/praktika_ru.md). Читать ВСЕГДА перед запуском или разбором кампании.
 
 ## Guidelines
 
