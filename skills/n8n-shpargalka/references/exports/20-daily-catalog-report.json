@@ -1,0 +1,276 @@
+{
+ "id": "artmDailyRep001",
+ "name": "Каталог: ежедневная сводка пробелов + таблица",
+ "active": false,
+ "settings": {
+  "executionOrder": "v1",
+  "errorWorkflow": "artmErrAlert001"
+ },
+ "nodes": [
+  {
+   "parameters": {
+    "rule": {
+     "interval": [
+      {
+       "field": "cronExpression",
+       "expression": "0 9 * * *"
+      }
+     ]
+    }
+   },
+   "id": "b2000000-0000-4000-8000-000000000001",
+   "name": "Каждое утро в 9",
+   "type": "n8n-nodes-base.scheduleTrigger",
+   "typeVersion": 1.2,
+   "position": [
+    -460,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "httpMethod": "POST",
+    "path": "panel/daily-catalog-report",
+    "responseMode": "lastNode",
+    "options": {}
+   },
+   "id": "b2000000-0000-4000-8000-000000000009",
+   "name": "Кнопка в панели",
+   "type": "n8n-nodes-base.webhook",
+   "typeVersion": 2,
+   "position": [
+    -460,
+    200
+   ],
+   "webhookId": "b2000000-0000-4000-8000-0000000000w9",
+   "notes": "Ручной запуск из операционной панели (panel/server.py). Отвечает результатом последнего узла."
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "https://kmfmxn-r4.myshopify.com/admin/oauth/access_token",
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={\n  \"client_id\": \"{{ $env.SHOPIFY_CLIENT_ID }}\",\n  \"client_secret\": \"{{ $env.SHOPIFY_CLIENT_SECRET }}\",\n  \"grant_type\": \"client_credentials\"\n}",
+    "options": {}
+   },
+   "id": "b2000000-0000-4000-8000-000000000002",
+   "name": "Выпустить токен",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    -240,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "jsCode": "// Забираем ВЕСЬ каталог постранично (по 100), а не первую сотню.\n// Токен приходит от узла «Выпустить токен».\nconst token = $input.first().json.access_token;\nconst url = 'https://kmfmxn-r4.myshopify.com/admin/api/2026-07/graphql.json';\nconst query = `query($cursor: String) {\n  products(first: 100, after: $cursor) {\n    pageInfo { hasNextPage endCursor }\n    nodes {\n      id title status handle featuredImage { url }\n      style: metafield(namespace: \"artmellio\", key: \"style\") { value }\n      material: metafield(namespace: \"artmellio\", key: \"material\") { value }\n      room: metafield(namespace: \"artmellio\", key: \"room\") { value }\n      palette: metafield(namespace: \"artmellio\", key: \"palette\") { value }\n      pairs: metafield(namespace: \"artmellio\", key: \"pairs_with\") { value }\n    }\n  }\n}`;\n\nconst all = [];\nlet cursor = null;\nlet pages = 0;\ndo {\n  const r = await this.helpers.httpRequest({\n    method: 'POST',\n    url,\n    headers: { 'X-Shopify-Access-Token': token, 'Content-Type': 'application/json' },\n    body: { query, variables: { cursor } },\n    json: true,\n  });\n  if (r.errors) throw new Error('Shopify: ' + JSON.stringify(r.errors));\n  const page = r.data.products;\n  all.push(...page.nodes);\n  cursor = page.pageInfo.hasNextPage ? page.pageInfo.endCursor : null;\n  pages += 1;\n} while (cursor && pages < 100);\n\nreturn [{ json: { data: { products: { nodes: all } }, страниц: pages } }];\n"
+   },
+   "id": "b2000000-0000-4000-8000-000000000003",
+   "name": "Забрать каталог",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -20,
+    0
+   ],
+   "notes": "Цикл по страницам через this.helpers.httpRequest. Раньше был HTTP Request на первую сотню."
+  },
+  {
+   "parameters": {
+    "jsCode": "// Считаем, чего не хватает карточкам. Только чтение. На выходе:\n// сводка (цифры), строки для таблицы (по одной на товар с пробелами),\n// текст для Telegram и признак «запущено по расписанию».\nconst FIELDS = ['style', 'material', 'room', 'palette'];\nconst NAMES = { style: 'стиль', material: 'материал', room: 'комната', palette: 'палитра', image: 'картинка', pairs: 'пара' };\nconst nodes = $input.first().json.data.products.nodes;\n\nconst empty = (v) => {\n  if (!v || !v.value) return true;\n  const t = String(v.value).trim();\n  return t === '' || t === '[]';\n};\n\nconst gaps = {};\nFIELDS.forEach((f) => (gaps[f] = []));\nconst noImage = [];\nconst noPairs = [];\nconst rows = [];\n\nfor (const p of nodes) {\n  const missing = [];\n  FIELDS.forEach((f) => { if (empty(p[f])) { gaps[f].push(p.title); missing.push(f); } });\n  if (!p.featuredImage) { noImage.push(p.title); missing.push('image'); }\n  if (empty(p.pairs)) { noPairs.push(p.title); missing.push('pairs'); }\n  if (!missing.length) continue;\n  const row = {\n    'Товар': p.title,\n    'Статус': p.status === 'ACTIVE' ? 'активен' : p.status === 'DRAFT' ? 'черновик' : 'архив',\n    'Пропусков': missing.length,\n    'Чего нет': missing.map((m) => NAMES[m]).join(', '),\n  };\n  for (const k of [...FIELDS, 'image', 'pairs']) row[NAMES[k]] = missing.includes(k) ? 'нет' : '';\n  row['Открыть в админке'] = 'https://admin.shopify.com/store/kmfmxn-r4/products/' + p.id.split('/').pop();\n  row['Витрина'] = 'https://www.artmellio.com/products/' + p.handle;\n  rows.push(row);\n}\n// Сначала самые «дырявые»\nrows.sort((a, b) => b['Пропусков'] - a['Пропусков'] || a['Товар'].localeCompare(b['Товар']));\n\nconst сводка = {\n  всего: nodes.length,\n  с_пробелами: rows.length,\n  без_картинки: noImage.length,\n  без_pairs_with: noPairs.length,\n};\nFIELDS.forEach((f) => (сводка['без_' + f] = gaps[f].length));\n\nlet from_schedule = false;\ntry { from_schedule = $('Каждое утро в 9').isExecuted === true; } catch (e) { from_schedule = false; }\n\nconst esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\nconst today = new Date().toLocaleDateString('ru-RU', { timeZone: 'Europe/Warsaw' });\nconst telegram_text = [\n  `📋 <b>Сводка пробелов каталога</b> · ${today}`,\n  `Товаров: ${nodes.length}, с пробелами: ${rows.length}`,\n  `Без стиля ${gaps.style.length} · материала ${gaps.material.length} · комнаты ${gaps.room.length} · палитры ${gaps.palette.length}`,\n  `Без картинки ${noImage.length} · без пары ${noPairs.length}`,\n  `Таблица: панель → «Отчёты» → catalog-gaps`,\n].map(esc).join('\\n').replace(/&lt;b&gt;/g, '<b>').replace(/&lt;\\/b&gt;/g, '</b>');\n\nreturn [{ json: { сводка, примеры: {\n  без_материала: gaps.material.slice(0, 10),\n  без_стиля: gaps.style.slice(0, 10),\n  без_картинки: noImage.slice(0, 10),\n}, rows, telegram_text, from_schedule,\n  telegram_on: from_schedule && Boolean($env.TELEGRAM_BOT_TOKEN && $env.TELEGRAM_CHAT_ID) } }];\n"
+   },
+   "id": "b2000000-0000-4000-8000-000000000004",
+   "name": "Собрать сводку",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    200,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "http://127.0.0.1:8787/api/report",
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify({ name: 'catalog-gaps', title: 'Сводка пробелов каталога', rows: $json.rows }) }}",
+    "options": {}
+   },
+   "id": "b2000000-0000-4000-8000-000000000005",
+   "name": "Отчёт в панель",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    420,
+    0
+   ],
+   "onError": "continueRegularOutput",
+   "notes": "Панель пишет data/reports/catalog-gaps-<дата>.csv и .xlsx. Если панель не запущена — идём дальше без файла."
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "id": "tg-on",
+       "leftValue": "={{ $('Собрать сводку').first().json.telegram_on }}",
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "b2000000-0000-4000-8000-000000000006",
+   "name": "Утро и есть Telegram?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    640,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendMessage",
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify({ chat_id: $env.TELEGRAM_CHAT_ID, text: $('Собрать сводку').first().json.telegram_text, parse_mode: 'HTML' }) }}",
+    "options": {}
+   },
+   "id": "b2000000-0000-4000-8000-000000000007",
+   "name": "В Telegram",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    860,
+    -120
+   ],
+   "onError": "continueRegularOutput"
+  },
+  {
+   "parameters": {
+    "jsCode": "// Ответ для панели: цифры, примеры и ссылки на файл отчёта.\nconst s = $('Собрать сводку').first().json;\nlet rep = {};\ntry { rep = $('Отчёт в панель').first().json || {}; } catch (e) { rep = {}; }\nconst out = { сводка: s.сводка };\nif (rep.xlsx_url) {\n  out.отчёт = { строк: rep.rows, excel: rep.xlsx_url, csv: rep.csv_url, папка: rep.folder };\n} else {\n  out.отчёт = { файл: 'не записан — панель не ответила (запущена ли panel\\start-panel.ps1?)' };\n}\nout.примеры = s.примеры;\nout.telegram = s.from_schedule ? (s.telegram_on ? 'отправлено' : 'ключей нет') : 'только по расписанию';\nreturn [{ json: out }];"
+   },
+   "id": "b2000000-0000-4000-8000-000000000008",
+   "name": "Итог",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1080,
+    0
+   ]
+  }
+ ],
+ "connections": {
+  "Кнопка в панели": {
+   "main": [
+    [
+     {
+      "node": "Выпустить токен",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Каждое утро в 9": {
+   "main": [
+    [
+     {
+      "node": "Выпустить токен",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Выпустить токен": {
+   "main": [
+    [
+     {
+      "node": "Забрать каталог",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Забрать каталог": {
+   "main": [
+    [
+     {
+      "node": "Собрать сводку",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Собрать сводку": {
+   "main": [
+    [
+     {
+      "node": "Отчёт в панель",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Отчёт в панель": {
+   "main": [
+    [
+     {
+      "node": "Утро и есть Telegram?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Утро и есть Telegram?": {
+   "main": [
+    [
+     {
+      "node": "В Telegram",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Итог",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "В Telegram": {
+   "main": [
+    [
+     {
+      "node": "Итог",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ }
+}

@@ -1,0 +1,464 @@
+{
+ "id": "mapWXQzbTDDS8jJR",
+ "name": "Карта · Проверка ниши и ключевых слов",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "c02565dd-70b7-4dc6-8f04-5bcc27705d2f",
+   "name": "Старт: Проверка ниши и ключевых слов",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    300
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "cd3dc69b-6293-4d28-89f8-4c9c0ee40442",
+   "name": "1. Вы: Присылает скрины или выгрузки ключей",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    280,
+    300
+   ],
+   "notes": "Проценты роста, графики, объёмы поиска",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "ad3e5b86-544a-4000-9dde-f992bdc7b3f4",
+   "name": "2. ИИ: Предупредить: проходит 2–3%",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    560,
+    300
+   ],
+   "notes": "Отсев — нормальный результат метода",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "ce004ad5-bce5-48e2-812d-0e889cd8767a",
+   "name": "3. ИИ: Найти формулировку с объёмом",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    840,
+    300
+   ],
+   "notes": "В планировщике смотреть близкие фразы, а не процент роста",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "97497766-3dab-4458-925e-5f38ea7f9566",
+   "name": "4. Система: Google Trends бесплатно",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1120,
+    300
+   ],
+   "notes": "5 лет для траектории, 1 год для состава, нужная страна, CSV",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "547c0b2d-dadc-41d2-bb4d-fb9145a74fa2",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "0bc3d674-b210-4605-a237-74ff07205fda",
+   "name": "5. Вверху списка нет брендов?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    1400,
+    300
+   ],
+   "notes": "Описательные запросы без производителей — ниша открыта",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "82b2c05d-d134-407e-b63c-91f298e36f91",
+   "name": "Нет: Закрыть нишу",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1540,
+    520
+   ]
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "624b16ce-a83e-44de-bfcd-ff12769fc843",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "5b12600e-3748-4281-bdca-4ebc589cf287",
+   "name": "6. Ровный рост весь период?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    1680,
+    300
+   ],
+   "notes": "Смотреть сглаженную линию",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "9405c88d-daab-46b2-8c0d-7d2e99395257",
+   "name": "Нет: Отказ: всплеск или кампания",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1820,
+    520
+   ]
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "dfdf1248-3d30-48fc-a400-be308ae1a513",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "1f53df28-1411-4c08-b22f-e2636d4f5afb",
+   "name": "7. Запросы покупательские?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    1960,
+    300
+   ],
+   "notes": "Best, сравнения, размеры, материал — да; DIY, дёшево, скепсис — нет",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "24be707a-7560-4af5-810b-bced7de147d7",
+   "name": "Нет: Отсеять",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2100,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "c1cf826e-7701-4cfc-aab1-dc2d0e368fb1",
+   "name": "8. Система: Keyword Planner: конкуренция и объём",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2240,
+    300
+   ],
+   "notes": "Платный запрос, только для прошедших шаг 2",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "ec3bb703-19da-4040-b2d9-f5fe8e876330",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "53944d4d-bc09-4791-87c3-8647c07603f3",
+   "name": "9. Конкуренция не максимальная?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    2520,
+    300
+   ],
+   "notes": "100 / High — стоп",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "81957895-6321-4b22-abb8-765c0cc45111",
+   "name": "Нет: Стоп, ниша занята",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2660,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "ced7860e-a1a1-4358-b414-eaefe1deaf77",
+   "name": "10. ИИ: Проверить глубину воронки",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2800,
+    300
+   ],
+   "notes": "Якорь, допы, расходники, контент",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "7d927008-c617-4d88-b28a-778529f9f676",
+   "name": "11. ИИ: Короткий вердикт и следующие ключи",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    3080,
+    300
+   ],
+   "notes": "Объём, форма кривой, вердикт; 2–3 ключа, что проверить дальше",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "content": "## Проверка ниши и ключевых слов\n\nПроверяет ключевые слова и ниши из скринов Glimpse/Google Trends/Keyword Planner, чтобы не поверить фальшивому тренду.\n\n**Запуск:** «Проверь эти ключевые слова» · «Какую нишу выбрать» · «Это реальный тренд?»\n\n**Правила:**\n- Процент роста — самое ненадёжное число: высокий рост обычно на почти нулевой базе\n- Проверки от дешёвых к дорогим, не пропускать шаги\n- Материал в растущих запросах — самый сильный хороший знак\n- Если новые данные опровергли прежний совет — сказать прямо и почему\n- Услуги, названия категорий и брендов — не товар для закупки\n\n_Карта логики скилла (skill: niche-keyword-validation). Узлы-заглушки: сценарий ничего не делает, пока шаги не заменят на настоящие._",
+    "height": 420,
+    "width": 520,
+    "color": 7
+   },
+   "id": "fc1f9461-26a9-465e-958c-cd716cab6506",
+   "name": "Описание",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -200
+   ]
+  }
+ ],
+ "connections": {
+  "Старт: Проверка ниши и ключевых слов": {
+   "main": [
+    [
+     {
+      "node": "1. Вы: Присылает скрины или выгрузки ключей",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1. Вы: Присылает скрины или выгрузки ключей": {
+   "main": [
+    [
+     {
+      "node": "2. ИИ: Предупредить: проходит 2–3%",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2. ИИ: Предупредить: проходит 2–3%": {
+   "main": [
+    [
+     {
+      "node": "3. ИИ: Найти формулировку с объёмом",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3. ИИ: Найти формулировку с объёмом": {
+   "main": [
+    [
+     {
+      "node": "4. Система: Google Trends бесплатно",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "4. Система: Google Trends бесплатно": {
+   "main": [
+    [
+     {
+      "node": "5. Вверху списка нет брендов?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5. Вверху списка нет брендов?": {
+   "main": [
+    [
+     {
+      "node": "6. Ровный рост весь период?",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Закрыть нишу",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6. Ровный рост весь период?": {
+   "main": [
+    [
+     {
+      "node": "7. Запросы покупательские?",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Отказ: всплеск или кампания",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "7. Запросы покупательские?": {
+   "main": [
+    [
+     {
+      "node": "8. Система: Keyword Planner: конкуренция и объём",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Отсеять",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "8. Система: Keyword Planner: конкуренция и объём": {
+   "main": [
+    [
+     {
+      "node": "9. Конкуренция не максимальная?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "9. Конкуренция не максимальная?": {
+   "main": [
+    [
+     {
+      "node": "10. ИИ: Проверить глубину воронки",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Стоп, ниша занята",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "10. ИИ: Проверить глубину воронки": {
+   "main": [
+    [
+     {
+      "node": "11. ИИ: Короткий вердикт и следующие ключи",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {}
+}

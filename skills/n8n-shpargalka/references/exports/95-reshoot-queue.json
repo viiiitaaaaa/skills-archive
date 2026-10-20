@@ -1,0 +1,102 @@
+{
+ "id": "artmReshootQ001",
+ "name": "Контент: очередь пересъёмки",
+ "active": false,
+ "settings": {
+  "executionOrder": "v1",
+  "errorWorkflow": "artmErrAlert001"
+ },
+ "nodes": [
+  {
+   "parameters": {
+    "httpMethod": "POST",
+    "path": "panel/reshoot-queue",
+    "responseMode": "lastNode",
+    "options": {}
+   },
+   "id": "90000000-0000-4000-8000-000000000011",
+   "name": "Кнопка в панели",
+   "type": "n8n-nodes-base.webhook",
+   "typeVersion": 2,
+   "position": [
+    -460,
+    0
+   ],
+   "webhookId": "90000000-0000-4000-8000-0000000000w2"
+  },
+  {
+   "parameters": {
+    "command": "py -3.13 \"C:\\Users\\User\\artmellio-system\\scripts\\comfy\\reshoot_products.py\" --list --json"
+   },
+   "id": "90000000-0000-4000-8000-000000000012",
+   "name": "Очередь",
+   "type": "n8n-nodes-base.executeCommand",
+   "typeVersion": 1,
+   "position": [
+    -240,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "jsCode": "// Скрипт печатает ход работы в stderr, а итог — последней строкой stdout: RESULT:{...}\nconst out = $input.first().json;\nconst lines = String(out.stdout || '').split(/\\r?\\n/).filter(Boolean);\nconst line = [...lines].reverse().find((l) => l.startsWith('RESULT:'));\nif (!line) {\n  throw new Error('Скрипт не вернул итог. Код выхода ' + out.exitCode + '. ' + String(out.stderr || '').slice(-600));\n}\nconst r = JSON.parse(line.slice('RESULT:'.length));\nif (!r.ok) throw new Error(r['ошибка'] || 'не удалось');\nreturn [{ json: r }];"
+   },
+   "id": "90000000-0000-4000-8000-000000000013",
+   "name": "Разобрать итог",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -20,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "jsCode": "const r = $('Разобрать итог').first().json;\nconst out = { в_очереди: r['в_очереди'] };\nout.очередь = r['очередь'] && r['очередь'].length ? r['очередь'] : 'пусто — поставьте товару тег reshoot в админке';\nreturn [{ json: out }];"
+   },
+   "id": "90000000-0000-4000-8000-000000000014",
+   "name": "Итог",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    200,
+    0
+   ]
+  }
+ ],
+ "connections": {
+  "Кнопка в панели": {
+   "main": [
+    [
+     {
+      "node": "Очередь",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Очередь": {
+   "main": [
+    [
+     {
+      "node": "Разобрать итог",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Разобрать итог": {
+   "main": [
+    [
+     {
+      "node": "Итог",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ }
+}

@@ -1,0 +1,360 @@
+{
+ "id": "maphqvnUFy2pzHiK",
+ "name": "Карта · Куратор каталога декора",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "0ebf57c2-5230-4e22-bd49-9cbf393e4bff",
+   "name": "Старт: Куратор каталога декора",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    300
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "d92dea4e-5796-420b-b8bf-557d244a4da4",
+   "name": "1. Вы: Присылает фото товаров",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    280,
+    300
+   ],
+   "notes": "часто сразу партией",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "5256a393-6804-4c67-afa7-519d55be4625",
+   "name": "2. ИИ: Свериться с styles.md и site-structure.md",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    560,
+    300
+   ],
+   "notes": "17 стилей, палитры, hex-коды; не по памяти",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "654efbd3-7a07-4e08-982f-d3eb67a93168",
+   "name": "3. ИИ: Искать сочетания внутри партии",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    840,
+    300
+   ],
+   "notes": "мини-сет или общий комнатный сет — главная ценность",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "7109311d-b2d0-4bb5-8a05-1beeb824dcfa",
+   "name": "4. ИИ: Тегировать каждый товар",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1120,
+    300
+   ],
+   "notes": "категория, комната, стиль с объяснением почему, материал",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "82b54096-5e26-4b98-94b7-446df3fc62c0",
+   "name": "5. ИИ: Указать, в какие сеты войдёт",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1400,
+    300
+   ],
+   "notes": "тип 1 — комната, 2 — категория, 3 — мини-сет",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "4975faf6-3f82-4a28-ac10-f51affc3e712",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "0011ec0b-7c97-4d59-be5a-b1fc359ed243",
+   "name": "6. Хватает данных для тега?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    1680,
+    300
+   ],
+   "notes": "например, неясна комната",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "a4928900-fe66-4902-ba2c-b6a9d593a3bc",
+   "name": "Нет: Уточняющий вопрос владелице",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1820,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "e08d85bd-1414-41dd-9357-2b5e27bc7c79",
+   "name": "7. Вы: Присылает референс с Pinterest",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1960,
+    300
+   ],
+   "notes": "",
+   "notesInFlow": false
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "50bf2e6b-e132-4c50-840d-1ee09fa6a974",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "60b561cd-551a-4457-a80b-28ab67a547a0",
+   "name": "8. Совпадает с одним из 17 стилей?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    2240,
+    300
+   ],
+   "notes": "оттенок на 5–10% другой — тоже совпадение",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "65d5480b-0210-4fc8-acd2-fc5b756dc745",
+   "name": "Нет: Предложить новый тег по формату",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2380,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "64b47297-0472-45dc-891b-7de09863346c",
+   "name": "9. Вы: Подтверждает новый тег",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2520,
+    300
+   ],
+   "notes": "только если он предложен; файл стилей не правится",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "b455f1cd-3a82-472c-b4f1-2245aaae9928",
+   "name": "10. ИИ: Промт по шаблону из styles.md",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2800,
+    300
+   ],
+   "notes": "3 шаблона на стиль, адаптировать, на английском",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "content": "## Куратор каталога декора\n\nТегирует фото товаров, собирает из них три типа сетов, относит референсы Pinterest к 17 стилям и выдаёт промты для визуала.\n\n**Запуск:** «Вот фото товаров, протегируй» · «Какой это стиль? (референс с Pinterest)» · «Собери мини-сет / дай промт под стиль»\n\n**Правила:**\n- Типы сетов различаются масштабом и категориями; стиль внутри сета всегда один.\n- Мини-сет — 2–4 товара разных категорий, локальный «уголок» с образным названием.\n- Не плодить варианты стиля: похожий оттенок относится к существующему тегу.\n- Структуру сайта брать из site-structure.md; изменения проговаривать явно.\n- Не переспрашивать уже согласованное.\n\n_Карта логики скилла (skill: home-decor-catalog-curator). Узлы-заглушки: сценарий ничего не делает, пока шаги не заменят на настоящие._",
+    "height": 420,
+    "width": 520,
+    "color": 7
+   },
+   "id": "d0c87e9a-9433-40bd-af6a-c30a6461df8d",
+   "name": "Описание",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -200
+   ]
+  }
+ ],
+ "connections": {
+  "Старт: Куратор каталога декора": {
+   "main": [
+    [
+     {
+      "node": "1. Вы: Присылает фото товаров",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1. Вы: Присылает фото товаров": {
+   "main": [
+    [
+     {
+      "node": "2. ИИ: Свериться с styles.md и site-structure.md",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2. ИИ: Свериться с styles.md и site-structure.md": {
+   "main": [
+    [
+     {
+      "node": "3. ИИ: Искать сочетания внутри партии",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3. ИИ: Искать сочетания внутри партии": {
+   "main": [
+    [
+     {
+      "node": "4. ИИ: Тегировать каждый товар",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "4. ИИ: Тегировать каждый товар": {
+   "main": [
+    [
+     {
+      "node": "5. ИИ: Указать, в какие сеты войдёт",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5. ИИ: Указать, в какие сеты войдёт": {
+   "main": [
+    [
+     {
+      "node": "6. Хватает данных для тега?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6. Хватает данных для тега?": {
+   "main": [
+    [
+     {
+      "node": "7. Вы: Присылает референс с Pinterest",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Уточняющий вопрос владелице",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "7. Вы: Присылает референс с Pinterest": {
+   "main": [
+    [
+     {
+      "node": "8. Совпадает с одним из 17 стилей?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "8. Совпадает с одним из 17 стилей?": {
+   "main": [
+    [
+     {
+      "node": "9. Вы: Подтверждает новый тег",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Предложить новый тег по формату",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "9. Вы: Подтверждает новый тег": {
+   "main": [
+    [
+     {
+      "node": "10. ИИ: Промт по шаблону из styles.md",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {}
+}

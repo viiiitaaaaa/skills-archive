@@ -1,0 +1,360 @@
+{
+ "id": "mapepoK7LdcntFF8",
+ "name": "Карта · Макеты экранов сайта в ComfyUI",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "4ca05e56-c541-4e8c-9c1a-c36853b0889b",
+   "name": "Старт: Макеты экранов сайта в ComfyUI",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    300
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "81cd399c-1406-44f8-af0a-56556562cf3e",
+   "name": "1. ИИ: Прочитать гайд и ТЗ",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    280,
+    300
+   ],
+   "notes": "если они упомянуты в задаче",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "b73d9a31-2044-45d7-986b-6301aad6352c",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "40e6b733-6709-42fc-b132-9b7f4af53771",
+   "name": "2. Направление стиля уже задано?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    560,
+    300
+   ],
+   "notes": "",
+   "notesInFlow": false
+  },
+  {
+   "parameters": {},
+   "id": "0d572105-3460-4571-a180-01b1a6fe440c",
+   "name": "Нет: Хиро в 3–4 ДНК, выбирает глазами",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    700,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "6374b7f0-edd3-404f-9f5a-72f690b1482b",
+   "name": "3. ИИ: Зафиксировать хвост промта",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    840,
+    300
+   ],
+   "notes": "одинаковый слово в слово, меняется только голова экрана",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "8eaff0f6-b61a-423c-b170-b56cd982473f",
+   "name": "4. Система: Прогнать все экраны одной пачкой",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1120,
+    300
+   ],
+   "notes": "ComfyUI Cloud через браузер, Flux, рецепт не менять",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "fd9cb311-313e-4b26-83cc-998bc3c3a532",
+   "name": "5. ИИ: Отсмотреть результаты сеткой",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1400,
+    300
+   ],
+   "notes": "",
+   "notesInFlow": false
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "bf5ffcdc-04f0-4d6c-aab0-47c98f23cca2",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "5bf9900e-0cf0-4552-a424-1f5343a555cc",
+   "name": "6. Экран получился?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    1680,
+    300
+   ],
+   "notes": "норма — 2–4 из 11 мимо",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "f1116e0c-0e92-4205-833e-1b5517d2841d",
+   "name": "Нет: Уточнить голову, другой seed",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1820,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "498b9658-d0e2-4276-81d0-055a13f275fb",
+   "name": "7. Вы: Разрешает скачать PNG",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1960,
+    300
+   ],
+   "notes": "",
+   "notesInFlow": false
+  },
+  {
+   "parameters": {},
+   "id": "aceaf36c-0f4e-4cd2-8426-586d69748e40",
+   "name": "8. Система: Скачать и разложить по папке",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2240,
+    300
+   ],
+   "notes": "Downloads\\comfy_shell",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "ac2393c0-e62b-43e0-98e0-5006e46a13ac",
+   "name": "9. ИИ: Обновить DESIGN_SYSTEM.md",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2520,
+    300
+   ],
+   "notes": "",
+   "notesInFlow": false
+  },
+  {
+   "parameters": {},
+   "id": "9e8b06c3-02e9-4ec6-a4be-1f6793806b86",
+   "name": "10. Система: Собрать галерею-артефакт",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2800,
+    300
+   ],
+   "notes": "картинки вшиты в base64 через PowerShell",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "content": "## Макеты экранов сайта в ComfyUI\n\nГенерирует экраны интерфейса магазина одним рецептом в ComfyUI Cloud и сводит их в дизайн-систему из оболочки и цветов коллекций.\n\n**Запуск:** «Сделай подложку сайта» · «Сгенерь экраны магазина в комфи» · «Перегенерь экраны в другом стиле»\n\n**Правила:**\n- Оболочка без цвета; цвет коллекции — только два токена: акцент и подложка фото.\n- Характер несут свет, сериф, капслок-подписи и скругление 24px, а не оттенок.\n- Атмосферные слова в хвосте промта превращают экран в фото стены.\n- Писать home decor, vases, ceramics, no clothing — иначе каталог уходит в одежду.\n- Негативный промт бесполезен: у Flux CFG 1.0.\n\n_Карта логики скилла (skill: site-mockups). Узлы-заглушки: сценарий ничего не делает, пока шаги не заменят на настоящие._",
+    "height": 420,
+    "width": 520,
+    "color": 7
+   },
+   "id": "01697b7c-19cf-42e8-b690-e2d51d587647",
+   "name": "Описание",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -200
+   ]
+  }
+ ],
+ "connections": {
+  "Старт: Макеты экранов сайта в ComfyUI": {
+   "main": [
+    [
+     {
+      "node": "1. ИИ: Прочитать гайд и ТЗ",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1. ИИ: Прочитать гайд и ТЗ": {
+   "main": [
+    [
+     {
+      "node": "2. Направление стиля уже задано?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2. Направление стиля уже задано?": {
+   "main": [
+    [
+     {
+      "node": "3. ИИ: Зафиксировать хвост промта",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Хиро в 3–4 ДНК, выбирает глазами",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3. ИИ: Зафиксировать хвост промта": {
+   "main": [
+    [
+     {
+      "node": "4. Система: Прогнать все экраны одной пачкой",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "4. Система: Прогнать все экраны одной пачкой": {
+   "main": [
+    [
+     {
+      "node": "5. ИИ: Отсмотреть результаты сеткой",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5. ИИ: Отсмотреть результаты сеткой": {
+   "main": [
+    [
+     {
+      "node": "6. Экран получился?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6. Экран получился?": {
+   "main": [
+    [
+     {
+      "node": "7. Вы: Разрешает скачать PNG",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Уточнить голову, другой seed",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "7. Вы: Разрешает скачать PNG": {
+   "main": [
+    [
+     {
+      "node": "8. Система: Скачать и разложить по папке",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "8. Система: Скачать и разложить по папке": {
+   "main": [
+    [
+     {
+      "node": "9. ИИ: Обновить DESIGN_SYSTEM.md",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "9. ИИ: Обновить DESIGN_SYSTEM.md": {
+   "main": [
+    [
+     {
+      "node": "10. Система: Собрать галерею-артефакт",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {}
+}

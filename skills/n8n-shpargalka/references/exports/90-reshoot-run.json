@@ -1,0 +1,158 @@
+{
+ "id": "artmReshoot0001",
+ "name": "Контент: пересъёмка фото через Comfy Cloud",
+ "active": false,
+ "settings": {
+  "executionOrder": "v1",
+  "errorWorkflow": "artmErrAlert001",
+  "executionTimeout": 1800
+ },
+ "nodes": [
+  {
+   "parameters": {
+    "httpMethod": "POST",
+    "path": "panel/reshoot-run",
+    "responseMode": "lastNode",
+    "options": {}
+   },
+   "id": "90000000-0000-4000-8000-000000000001",
+   "name": "Кнопка в панели",
+   "type": "n8n-nodes-base.webhook",
+   "typeVersion": 2,
+   "position": [
+    -460,
+    0
+   ],
+   "webhookId": "90000000-0000-4000-8000-0000000000w1"
+  },
+  {
+   "parameters": {
+    "command": "py -3.13 \"C:\\Users\\User\\artmellio-system\\scripts\\comfy\\reshoot_products.py\" --limit 5 --json"
+   },
+   "id": "90000000-0000-4000-8000-000000000002",
+   "name": "Переснять",
+   "type": "n8n-nodes-base.executeCommand",
+   "typeVersion": 1,
+   "position": [
+    -240,
+    0
+   ],
+   "notes": "Comfy Cloud без браузера: ключи в «comfy cloud.txt» рядом с ключами Shopify. ~1 минута на товар, холодный старт до 3 минут."
+  },
+  {
+   "parameters": {
+    "jsCode": "// Скрипт печатает ход работы в stderr, а итог — последней строкой stdout: RESULT:{...}\nconst out = $input.first().json;\nconst lines = String(out.stdout || '').split(/\\r?\\n/).filter(Boolean);\nconst line = [...lines].reverse().find((l) => l.startsWith('RESULT:'));\nif (!line) {\n  throw new Error('Скрипт не вернул итог. Код выхода ' + out.exitCode + '. ' + String(out.stderr || '').slice(-600));\n}\nconst r = JSON.parse(line.slice('RESULT:'.length));\nif (!r.ok) throw new Error(r['ошибка'] || 'не удалось');\nreturn [{ json: r }];"
+   },
+   "id": "90000000-0000-4000-8000-000000000003",
+   "name": "Разобрать итог",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -20,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "jsCode": "const r = $('Разобрать итог').first().json;\nreturn [{ json: { kind: r['не_получилось'] ? 'warning' : 'info',\n  title: `Пересъёмка: готово ${r['переснято']}` + (r['не_получилось'] ? `, ошибок ${r['не_получилось']}` : ''),\n  text: `в очереди осталось ${r['осталось_в_очереди']} · кадры в ${r['папка']}` } }];"
+   },
+   "id": "90000000-0000-4000-8000-000000000004",
+   "name": "Сводка",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    200,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "http://127.0.0.1:8787/api/notify",
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify({ kind: $json.kind, title: $json.title, text: $json.text }) }}",
+    "options": {}
+   },
+   "id": "90000000-0000-4000-8000-000000000005",
+   "name": "Уведомление в панель",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    420,
+    -120
+   ],
+   "onError": "continueRegularOutput"
+  },
+  {
+   "parameters": {
+    "jsCode": "const r = $('Разобрать итог').first().json;\nconst out = { в_очереди: r['в_очереди'], переснято: r['переснято'], не_получилось: r['не_получилось'],\n  осталось_в_очереди: r['осталось_в_очереди'], папка_с_кадрами: r['папка'] };\nif (r['подсказка']) out.подсказка = r['подсказка'];\nif (r['готово'] && r['готово'].length) out.готово = r['готово'];\nif (r['ошибки'] && r['ошибки'].length) out.ошибки = r['ошибки'];\nreturn [{ json: out }];"
+   },
+   "id": "90000000-0000-4000-8000-000000000006",
+   "name": "Итог",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    640,
+    0
+   ]
+  }
+ ],
+ "connections": {
+  "Кнопка в панели": {
+   "main": [
+    [
+     {
+      "node": "Переснять",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Переснять": {
+   "main": [
+    [
+     {
+      "node": "Разобрать итог",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Разобрать итог": {
+   "main": [
+    [
+     {
+      "node": "Сводка",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Сводка": {
+   "main": [
+    [
+     {
+      "node": "Уведомление в панель",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Уведомление в панель": {
+   "main": [
+    [
+     {
+      "node": "Итог",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ }
+}

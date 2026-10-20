@@ -1,0 +1,248 @@
+{
+ "id": "mapHqzD7cNZFCIPb",
+ "name": "Карта · Юридические дела: бот → Drive → документы",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "1b792dc0-b4a0-4582-b5cb-7c520f545e6c",
+   "name": "Старт: Юридические дела: бот → Drive → документы",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    300
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "8698b1c2-beb5-4ee8-9c39-3a49799b6038",
+   "name": "1. Вы: Пересылает в бот голосовые и документы, пишет названи",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    280,
+    300
+   ],
+   "notes": "Бот молча сохраняет в Дела/_Входящие, ставит 👌",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "180d6aa3-7dd3-4fbd-9e32-089cf31fde22",
+   "name": "2. Система: Бот расшифровывает голосовые и пишет ленту",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    560,
+    300
+   ],
+   "notes": "Whisper large-v3-turbo на компьютере; _лента.md с msg_id",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "4ff3f8ed-f5af-4531-a27c-e6122cc063e2",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "b8853f17-7898-4515-af2f-e6b5ffc58d7a",
+   "name": "3. Google Drive синхронизируется?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    840,
+    300
+   ],
+   "notes": "Нет паузы и «offline» в журнале DriveFS; облако сверено коннектором",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "54c4ac2e-d227-4abf-a3d4-2c720f0d835a",
+   "name": "Нет: Попросить снять паузу: значок Drive → ⚙ → Возобновить",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    980,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "cd1ae7a1-fcb3-4893-9f1a-b836329bc6ca",
+   "name": "4. ИИ: Раскладывает по папкам дел",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1120,
+    300
+   ],
+   "notes": "Сканы → Документы с понятными именами; дубли — только по SHA-256; новое дело — _описание и _итоги",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "3528e981-5736-44b4-a84c-1c3de38b2687",
+   "name": "5. ИИ: Готовит документ по голосовому",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1400,
+    300
+   ],
+   "notes": "Читает _описание и _итоги; скилл ru-litigation-docs; старая версия — в Архив",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "30dd56f9-3a0f-4025-862f-9df77e26b414",
+   "name": "6. Система: Итог в три места",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1680,
+    300
+   ],
+   "notes": "_итоги.md на Drive; ответом на голосовое в бот; файлы + итог в чат дела на claude.ai",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "e3c2923f-1425-4aec-a446-c59f0bb913e0",
+   "name": "7. ИИ: Сверка: Drive / бот / Claude",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1960,
+    300
+   ],
+   "notes": "Таблица ✅/❌ для неё",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "content": "## Юридические дела: бот → Drive → документы\n\nГолосовые и документы из Telegram-бота «Дела» раскладывает по папкам дел на Google Drive, готовит иски и обращения и отправляет итог в Drive, в бот и в чат дела на claude.ai.\n\n**Запуск:** «Разбери входящие» · «Я скинула в бот по делу Шиловой» · «Разложи документы по делам»\n\n**Правила:**\n- Бот ничего не спрашивает — дело указывает она сама\n- На claude.ai и в файлах дел бот не упоминается\n- Правильная версия — только папка дела на Drive (Дела/_ПРАВИЛА.md)\n\n_Карта логики скилла (skill: dela). Узлы-заглушки: сценарий ничего не делает, пока шаги не заменят на настоящие._",
+    "height": 420,
+    "width": 520,
+    "color": 7
+   },
+   "id": "ffa24529-8d27-4129-ba04-c87cf8833a23",
+   "name": "Описание",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -200
+   ]
+  }
+ ],
+ "connections": {
+  "Старт: Юридические дела: бот → Drive → документы": {
+   "main": [
+    [
+     {
+      "node": "1. Вы: Пересылает в бот голосовые и документы, пишет названи",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1. Вы: Пересылает в бот голосовые и документы, пишет названи": {
+   "main": [
+    [
+     {
+      "node": "2. Система: Бот расшифровывает голосовые и пишет ленту",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2. Система: Бот расшифровывает голосовые и пишет ленту": {
+   "main": [
+    [
+     {
+      "node": "3. Google Drive синхронизируется?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3. Google Drive синхронизируется?": {
+   "main": [
+    [
+     {
+      "node": "4. ИИ: Раскладывает по папкам дел",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Попросить снять паузу: значок Drive → ⚙ → Возобновить",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "4. ИИ: Раскладывает по папкам дел": {
+   "main": [
+    [
+     {
+      "node": "5. ИИ: Готовит документ по голосовому",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5. ИИ: Готовит документ по голосовому": {
+   "main": [
+    [
+     {
+      "node": "6. Система: Итог в три места",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6. Система: Итог в три места": {
+   "main": [
+    [
+     {
+      "node": "7. ИИ: Сверка: Drive / бот / Claude",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {}
+}

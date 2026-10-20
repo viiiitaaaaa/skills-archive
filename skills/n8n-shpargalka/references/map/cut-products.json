@@ -1,0 +1,341 @@
+{
+ "id": "maptP29jBJo89oB5",
+ "name": "Карта · Нарезка товаров со скринов",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "9cb738dc-f454-429b-bc7c-932ec580d90d",
+   "name": "Старт: Нарезка товаров со скринов",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    300
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "2a3f4bf6-3a3e-443a-a781-4a9d47fa4df2",
+   "name": "1. Вы: Скрины уже сняты по папкам",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    280,
+    300
+   ],
+   "notes": "Снимает скилл dolphin-shots, папка = название магазина",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "0ed7d737-d221-4639-ae26-5b16acc1c011",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "6cc061fe-dcc2-479b-9b15-3cbd7cd3883f",
+   "name": "2. Лишние старые вырезки есть?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    560,
+    300
+   ],
+   "notes": "Если исходников стало меньше — сначала удалить старые <магазин>-*.png",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "905d3860-b80b-43f5-8b24-b0769585ddd4",
+   "name": "Нет: Сразу запускать скрипт",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    700,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "f1f48233-d431-40ae-bf26-267c0ff396a1",
+   "name": "3. Система: Запустить готовый скрипт нарезки",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    840,
+    300
+   ],
+   "notes": "cut_products.py на папку магазина или на всю папку; всё — в фоне",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "9acbdbb4-c9d7-4a69-bc7d-5ce51f8acda6",
+   "name": "4. Система: Найти колонки и ряды сетки",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1120,
+    300
+   ],
+   "notes": "По не-белым пикселям, порог подстраивается сам",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "8c9609bc-18ba-4b86-9815-00d33ebda3ef",
+   "name": "5. Система: Взять только квадратные ячейки",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1400,
+    300
+   ],
+   "notes": "Так отсекаются шапка, футер, цены, рейтинги",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "dd9d9fe5-b2ad-48d0-8749-e16809a7288f",
+   "name": "6. Система: Пропустить пустые и повторы",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1680,
+    300
+   ],
+   "notes": "Повторы с соседних страниц убираются по хэшу",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "16ed4ecc-75a2-4cf7-93dd-e26e833af1a5",
+   "name": "7. Система: Сохранить вырезки рядом со скринами",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1960,
+    300
+   ],
+   "notes": "Имена <магазин>-001.png, сквозная нумерация по страницам",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "2bc8a6c6-4e7f-47d6-abe6-fbf2b9d364e2",
+   "name": "8. ИИ: Проверить контактным листом",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2240,
+    300
+   ],
+   "notes": "По 1–2 вырезки из папки, уменьшить до 150 px, склеить и посмотреть",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "aa769cc3-abe3-4277-8f1e-ee1c14b60cc6",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "cfebd675-c3df-431c-a811-0162f26506e0",
+   "name": "9. Со всех страниц вышло поровну?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    2520,
+    300
+   ],
+   "notes": "Мало карточек с одной страницы — мешало окно «Sign in»",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "9a32fe75-f8cc-4785-9f88-f4c44e7d5db8",
+   "name": "Нет: Переснять страницу без окна",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2660,
+    520
+   ]
+  },
+  {
+   "parameters": {
+    "content": "## Нарезка товаров со скринов\n\nРежет большие скрины магазина AliExpress на отдельные квадратные фото товаров без названий, цен и рейтингов.\n\n**Запуск:** «Нарежь картинки магазина» · «Вырежи товары со скринов» · «Порежь скрины на товары»\n\n**Правила:**\n- Не писать нарезку заново — запускать cut_products.py; правишь — обнови обе копии.\n- Рекламные баннеры магазина попадают в вырезки — технически не отличимы от товаров.\n- Повторный запуск безопасен: вырезки перезаписываются, но старые лишние не удаляются.\n- Размер вырезки 418/508/387 px зависит от ширины окна при съёмке — это нормально.\n\n_Карта логики скилла (skill: cut-products). Узлы-заглушки: сценарий ничего не делает, пока шаги не заменят на настоящие._",
+    "height": 420,
+    "width": 520,
+    "color": 7
+   },
+   "id": "41b6856f-5ef7-42ab-9a3a-f102379642f0",
+   "name": "Описание",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -200
+   ]
+  }
+ ],
+ "connections": {
+  "Старт: Нарезка товаров со скринов": {
+   "main": [
+    [
+     {
+      "node": "1. Вы: Скрины уже сняты по папкам",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1. Вы: Скрины уже сняты по папкам": {
+   "main": [
+    [
+     {
+      "node": "2. Лишние старые вырезки есть?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2. Лишние старые вырезки есть?": {
+   "main": [
+    [
+     {
+      "node": "3. Система: Запустить готовый скрипт нарезки",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Сразу запускать скрипт",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3. Система: Запустить готовый скрипт нарезки": {
+   "main": [
+    [
+     {
+      "node": "4. Система: Найти колонки и ряды сетки",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "4. Система: Найти колонки и ряды сетки": {
+   "main": [
+    [
+     {
+      "node": "5. Система: Взять только квадратные ячейки",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5. Система: Взять только квадратные ячейки": {
+   "main": [
+    [
+     {
+      "node": "6. Система: Пропустить пустые и повторы",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6. Система: Пропустить пустые и повторы": {
+   "main": [
+    [
+     {
+      "node": "7. Система: Сохранить вырезки рядом со скринами",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "7. Система: Сохранить вырезки рядом со скринами": {
+   "main": [
+    [
+     {
+      "node": "8. ИИ: Проверить контактным листом",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "8. ИИ: Проверить контактным листом": {
+   "main": [
+    [
+     {
+      "node": "9. Со всех страниц вышло поровну?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "9. Со всех страниц вышло поровну?": {
+   "main": [
+    [],
+    [
+     {
+      "node": "Нет: Переснять страницу без окна",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {}
+}

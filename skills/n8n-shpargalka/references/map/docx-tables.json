@@ -1,0 +1,277 @@
+{
+ "id": "map6rjJPovkr5seS",
+ "name": "Карта · Таблицы в Word без съезжания",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "1d6a5f6e-cf94-4a31-b1fd-9df45f9680b9",
+   "name": "Старт: Таблицы в Word без съезжания",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    300
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "14e35768-a012-4f28-9049-64443cc30485",
+   "name": "1. ИИ: Задаёт фиксированную раскладку таблицы",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    280,
+    300
+   ],
+   "notes": "FIXED, ширины колонок в DXA, сумма ≤ ширины страницы",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "c0008c48-fb33-47e7-b7eb-650007b439e4",
+   "name": "2. ИИ: Ставит явную ширину каждой ячейке",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    560,
+    300
+   ],
+   "notes": "равна ширине её колонки; объединённая — сумма колонок",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "6a363a28-a00d-46c9-88f3-77f0a8672f57",
+   "name": "3. ИИ: Запрещает разрыв строк между страницами",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    840,
+    300
+   ],
+   "notes": "cantSplit у строк, у шапки повтор на новой странице",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "0ebd4855-9a53-49b1-9376-f07b36c344f8",
+   "name": "4. ИИ: Не даёт шапке оторваться от тела",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1120,
+    300
+   ],
+   "notes": "разрыв страницы перед заголовком или keepNext",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "a247bd30-94fd-4feb-82e1-380ed861ba23",
+   "name": "5. ИИ: Оформляет числа и итог",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1400,
+    300
+   ],
+   "notes": "по правому краю, формат 13 278 000,00, итог жирным",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "f9890747-a402-42c4-9203-ae08a4c411a8",
+   "name": "6. Система: Программно пересчитывает арифметику таблицы",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1680,
+    300
+   ],
+   "notes": "суммы по строкам = итог",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "40dc9e72-636d-4b1b-9f47-61e3ec8a3d51",
+   "name": "7. Система: Конвертирует в PDF через LibreOffice",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1960,
+    300
+   ],
+   "notes": "",
+   "notesInFlow": false
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "5a37364c-4152-4d2f-9677-11e6fdb41366",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "d01fe35a-ebf7-47d5-9f83-e921157e0c42",
+   "name": "8. Таблица цела на всех страницах?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    2240,
+    300
+   ],
+   "notes": "просмотр постранично по чек-листу",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "37c00d48-28ac-4459-bb0e-a66e2f192f29",
+   "name": "Нет: исправить и проверить заново",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2380,
+    520
+   ]
+  },
+  {
+   "parameters": {
+    "content": "## Таблицы в Word без съезжания\n\nПравила вёрстки таблиц в .docx, чтобы Word не сдвигал колонки и не разрывал таблицу.\n\n**Запуск:** «Сделай расчёт процентов по 395 в Word» · «Нужна смета в docx с таблицей» · «Реестр документов в Word»\n\n**Правила:**\n- Применять к любому .docx с таблицей, вместе со скиллом docx\n- Без ширины у каждой ячейки Word пересчитает ширины сам и таблица съедет\n- Сумма ширин колонок не больше текстовой области (A4 с полями 3/1,5 см ≈ 9355 DXA)\n- Перед отправкой — PDF и постраничный просмотр\n\n_Карта логики скилла (skill: docx-tables). Узлы-заглушки: сценарий ничего не делает, пока шаги не заменят на настоящие._",
+    "height": 420,
+    "width": 520,
+    "color": 7
+   },
+   "id": "ff828cd2-c23b-4602-b133-53a1af574574",
+   "name": "Описание",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -200
+   ]
+  }
+ ],
+ "connections": {
+  "Старт: Таблицы в Word без съезжания": {
+   "main": [
+    [
+     {
+      "node": "1. ИИ: Задаёт фиксированную раскладку таблицы",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1. ИИ: Задаёт фиксированную раскладку таблицы": {
+   "main": [
+    [
+     {
+      "node": "2. ИИ: Ставит явную ширину каждой ячейке",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2. ИИ: Ставит явную ширину каждой ячейке": {
+   "main": [
+    [
+     {
+      "node": "3. ИИ: Запрещает разрыв строк между страницами",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3. ИИ: Запрещает разрыв строк между страницами": {
+   "main": [
+    [
+     {
+      "node": "4. ИИ: Не даёт шапке оторваться от тела",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "4. ИИ: Не даёт шапке оторваться от тела": {
+   "main": [
+    [
+     {
+      "node": "5. ИИ: Оформляет числа и итог",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5. ИИ: Оформляет числа и итог": {
+   "main": [
+    [
+     {
+      "node": "6. Система: Программно пересчитывает арифметику таблицы",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6. Система: Программно пересчитывает арифметику таблицы": {
+   "main": [
+    [
+     {
+      "node": "7. Система: Конвертирует в PDF через LibreOffice",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "7. Система: Конвертирует в PDF через LibreOffice": {
+   "main": [
+    [
+     {
+      "node": "8. Таблица цела на всех страницах?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "8. Таблица цела на всех страницах?": {
+   "main": [
+    [],
+    [
+     {
+      "node": "Нет: исправить и проверить заново",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {}
+}

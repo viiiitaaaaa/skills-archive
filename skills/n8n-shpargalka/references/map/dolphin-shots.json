@@ -1,0 +1,384 @@
+{
+ "id": "mapUfYvOr4fsu9NR",
+ "name": "Карта · Скрины магазинов AliExpress через Dolphin",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "1c24bba0-596a-41b6-9560-8a54c75ae602",
+   "name": "Старт: Скрины магазинов AliExpress через Dolphin",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    300
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "fa07f0be-c4aa-4075-8a2f-c924a5b6bb3f",
+   "name": "1. Система: Проверить, жив ли Dolphin",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    280,
+    300
+   ],
+   "notes": "dolphin.py --check; программа Dolphin должна быть запущена на компьютере",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "61ee974a-4004-4b61-9c40-87251a545a50",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "6bf1cb0d-c747-48bd-98fb-2ac39fef2f0d",
+   "name": "2. Профиль уже открыт руками?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    560,
+    300
+   ],
+   "notes": "Если да — подключиться к открытому, не гасить его",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "4b25c119-b263-43c0-8dfe-d3274d6ffb52",
+   "name": "Нет: Запуск через start_with_retry",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    700,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "9658e814-b9b9-478d-b9ea-102546a5a189",
+   "name": "3. Система: Запустить профиль с автоматизацией",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    840,
+    300
+   ],
+   "notes": "start_with_retry: при «already running» стоп, пауза 10 с, до 6 попыток",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "a662cb22-9b8d-443d-b210-1456b7bae67e",
+   "name": "4. Система: Развернуть ссылки в десктопную версию",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1120,
+    300
+   ],
+   "notes": "Короткие и мобильные ссылки → www.aliexpress.com/store/<id>/pages/all-items.html",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "7bdbf94f-2b73-4b83-96ea-4a9577dbef2e",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "c5b5f784-6429-4205-b699-cd15e7593be3",
+   "name": "5. Адрес остался на .com?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    1400,
+    300
+   ],
+   "notes": "Если увело на .ru — скрипт останавливается, 404 не снимает",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "e73d11a8-1736-43c3-a60a-09878bcb1780",
+   "name": "Нет: Стоп, нужен не-российский прокси",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1540,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "a0dfadb4-7445-4900-b4dd-bf9c508f43cb",
+   "name": "6. Система: Дождаться карточек и прокрутить вниз",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1680,
+    300
+   ],
+   "notes": "Ждать ссылки на товары, прокрутка до низа прогружает картинки",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "925ef742-bb54-40e7-a27e-bcaaa5e8138f",
+   "name": "7. Система: Снять страницу целиком",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1960,
+    300
+   ],
+   "notes": "Полностраничный скрин, таймаут 180 с; FireShot через скрипт не работает",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "9ab63579-9864-4fd0-a740-dd2a22924d9a",
+   "name": "8. Система: Листать кликом по номеру страницы",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2240,
+    300
+   ],
+   "notes": "&page=N не работает; проверять смену товаров, пока номера не кончатся",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "05606f7a-9f3d-4707-93b0-8765db77c8ed",
+   "name": "9. Система: Записать прогресс после каждого магазина",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2520,
+    300
+   ],
+   "notes": "state.json: обрыв не теряет снятое, упавшие — в failed",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "e0684ca8-e116-40d1-ab96-c887459ff646",
+   "name": "10. Система: Закрыть вкладку магазина",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2800,
+    300
+   ],
+   "notes": "Один магазин = одна вкладка, не больше 10 вкладок",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "612cebfe-dcac-4759-9c75-58973787daeb",
+   "name": "11. Вы: Получить скрины в папке",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    3080,
+    300
+   ],
+   "notes": "Рабочий стол\\скрины магазинов\\<магазин>\\<магазин> — страница N.png",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "content": "## Скрины магазинов AliExpress через Dolphin\n\nОткрывает профиль Dolphin с прокси и снимает полностраничные скрины всех страниц магазина AliExpress, чтобы потом нарезать товары.\n\n**Запуск:** «Сними скрины магазина» · «Открой профиль долфин» · «Сделай скрины магазинов из списка»\n\n**Правила:**\n- Готовые скрипты в C:\\Users\\User\\dolphin_anty — не писать заново.\n- Только aliexpress.com и десктопная версия; .ru и мобильная — брак.\n- Старт профиля и вся работа — в одном процессе, иначе браузер гаснет.\n- Порядок товаров между запусками тасуется, число страниц у магазинов разное — это нормально.\n- Профиль Dolphin всегда один — 859648353; старые «Ремешки» и «Декор» не использовать.\n\n_Карта логики скилла (skill: dolphin-shots). Узлы-заглушки: сценарий ничего не делает, пока шаги не заменят на настоящие._",
+    "height": 420,
+    "width": 520,
+    "color": 7
+   },
+   "id": "99755d10-bde9-46a3-b6c4-3525ea39fd58",
+   "name": "Описание",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -200
+   ]
+  }
+ ],
+ "connections": {
+  "Старт: Скрины магазинов AliExpress через Dolphin": {
+   "main": [
+    [
+     {
+      "node": "1. Система: Проверить, жив ли Dolphin",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1. Система: Проверить, жив ли Dolphin": {
+   "main": [
+    [
+     {
+      "node": "2. Профиль уже открыт руками?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2. Профиль уже открыт руками?": {
+   "main": [
+    [
+     {
+      "node": "3. Система: Запустить профиль с автоматизацией",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Запуск через start_with_retry",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3. Система: Запустить профиль с автоматизацией": {
+   "main": [
+    [
+     {
+      "node": "4. Система: Развернуть ссылки в десктопную версию",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "4. Система: Развернуть ссылки в десктопную версию": {
+   "main": [
+    [
+     {
+      "node": "5. Адрес остался на .com?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5. Адрес остался на .com?": {
+   "main": [
+    [
+     {
+      "node": "6. Система: Дождаться карточек и прокрутить вниз",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Стоп, нужен не-российский прокси",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6. Система: Дождаться карточек и прокрутить вниз": {
+   "main": [
+    [
+     {
+      "node": "7. Система: Снять страницу целиком",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "7. Система: Снять страницу целиком": {
+   "main": [
+    [
+     {
+      "node": "8. Система: Листать кликом по номеру страницы",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "8. Система: Листать кликом по номеру страницы": {
+   "main": [
+    [
+     {
+      "node": "9. Система: Записать прогресс после каждого магазина",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "9. Система: Записать прогресс после каждого магазина": {
+   "main": [
+    [
+     {
+      "node": "10. Система: Закрыть вкладку магазина",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "10. Система: Закрыть вкладку магазина": {
+   "main": [
+    [
+     {
+      "node": "11. Вы: Получить скрины в папке",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {}
+}

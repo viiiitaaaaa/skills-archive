@@ -1,0 +1,85 @@
+{
+ "id": "artmMarkupQ001",
+ "name": "Разметка: что заполнить дальше",
+ "active": false,
+ "settings": {
+  "executionOrder": "v1",
+  "errorWorkflow": "artmErrAlert001"
+ },
+ "nodes": [
+  {
+   "parameters": {
+    "httpMethod": "POST",
+    "path": "panel/markup-queue",
+    "responseMode": "lastNode",
+    "options": {}
+   },
+   "id": "a7000000-0000-4000-8000-000000000001",
+   "name": "Кнопка в панели",
+   "type": "n8n-nodes-base.webhook",
+   "typeVersion": 2,
+   "position": [
+    -460,
+    0
+   ],
+   "webhookId": "a7000000-0000-4000-8000-0000000000w1",
+   "notes": "Ручной запуск из операционной панели. Только чтение."
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "https://kmfmxn-r4.myshopify.com/admin/oauth/access_token",
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={\n  \"client_id\": \"{{ $env.SHOPIFY_CLIENT_ID }}\",\n  \"client_secret\": \"{{ $env.SHOPIFY_CLIENT_SECRET }}\",\n  \"grant_type\": \"client_credentials\"\n}",
+    "options": {}
+   },
+   "id": "a7000000-0000-4000-8000-000000000002",
+   "name": "Выпустить токен",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    -240,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "jsCode": "// Очередь разметки: следующие N товаров, у которых пусто хоть одно из\n// метаполей artmellio.style / material / room / palette. Только чтение.\nconst N = 20;\nconst token = $input.first().json.access_token;\nconst url = 'https://kmfmxn-r4.myshopify.com/admin/api/2026-07/graphql.json';\nconst query = `query($cursor: String) {\n  products(first: 100, after: $cursor, query: \"status:active OR status:draft\", sortKey: TITLE) {\n    pageInfo { hasNextPage endCursor }\n    nodes {\n      id title status\n      style: metafield(namespace: \"artmellio\", key: \"style\") { value }\n      material: metafield(namespace: \"artmellio\", key: \"material\") { value }\n      room: metafield(namespace: \"artmellio\", key: \"room\") { value }\n      palette: metafield(namespace: \"artmellio\", key: \"palette\") { value }\n    }\n  }\n}`;\nconst empty = (v) => !v || !v.value || String(v.value).trim() === '' || String(v.value).trim() === '[]';\nconst NAMES = { style: 'стиль', material: 'материал', room: 'комната', palette: 'палитра' };\n\nconst all = [];\nlet cursor = null;\nlet pages = 0;\ndo {\n  const r = await this.helpers.httpRequest({\n    method: 'POST', url,\n    headers: { 'X-Shopify-Access-Token': token, 'Content-Type': 'application/json' },\n    body: { query, variables: { cursor } }, json: true,\n  });\n  if (r.errors) throw new Error('Shopify: ' + JSON.stringify(r.errors));\n  const page = r.data.products;\n  all.push(...page.nodes);\n  cursor = page.pageInfo.hasNextPage ? page.pageInfo.endCursor : null;\n  pages += 1;\n} while (cursor && pages < 100);\n\nconst todo = [];\nfor (const p of all) {\n  const missing = Object.keys(NAMES).filter((k) => empty(p[k])).map((k) => NAMES[k]);\n  if (missing.length) todo.push({ p, missing });\n}\n\nconst список = todo.slice(0, N).map(({ p, missing }, i) => ({\n  '№': i + 1,\n  товар: p.title,\n  статус: p.status === 'ACTIVE' ? 'активен' : 'черновик',\n  не_хватает: missing.join(', '),\n  открыть: 'https://admin.shopify.com/store/kmfmxn-r4/products/' + p.id.split('/').pop(),\n}));\n\nreturn [{ json: {\n  всего_товаров: all.length,\n  осталось_разметить: todo.length,\n  готово: all.length - todo.length,\n  список,\n} }];\n"
+   },
+   "id": "a7000000-0000-4000-8000-000000000003",
+   "name": "Найти пропуски",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -20,
+    0
+   ],
+   "notes": "Весь каталог постранично, фильтр по пустым метаполям, первые 20 по алфавиту со ссылками в админку."
+  }
+ ],
+ "connections": {
+  "Кнопка в панели": {
+   "main": [
+    [
+     {
+      "node": "Выпустить токен",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Выпустить токен": {
+   "main": [
+    [
+     {
+      "node": "Найти пропуски",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ }
+}

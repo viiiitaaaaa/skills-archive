@@ -1,0 +1,504 @@
+{
+ "id": "mapeq8EFU5QbtBSm",
+ "name": "Карта · Отбор товаров на 1688 в таблицу",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "b05aef2b-59c5-4fab-ba1b-0afeba8dd0d9",
+   "name": "Старт: Отбор товаров на 1688 в таблицу",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    300
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "6a968093-932c-4d1a-8dd7-ce41921cc5e4",
+   "name": "1. Вы: Открывает вкладки 1688 в Chrome",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    280,
+    300
+   ],
+   "notes": "Или Claude даёт китайские запросы по вещам из теста радара",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "d2e993e7-34e3-4449-87ac-f5fdaf9c9018",
+   "name": "2. Система: Ссылки из вкладок Chrome",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    560,
+    300
+   ],
+   "notes": "Из файлов сессии Chrome, скрипт chrome_1688_tabs.py",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "a99943c9-b416-4d7b-92e2-7e7afa9a817a",
+   "name": "3. Система: Данные со страницы товара",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    840,
+    300
+   ],
+   "notes": "Название, цена ¥, мин. заказ, поштучная отправка, продажи — обычный Chrome",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "654556ac-67db-487c-a79c-7032dfddfa72",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "b71eccbf-98aa-4082-9fcd-761d5b9eda63",
+   "name": "4. Заказ от 1 шт и поштучная отправка?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    1120,
+    300
+   ],
+   "notes": "Проверять сразу при сборе",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "f58bca53-3dd3-4ffb-8841-8e6b82003e83",
+   "name": "Нет: Убрать из подборки",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1260,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "9d11814d-bdd2-459c-be6f-825de21d5556",
+   "name": "5. Система: Динамика, график 90 дней, фото",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1400,
+    300
+   ],
+   "notes": "Панель помощника 1688; график по образцу 9.PNG с русскими подписями",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "c18526e6-dc85-4a64-bee4-fc95f0004713",
+   "name": "6. Система: Тренд фасона по радару",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1680,
+    300
+   ],
+   "notes": "run_word_analysis.py; плашка тренда на вердикт не влияет",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "d56ba5da-9fdd-4852-9367-8a816f4aa905",
+   "name": "7. ИИ: Вердикт брать / можно / слабо / не брать",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1960,
+    300
+   ],
+   "notes": "≥$15 чистыми и продажи ≥50 юбки/≥500 прочее; весна-лето — не брать",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "2b14c6b1-28b8-41d1-8ff5-3d752834828b",
+   "name": "8. Система: Таблица и юнит-экономика формулами",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2240,
+    300
+   ],
+   "notes": "Закупка, доставка, пошлина 30%, Shopify, налог, три канала рекламы",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "ec3a97d4-e7b4-4023-a298-d7a79fb1443d",
+   "name": "9. ИИ: Подсказка по её вкусу",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2520,
+    300
+   ],
+   "notes": "Только информирует, ничего не отсеивает",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "f3a8e2d4-4cf8-44d5-b00d-4ed00b106950",
+   "name": "10. Вы: Ставит свой вердикт брать/не брать",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2800,
+    300
+   ],
+   "notes": "Её правки в Excel святы, файл не перезаписывать с нуля",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "2c688827-b300-40f6-b3da-a8cb92f3c4e7",
+   "name": "11. Система: По команде удалить «не брать»",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    3080,
+    300
+   ],
+   "notes": "После удаления строк пересчитать формулы refresh_formulas.py",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "27106840-7508-49ea-8c0d-acb102048ec6",
+   "name": "12. Вы: Даёт выдачу Pinduoduo",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    3360,
+    300
+   ],
+   "notes": "Что реально продаётся в Китае; листы PDD — в главном документе yubka_kletka_otbor60.xlsx",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "e8868562-4ce1-4c71-85c3-9b7500578d4d",
+   "name": "13. Система: Та же модель на 1688 по фото",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    3640,
+    300
+   ],
+   "notes": "Поиск по фото + сверка всех фото и размерной таблицы PDD; не больше 3–4 поисков подряд",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "fc832a43-b5bf-41e2-bd36-348d3ad76ca2",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "36b0c203-c048-4750-91e5-50f65a172f21",
+   "name": "14. 复购率 модели ≥60%, от 1 шт, 25–65 ¥?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    3920,
+    300
+   ],
+   "notes": "Цифра — с панели на странице товара, не 回头率 магазина",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "d16ae7e3-657f-42d6-99c1-3d9ca59954fa",
+   "name": "Нет: Розовая пометка, модель не подменять похожей",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    4060,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "1f195b2b-0947-4ba6-9207-1ad3ce696709",
+   "name": "15. Система: Столбцы N–S главного документа",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    4200,
+    300
+   ],
+   "notes": "Скрипт pdd_postavshchiki_v_excel.ps1 пишет через Excel — картинки не теряются",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "73ac2d10-f99f-490c-bd66-07d1725148d1",
+   "name": "16. ИИ: Сопоставить с листом «Отбор» → лучшие",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    4480,
+    300
+   ],
+   "notes": "Спрос на PDD + поставщик прошёл правила; итог с фото, открыть в Excel",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "content": "## Отбор товаров на 1688 в таблицу\n\nСобирает товары одежды с 1688 в итоговую таблицу с фото, динамикой продаж, трендом и юнит-экономикой для продажи в США.\n\n**Запуск:** «Найди товары на 1688» · «Добавь вкладки в таблицу» · «Юнит-экономика товаров» · «Найди поставщика на 1688 для товаров Pinduoduo» · «Сопоставь лучшие»\n\n**Правила:**\n- Её выбор не фильтровать: всё в таблицу, «подходит/нет» только пометкой\n- CJ не используется; посредника для США выбирает она\n- Открытый файл не трогать — сохранять следующей версией _vN\n- Динамика 1688 работает только при прямом входе, не через VPN\n- Taobao автоматически не собирать — аккаунт ограничен за парсинг\n- Для каждого товара — «потолок» цены покупателя и тест $150–300 (уроки из новостей)\n- Главный документ yubka_kletka_otbor60.xlsx не перезаписывать; правки только через Excel, с копией\n- Проверку «я не робот» на 1688 проходит только она\n\n_Карта логики скилла (skill: sourcing-1688). Узлы-заглушки: сценарий ничего не делает, пока шаги не заменят на настоящие._",
+    "height": 420,
+    "width": 520,
+    "color": 7
+   },
+   "id": "9d89c078-3ca4-4467-a1aa-66b483eace61",
+   "name": "Описание",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -200
+   ]
+  }
+ ],
+ "connections": {
+  "Старт: Отбор товаров на 1688 в таблицу": {
+   "main": [
+    [
+     {
+      "node": "1. Вы: Открывает вкладки 1688 в Chrome",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1. Вы: Открывает вкладки 1688 в Chrome": {
+   "main": [
+    [
+     {
+      "node": "2. Система: Ссылки из вкладок Chrome",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2. Система: Ссылки из вкладок Chrome": {
+   "main": [
+    [
+     {
+      "node": "3. Система: Данные со страницы товара",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3. Система: Данные со страницы товара": {
+   "main": [
+    [
+     {
+      "node": "4. Заказ от 1 шт и поштучная отправка?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "4. Заказ от 1 шт и поштучная отправка?": {
+   "main": [
+    [
+     {
+      "node": "5. Система: Динамика, график 90 дней, фото",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Убрать из подборки",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5. Система: Динамика, график 90 дней, фото": {
+   "main": [
+    [
+     {
+      "node": "6. Система: Тренд фасона по радару",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6. Система: Тренд фасона по радару": {
+   "main": [
+    [
+     {
+      "node": "7. ИИ: Вердикт брать / можно / слабо / не брать",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "7. ИИ: Вердикт брать / можно / слабо / не брать": {
+   "main": [
+    [
+     {
+      "node": "8. Система: Таблица и юнит-экономика формулами",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "8. Система: Таблица и юнит-экономика формулами": {
+   "main": [
+    [
+     {
+      "node": "9. ИИ: Подсказка по её вкусу",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "9. ИИ: Подсказка по её вкусу": {
+   "main": [
+    [
+     {
+      "node": "10. Вы: Ставит свой вердикт брать/не брать",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "10. Вы: Ставит свой вердикт брать/не брать": {
+   "main": [
+    [
+     {
+      "node": "11. Система: По команде удалить «не брать»",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "11. Система: По команде удалить «не брать»": {
+   "main": [
+    [
+     {
+      "node": "12. Вы: Даёт выдачу Pinduoduo",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "12. Вы: Даёт выдачу Pinduoduo": {
+   "main": [
+    [
+     {
+      "node": "13. Система: Та же модель на 1688 по фото",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "13. Система: Та же модель на 1688 по фото": {
+   "main": [
+    [
+     {
+      "node": "14. 复购率 модели ≥60%, от 1 шт, 25–65 ¥?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "14. 复购率 модели ≥60%, от 1 шт, 25–65 ¥?": {
+   "main": [
+    [
+     {
+      "node": "15. Система: Столбцы N–S главного документа",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Розовая пометка, модель не подменять похожей",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "15. Система: Столбцы N–S главного документа": {
+   "main": [
+    [
+     {
+      "node": "16. ИИ: Сопоставить с листом «Отбор» → лучшие",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {}
+}

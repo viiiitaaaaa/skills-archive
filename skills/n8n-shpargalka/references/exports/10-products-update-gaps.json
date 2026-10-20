@@ -1,0 +1,298 @@
+{
+ "id": "artmProdUpdate01",
+ "name": "Shopify products/update - метка неполных карточек",
+ "active": false,
+ "settings": {
+  "executionOrder": "v1",
+  "errorWorkflow": "artmErrAlert001"
+ },
+ "nodes": [
+  {
+   "parameters": {
+    "httpMethod": "POST",
+    "path": "shopify-products-update",
+    "options": {}
+   },
+   "id": "a1000000-0000-4000-8000-000000000001",
+   "name": "Вебхук Shopify",
+   "type": "n8n-nodes-base.webhook",
+   "typeVersion": 2,
+   "position": [
+    -460,
+    0
+   ],
+   "webhookId": "a1000000-0000-4000-8000-0000000000w1"
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "https://kmfmxn-r4.myshopify.com/admin/oauth/access_token",
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={\n  \"client_id\": \"{{ $env.SHOPIFY_CLIENT_ID }}\",\n  \"client_secret\": \"{{ $env.SHOPIFY_CLIENT_SECRET }}\",\n  \"grant_type\": \"client_credentials\"\n}",
+    "options": {}
+   },
+   "id": "a1000000-0000-4000-8000-000000000002",
+   "name": "Выпустить токен",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    -240,
+    0
+   ],
+   "notes": "Токен client_credentials живёт 24 часа. Выпускаем на каждый запуск - иначе воркфлоу встанет через сутки.",
+   "retryOnFail": true,
+   "maxTries": 3,
+   "waitBetweenTries": 2000
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "https://kmfmxn-r4.myshopify.com/admin/api/2026-07/graphql.json",
+    "sendHeaders": true,
+    "headerParameters": {
+     "parameters": [
+      {
+       "name": "X-Shopify-Access-Token",
+       "value": "={{ $json.access_token }}"
+      }
+     ]
+    },
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify({ query: 'query($id: ID!) { product(id: $id) { id title status tags style: metafield(namespace: \\\"artmellio\\\", key: \\\"style\\\") { value } material: metafield(namespace: \\\"artmellio\\\", key: \\\"material\\\") { value } room: metafield(namespace: \\\"artmellio\\\", key: \\\"room\\\") { value } palette: metafield(namespace: \\\"artmellio\\\", key: \\\"palette\\\") { value } } }', variables: { id: $('Вебхук Shopify').item.json.body.admin_graphql_api_id } }) }}",
+    "options": {}
+   },
+   "id": "a1000000-0000-4000-8000-000000000003",
+   "name": "Спросить метаполя",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    -20,
+    0
+   ],
+   "retryOnFail": true,
+   "maxTries": 3,
+   "waitBetweenTries": 2000
+  },
+  {
+   "parameters": {
+    "jsCode": "// Какие поля обязаны быть заполнены у карточки перед публикацией\nconst REQUIRED = ['style', 'material', 'room', 'palette'];\nconst TAG = 'needs:data';\n\nconst p = $input.first().json.data.product;\nconst missing = REQUIRED.filter((k) => {\n  const v = p[k] && p[k].value;\n  if (!v) return true;\n  // списочные метаполя приходят JSON-строкой: \"[]\" тоже пусто\n  const t = String(v).trim();\n  return t === '' || t === '[]';\n});\nconst hasTag = (p.tags || []).includes(TAG);\n\n// Меняем тег только если он не в нужном состоянии. Иначе ничего не делаем:\n// лишний tagsAdd сам вызывает products/update, и получился бы круг.\nlet action = 'none';\nif (missing.length && !hasTag) action = 'add';\nif (!missing.length && hasTag) action = 'remove';\n\nreturn [{ json: { id: p.id, title: p.title, status: p.status, missing, hasTag, tag: TAG, action } }];\n"
+   },
+   "id": "a1000000-0000-4000-8000-000000000004",
+   "name": "Найти пустые поля",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    200,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "loose",
+      "version": 2
+     },
+     "conditions": [
+      {
+       "id": "cond-1",
+       "operator": {
+        "type": "string",
+        "operation": "equals"
+       },
+       "leftValue": "={{ $json.action }}",
+       "rightValue": "add"
+      }
+     ],
+     "combinator": "and"
+    },
+    "looseTypeValidation": true,
+    "options": {}
+   },
+   "id": "a1000000-0000-4000-8000-000000000005",
+   "name": "Ставить метку?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    420,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "https://kmfmxn-r4.myshopify.com/admin/api/2026-07/graphql.json",
+    "sendHeaders": true,
+    "headerParameters": {
+     "parameters": [
+      {
+       "name": "X-Shopify-Access-Token",
+       "value": "={{ $('Выпустить токен').item.json.access_token }}"
+      }
+     ]
+    },
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify({ query: 'mutation($id: ID!, $tags: [String!]!) { tagsAdd(id: $id, tags: $tags) { userErrors { message } } }', variables: { id: $json.id, tags: [$json.tag] } }) }}",
+    "options": {}
+   },
+   "id": "a1000000-0000-4000-8000-000000000006",
+   "name": "Повесить метку needs:data",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    660,
+    -110
+   ],
+   "retryOnFail": true,
+   "maxTries": 3,
+   "waitBetweenTries": 2000
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "https://kmfmxn-r4.myshopify.com/admin/api/2026-07/graphql.json",
+    "sendHeaders": true,
+    "headerParameters": {
+     "parameters": [
+      {
+       "name": "X-Shopify-Access-Token",
+       "value": "={{ $('Выпустить токен').item.json.access_token }}"
+      }
+     ]
+    },
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify({ query: 'mutation($id: ID!, $tags: [String!]!) { tagsRemove(id: $id, tags: $tags) { userErrors { message } } }', variables: { id: $json.id, tags: [$json.tag] } }) }}",
+    "options": {}
+   },
+   "id": "a1000000-0000-4000-8000-000000000007",
+   "name": "Снять метку needs:data",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    900,
+    110
+   ],
+   "notes": "Карточка дозаполнена - метка больше не нужна. Прочие теги не трогаем: на room:* держатся автоколлекции.",
+   "retryOnFail": true,
+   "maxTries": 3,
+   "waitBetweenTries": 2000
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "loose",
+      "version": 2
+     },
+     "conditions": [
+      {
+       "id": "cond-2",
+       "operator": {
+        "type": "string",
+        "operation": "equals"
+       },
+       "leftValue": "={{ $json.action }}",
+       "rightValue": "remove"
+      }
+     ],
+     "combinator": "and"
+    },
+    "looseTypeValidation": true,
+    "options": {}
+   },
+   "id": "a1000000-0000-4000-8000-000000000008",
+   "name": "Снимать метку?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    660,
+    110
+   ],
+   "notes": "action == none — тег уже в нужном состоянии, ничего не делаем."
+  }
+ ],
+ "connections": {
+  "Вебхук Shopify": {
+   "main": [
+    [
+     {
+      "node": "Выпустить токен",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Выпустить токен": {
+   "main": [
+    [
+     {
+      "node": "Спросить метаполя",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Спросить метаполя": {
+   "main": [
+    [
+     {
+      "node": "Найти пустые поля",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Найти пустые поля": {
+   "main": [
+    [
+     {
+      "node": "Ставить метку?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Ставить метку?": {
+   "main": [
+    [
+     {
+      "node": "Повесить метку needs:data",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Снимать метку?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Снимать метку?": {
+   "main": [
+    [
+     {
+      "node": "Снять метку needs:data",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    []
+   ]
+  }
+ }
+}

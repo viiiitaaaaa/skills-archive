@@ -1,0 +1,248 @@
+{
+ "id": "mapy4bncwja05nje",
+ "name": "Карта · Порядок на дисках: разбор, рефераты, место",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "e80aa1f1-7824-45bb-8a57-7bbf812d7f33",
+   "name": "Старт: Порядок на дисках: разбор, рефераты, место",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    300
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "1f27db05-d621-4abf-a04e-68ef0da02005",
+   "name": "1. Система: Опись и проверка синхронизации",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    280,
+    300
+   ],
+   "notes": "Что лежит и сколько; drive_sync_roots — Drive синхронизирует только Рабочий стол, C:→G: перетаскиванием = копия",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "7f7acadf-be85-4b60-a11b-f5ad8fb2cace",
+   "name": "2. ИИ: Раскладка по правилам",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    560,
+    300
+   ],
+   "notes": "sort_by_rules: шаблон имени → папка, вхолостую, потом --apply; дубли и пустые — в _Можно удалить; журнал",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "4ea3b4e5-e678-4aba-a264-4144e0228c1c",
+   "name": "3. ИИ: Рефераты вместо учебных файлов",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    840,
+    300
+   ],
+   "notes": "extract_text (docx целиком из XML), transcribe (whisper), манифест файл→тема, помощники по BRIEF, md2docx",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "3ab04afe-adce-47af-827d-2f70926733a8",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "24928e21-777b-4507-98b9-67037af57f64",
+   "name": "4. Все файлы вошли в рефераты?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    1120,
+    300
+   ],
+   "notes": "finalize сверяет манифест со всей папкой",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "452f9952-c433-4391-9c7a-335cfea5569d",
+   "name": "Нет: Остановиться, отнести непрочитанные файлы к темам",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1260,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "831e1b9e-3b3e-41fa-8083-b3fe9e8a9be6",
+   "name": "5. Система: Скан места",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1400,
+    300
+   ],
+   "notes": "WizTree → report: папки, крупные файлы, повторы, кэши, старые версии, нужные ревизии playwright",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "304fe9ff-65d1-4f34-a421-7843a61811cf",
+   "name": "6. Вы: Выбирает, что удалить",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1680,
+    300
+   ],
+   "notes": "Таблица: можно удалить / через настройки Windows (она) / не трогать",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "7095fbc3-f260-44a3-833c-69e1f7e115f7",
+   "name": "7. ИИ: Очистка",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1960,
+    300
+   ],
+   "notes": "clean.ps1 -Apply по выбранным ключам; корзину Google Диска — по её слову",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "content": "## Порядок на дисках: разбор, рефераты, место\n\nРаскладывает Google Диск и папки C: по темам, делает полные рефераты вместо учебных исходников и удаляет исходники, находит и освобождает место на C: и в Google Диске.\n\n**Запуск:** «Разбери диск» · «Сделай рефераты по темам и удали файлы» · «Что много весит — почисти место»\n\n**Правила:**\n- Всё сначала вхолостую; удаление — только с -Apply/--apply и по её выбору\n- Пароли и ключи — в папку «доступ», юр. материалы — в Дела/_Входящие, не удалять\n- Перед удалением сверить второе место: что есть только тут — пропадёт навсегда\n\n_Карта логики скилла (skill: disk-hygiene). Узлы-заглушки: сценарий ничего не делает, пока шаги не заменят на настоящие._",
+    "height": 420,
+    "width": 520,
+    "color": 7
+   },
+   "id": "b9954b57-3273-4a5a-a289-9ec6ee5fa976",
+   "name": "Описание",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -200
+   ]
+  }
+ ],
+ "connections": {
+  "Старт: Порядок на дисках: разбор, рефераты, место": {
+   "main": [
+    [
+     {
+      "node": "1. Система: Опись и проверка синхронизации",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1. Система: Опись и проверка синхронизации": {
+   "main": [
+    [
+     {
+      "node": "2. ИИ: Раскладка по правилам",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2. ИИ: Раскладка по правилам": {
+   "main": [
+    [
+     {
+      "node": "3. ИИ: Рефераты вместо учебных файлов",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3. ИИ: Рефераты вместо учебных файлов": {
+   "main": [
+    [
+     {
+      "node": "4. Все файлы вошли в рефераты?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "4. Все файлы вошли в рефераты?": {
+   "main": [
+    [
+     {
+      "node": "5. Система: Скан места",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Остановиться, отнести непрочитанные файлы к темам",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5. Система: Скан места": {
+   "main": [
+    [
+     {
+      "node": "6. Вы: Выбирает, что удалить",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6. Вы: Выбирает, что удалить": {
+   "main": [
+    [
+     {
+      "node": "7. ИИ: Очистка",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {}
+}

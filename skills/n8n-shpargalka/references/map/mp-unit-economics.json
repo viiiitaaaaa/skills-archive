@@ -1,0 +1,408 @@
+{
+ "id": "mapFm6xZNOJHozab",
+ "name": "Карта · Юнит-экономика WB / Ozon в Excel",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "168aef27-147d-46de-8176-1471f8eb79e7",
+   "name": "Старт: Юнит-экономика WB / Ozon в Excel",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    300
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "0d6d011b-d8ef-4c0b-a9e3-50b2a1d98c2f",
+   "name": "1. Вы: Загружает отчёты или жалуется на файл",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    280,
+    300
+   ],
+   "notes": "отчёт реализации WB, начисления Ozon, ListExpense, остатки",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "108ae11b-8845-46a1-9bc0-e2996ff9a269",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "3a41e4c7-b767-4781-9a35-ff0c44ed97d7",
+   "name": "2. Это жалоба на поломку?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    560,
+    300
+   ],
+   "notes": "«опять ошибка», #REF!, нули, не сходится",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "c8660062-f82c-47c7-b2b7-705afc3e7c3e",
+   "name": "Нет: идём собирать или закрывать период",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    700,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "6d9084cc-4821-486a-b477-711b741da34b",
+   "name": "3. Система: Полный скан формул на ошибки",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    840,
+    300
+   ],
+   "notes": "ищет #REF! и ссылки на внешние файлы [1]",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "ed8b5a82-fbb2-4b7e-80a1-7f348965294f",
+   "name": "4. ИИ: Чинит по чеклисту, не переписывая файл",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1120,
+    300
+   ],
+   "notes": "troubleshooting.md: симптом → причина → фикс",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "70ef2672-12b4-4218-91d4-72dc836cabf0",
+   "name": "5. Система: Разведка структуры каждого отчёта",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1400,
+    300
+   ],
+   "notes": "где заголовки, артикул, суммы; сверка с report-layouts.md",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "44ec5dc0-2d3c-45e8-8442-975dbce0b0ab",
+   "name": "6. ИИ: Находит, что уже настроила владелица",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1680,
+    300
+   ],
+   "notes": "user-workbook.md, articles.md; ячейки, которые читает дашборд",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "78fe9957-e85e-40a3-9f8b-1c1d4b2c204e",
+   "name": "7. ИИ: Собирает сводную на СУММЕСЛИМН через ДВССЫЛ",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1960,
+    300
+   ],
+   "notes": "читает сырые колонки отчёта, без вспомогательных колонок",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "0898f5ec-8527-4367-96c2-e4c8ce373e80",
+   "name": "8. Система: Пересчёт и независимая сверка сумм",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2240,
+    300
+   ],
+   "notes": "recalc.py — 0 ошибок, reconcile.py — цифры сходятся",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "dd271cee-d25b-46bc-9793-9c40fbbf7efa",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "885c56c0-0d47-447d-9733-c422774e2d64",
+   "name": "9. Итог сходится с сырыми данными?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    2520,
+    300
+   ],
+   "notes": "",
+   "notesInFlow": false
+  },
+  {
+   "parameters": {},
+   "id": "c1087865-01f8-4906-ab6f-1b83735908e8",
+   "name": "Нет: ищет пропущенный артикул, не подгоняет",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2660,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "b34d2e90-a4c4-4cd7-b960-f41010ddb2fd",
+   "name": "10. Вы: Даёт скрин «Экономика магазина» Ozon",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2800,
+    300
+   ],
+   "notes": "сверка групп начислений до рубля",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "5b8671a8-ba51-4a87-9fbd-6aa10de0934a",
+   "name": "11. Система: Отдельно сверяет остатки на складе",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    3080,
+    300
+   ],
+   "notes": "товары без продаж добавить в юнит, сводную, себестоимость",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "94dbeee4-c855-4ed4-bf62-798eea03aeac",
+   "name": "12. ИИ: Архивирует период и отчитывается сверенными числами",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    3360,
+    300
+   ],
+   "notes": "лист периода только значениями; сказать, если строка итогов переехала",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "content": "## Юнит-экономика WB / Ozon в Excel\n\nСобирает или чинит Excel-файл, куда вставляют отчёты WB/Ozon, и статистика по артикулам считается сама.\n\n**Запуск:** «Посчитай юнит-экономику по отчётам» · «Опять ошибка, везде #ССЫЛКА!» · «Сделай период с 1 по 16 августа»\n\n**Правила:**\n- Все ссылки на листы-приёмники — через ДВССЫЛ, иначе при удалении строк будет #ССЫЛКА!\n- Не заворачивать ИНДЕКС+ПОИСКПОЗ в СУММЕСЛИМН: теряется JK-577 против jk-577\n- Строку итогов, которую читает дашборд, не сдвигать; insert_rows не использовать\n- Возвраты: у WB плюс (продажи − возвраты), у Ozon минус (продажи + возвраты)\n- Ноль ошибок формул не значит, что верно: суммы сверять с исходниками\n\n_Карта логики скилла (skill: mp-unit-economics). Узлы-заглушки: сценарий ничего не делает, пока шаги не заменят на настоящие._",
+    "height": 420,
+    "width": 520,
+    "color": 7
+   },
+   "id": "440f3981-2f1e-456e-8f47-d4bb8077a9c3",
+   "name": "Описание",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -200
+   ]
+  }
+ ],
+ "connections": {
+  "Старт: Юнит-экономика WB / Ozon в Excel": {
+   "main": [
+    [
+     {
+      "node": "1. Вы: Загружает отчёты или жалуется на файл",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1. Вы: Загружает отчёты или жалуется на файл": {
+   "main": [
+    [
+     {
+      "node": "2. Это жалоба на поломку?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2. Это жалоба на поломку?": {
+   "main": [
+    [
+     {
+      "node": "3. Система: Полный скан формул на ошибки",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: идём собирать или закрывать период",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3. Система: Полный скан формул на ошибки": {
+   "main": [
+    [
+     {
+      "node": "4. ИИ: Чинит по чеклисту, не переписывая файл",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "4. ИИ: Чинит по чеклисту, не переписывая файл": {
+   "main": [
+    [
+     {
+      "node": "5. Система: Разведка структуры каждого отчёта",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5. Система: Разведка структуры каждого отчёта": {
+   "main": [
+    [
+     {
+      "node": "6. ИИ: Находит, что уже настроила владелица",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6. ИИ: Находит, что уже настроила владелица": {
+   "main": [
+    [
+     {
+      "node": "7. ИИ: Собирает сводную на СУММЕСЛИМН через ДВССЫЛ",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "7. ИИ: Собирает сводную на СУММЕСЛИМН через ДВССЫЛ": {
+   "main": [
+    [
+     {
+      "node": "8. Система: Пересчёт и независимая сверка сумм",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "8. Система: Пересчёт и независимая сверка сумм": {
+   "main": [
+    [
+     {
+      "node": "9. Итог сходится с сырыми данными?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "9. Итог сходится с сырыми данными?": {
+   "main": [
+    [
+     {
+      "node": "10. Вы: Даёт скрин «Экономика магазина» Ozon",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: ищет пропущенный артикул, не подгоняет",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "10. Вы: Даёт скрин «Экономика магазина» Ozon": {
+   "main": [
+    [
+     {
+      "node": "11. Система: Отдельно сверяет остатки на складе",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "11. Система: Отдельно сверяет остатки на складе": {
+   "main": [
+    [
+     {
+      "node": "12. ИИ: Архивирует период и отчитывается сверенными числами",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {}
+}

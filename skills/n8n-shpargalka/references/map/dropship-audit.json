@@ -1,0 +1,296 @@
+{
+ "id": "mapCucNPt2BGAbwk",
+ "name": "Карта · Сверка магазина с курсом",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "cca03dcf-5676-4c1b-b7b7-f7a309877c9b",
+   "name": "Старт: Сверка магазина с курсом",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    300
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "5f0e75f6-580a-4d5e-97c0-9ac46332a72f",
+   "name": "1. ИИ: Взять требования курса",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    280,
+    300
+   ],
+   "notes": "реферат курса, текст в docs/lecture-dropship.txt",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "c68a683b-38e4-41e4-944d-a5a3492892d6",
+   "name": "2. Система: Запустить готовые скрипты аудита",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    560,
+    300
+   ],
+   "notes": "part4_setup, part7_product, part13_reviews, material_conflict",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "f59368c5-81c0-477c-bd49-7fe453978bdf",
+   "name": "3. Система: Проверить отрисованную витрину",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    840,
+    300
+   ],
+   "notes": "render_check.py: Loox и блоки рисуются в iframe",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "4c8fac25-f1fb-4a21-b6b4-1fcb57f62cc1",
+   "name": "4. ИИ: Сверить с «Сделано» и «Не сделано»",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1120,
+    300
+   ],
+   "notes": "по частям курса",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "cec4b7c5-aa1a-4221-9aba-926c337e0549",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "c272752c-2f88-4154-9bfb-51f6090d7d47",
+   "name": "5. Настройка есть в Admin API?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    1400,
+    300
+   ],
+   "notes": "",
+   "notesInFlow": false
+  },
+  {
+   "parameters": {},
+   "id": "6591d627-0144-49e4-a674-c9821cd85b4c",
+   "name": "Нет: Админка через Dolphin 836461485",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1540,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "d3e2be4f-c097-4185-ad06-4c1ef6af2be6",
+   "name": "6. Система: Прогнать скрипт вхолостую",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1680,
+    300
+   ],
+   "notes": "без --apply показывает только план",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "b4fd5a75-0690-4583-b1b1-bf9759f1713d",
+   "name": "7. Система: Применить скрипт с --apply",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1960,
+    300
+   ],
+   "notes": "",
+   "notesInFlow": false
+  },
+  {
+   "parameters": {},
+   "id": "e6c3ceaf-f4fb-4a7b-bc73-0cc115821c89",
+   "name": "8. Вы: Делает сама: платежи, тексты чекаута",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2240,
+    300
+   ],
+   "notes": "и галочку Cloudflare в админке",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "c3977316-73fd-437c-8c36-2647df07652d",
+   "name": "9. ИИ: Обновить нужный раздел скилла",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2520,
+    300
+   ],
+   "notes": "править раздел, а не дописывать хронику в конец",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "content": "## Сверка магазина с курсом\n\nСверяет ARTMELLIO с курсом по дропшиппингу по частям и показывает, что сделано и что осталось доработать.\n\n**Запуск:** «Сверь магазин с лекцией» · «Что ещё доработать в магазине?» · «Аудит магазина по курсу»\n\n**Правила:**\n- Отзывы не выдумывать, не брать с чужих товаров и не отбирать по тональности.\n- Материал показывать только сверенный с поставщиком.\n- Звёзды отзывов в каталог не возвращать без её прямой просьбы.\n- Её решения (скрытые коллекции, галочка подписки, ленты главной) не менять без её слова.\n- Перед публикацией темы сверять settings_data.json, иначе откатятся настройки.\n\n_Карта логики скилла (skill: dropship-audit). Узлы-заглушки: сценарий ничего не делает, пока шаги не заменят на настоящие._",
+    "height": 420,
+    "width": 520,
+    "color": 7
+   },
+   "id": "1e6864cd-7cbd-4b2d-8311-659597934694",
+   "name": "Описание",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -200
+   ]
+  }
+ ],
+ "connections": {
+  "Старт: Сверка магазина с курсом": {
+   "main": [
+    [
+     {
+      "node": "1. ИИ: Взять требования курса",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1. ИИ: Взять требования курса": {
+   "main": [
+    [
+     {
+      "node": "2. Система: Запустить готовые скрипты аудита",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2. Система: Запустить готовые скрипты аудита": {
+   "main": [
+    [
+     {
+      "node": "3. Система: Проверить отрисованную витрину",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3. Система: Проверить отрисованную витрину": {
+   "main": [
+    [
+     {
+      "node": "4. ИИ: Сверить с «Сделано» и «Не сделано»",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "4. ИИ: Сверить с «Сделано» и «Не сделано»": {
+   "main": [
+    [
+     {
+      "node": "5. Настройка есть в Admin API?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5. Настройка есть в Admin API?": {
+   "main": [
+    [
+     {
+      "node": "6. Система: Прогнать скрипт вхолостую",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Админка через Dolphin 836461485",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6. Система: Прогнать скрипт вхолостую": {
+   "main": [
+    [
+     {
+      "node": "7. Система: Применить скрипт с --apply",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "7. Система: Применить скрипт с --apply": {
+   "main": [
+    [
+     {
+      "node": "8. Вы: Делает сама: платежи, тексты чекаута",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "8. Вы: Делает сама: платежи, тексты чекаута": {
+   "main": [
+    [
+     {
+      "node": "9. ИИ: Обновить нужный раздел скилла",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {}
+}

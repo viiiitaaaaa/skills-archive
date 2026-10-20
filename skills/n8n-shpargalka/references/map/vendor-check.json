@@ -1,0 +1,352 @@
+{
+ "id": "mapYG5QTFnfzBe5f",
+ "name": "Карта · Проверка поставщика по открытым источникам",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "d8373a73-7bd9-4d5a-ab50-5ae14f9ee7f6",
+   "name": "Старт: Проверка поставщика по открытым источникам",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    300
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "7cd5f170-90ee-4d7a-aeef-0404396892df",
+   "name": "1. Вы: Просит проверить поставщика",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    280,
+    300
+   ],
+   "notes": "Только деловая проверка, не частных лиц без причины",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "b8701d27-8b43-4f8a-a642-eba1b5e2b0a4",
+   "name": "2. ИИ: Взять ник или бренд",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    560,
+    300
+   ],
+   "notes": "С его сайта, визитки или профиля на маркетплейсе",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "2a75e061-45f4-4be5-bbb5-d09c0f8e7690",
+   "name": "3. Система: Базовая проверка Aliens Eye",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    840,
+    300
+   ],
+   "notes": "840+ площадок плюс проверка домена под этим именем",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "dcbf2737-e320-4a51-83af-3d73ae046d6f",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "2c5a2356-6561-4a1f-94af-74fd25078c3d",
+   "name": "4. Похоже на реальную компанию?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    1120,
+    300
+   ],
+   "notes": "Тогда полный отчёт со сверкой во всех форматах",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "bf706d8e-be9f-4424-ab38-33f038c0a66b",
+   "name": "Нет: Остаётся базовая проверка",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1260,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "11521dd8-b08a-4af8-93c4-56d55d088892",
+   "name": "5. ИИ: Прочитать таблицу найдено/возможно/нет",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1400,
+    300
+   ],
+   "notes": "По площадкам с уверенностью",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "f5c96bd9-13a5-4e72-bb51-8e55c2eec5f4",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "e5da3f2a-f7b5-48cb-82f2-319ddd7cf60d",
+   "name": "6. Найден на 5+ площадках одинаково?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    1680,
+    300
+   ],
+   "notes": "Сайт, LinkedIn, маркетплейс, соцсеть — одно описание и логотип",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "4cca2f37-b969-4853-abbe-47a3bc3bb0fe",
+   "name": "Нет: Проверить вручную: звонок, документы",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1820,
+    520
+   ]
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "204fc0bd-d146-45a6-aa44-61bd14079bf1",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "2340c83e-08b0-462d-9ca8-832d600f09cf",
+   "name": "7. Названный домен зарегистрирован?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    1960,
+    300
+   ],
+   "notes": "Если поставщик упоминает его в переписке",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "aece020a-0977-4f1b-a689-c9f0c3f0e8f7",
+   "name": "Нет: Красный флаг",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2100,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "8bbe7b93-5562-4fcb-a4ad-cb3db522f86c",
+   "name": "8. ИИ: Вывод как наводки",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2240,
+    300
+   ],
+   "notes": "Не окончательное доказательство, дальше ручная проверка",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "content": "## Проверка поставщика по открытым источникам\n\nПроверяет, есть ли у поставщика или партнёра живое цифровое присутствие, прежде чем работать или платить.\n\n**Запуск:** «Проверь поставщика» · «Пробей компанию» · «Проверь партнёра»\n\n**Правила:**\n- Только для деловых контрагентов перед сотрудничеством или переводом денег\n- Мало находок — не доказательство мошенничества, а повод проверить вручную\n- Точность инструмента около 65% — это наводки, не факты\n- Незарегистрированный домен из переписки — красный флаг\n\n_Карта логики скилла (skill: vendor-check). Узлы-заглушки: сценарий ничего не делает, пока шаги не заменят на настоящие._",
+    "height": 420,
+    "width": 520,
+    "color": 7
+   },
+   "id": "195b8b12-9112-47d4-a024-869f6f95a330",
+   "name": "Описание",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -200
+   ]
+  }
+ ],
+ "connections": {
+  "Старт: Проверка поставщика по открытым источникам": {
+   "main": [
+    [
+     {
+      "node": "1. Вы: Просит проверить поставщика",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1. Вы: Просит проверить поставщика": {
+   "main": [
+    [
+     {
+      "node": "2. ИИ: Взять ник или бренд",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2. ИИ: Взять ник или бренд": {
+   "main": [
+    [
+     {
+      "node": "3. Система: Базовая проверка Aliens Eye",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3. Система: Базовая проверка Aliens Eye": {
+   "main": [
+    [
+     {
+      "node": "4. Похоже на реальную компанию?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "4. Похоже на реальную компанию?": {
+   "main": [
+    [
+     {
+      "node": "5. ИИ: Прочитать таблицу найдено/возможно/нет",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Остаётся базовая проверка",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5. ИИ: Прочитать таблицу найдено/возможно/нет": {
+   "main": [
+    [
+     {
+      "node": "6. Найден на 5+ площадках одинаково?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6. Найден на 5+ площадках одинаково?": {
+   "main": [
+    [
+     {
+      "node": "7. Названный домен зарегистрирован?",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Проверить вручную: звонок, документы",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "7. Названный домен зарегистрирован?": {
+   "main": [
+    [
+     {
+      "node": "8. ИИ: Вывод как наводки",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Красный флаг",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {}
+}

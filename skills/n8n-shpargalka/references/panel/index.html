@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ARTMELLIO · панель</title>
+<style>
+  :root {
+    --bg: #f6f5f2; --card: #ffffff; --ink: #1d1d1b; --muted: #6b6a66; --line: #e4e2dc;
+    --ok: #2f7d4f; --ok-bg: #e6f3ea; --run: #8a6d1f; --run-bg: #fbf1d6;
+    --err: #a83232; --err-bg: #f9e3e3; --off: #6b6a66; --off-bg: #ecebe7;
+    --accent: #1d1d1b;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header { display: flex; align-items: center; gap: 16px; padding: 18px 28px; border-bottom: 1px solid var(--line); background: var(--card); position: sticky; top: 0; }
+  header h1 { font-size: 17px; margin: 0; letter-spacing: .12em; font-weight: 600; }
+  header .sub { color: var(--muted); font-size: 13px; }
+  .pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .pill.ok { background: var(--ok-bg); color: var(--ok); }
+  .pill.run { background: var(--run-bg); color: var(--run); }
+  .pill.err { background: var(--err-bg); color: var(--err); }
+  .pill.off { background: var(--off-bg); color: var(--off); }
+  main { max-width: 1080px; margin: 0 auto; padding: 24px 28px 60px; }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 28px; }
+  .kpi { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+  .kpi .v { font-size: 26px; font-weight: 600; }
+  .kpi .l { color: var(--muted); font-size: 13px; }
+  h2 { font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 26px 0 10px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; margin-bottom: 12px; }
+  .row { display: flex; gap: 16px; align-items: flex-start; }
+  .grow { flex: 1; min-width: 0; }
+  .card h3 { margin: 0 0 4px; font-size: 16px; }
+  .card p { margin: 4px 0; color: var(--muted); font-size: 14px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 8px; font-size: 13px; color: var(--muted); }
+  .actions { display: flex; flex-direction: column; gap: 8px; align-items: stretch; min-width: 150px; }
+  button { font: inherit; padding: 9px 14px; border-radius: 8px; border: 1px solid var(--accent); background: var(--accent); color: #fff; cursor: pointer; }
+  button.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  .hint { font-size: 12px; color: var(--muted); }
+  .result { margin-top: 12px; padding: 12px 14px; border-radius: 8px; background: #f2f1ed; font-size: 13px; white-space: pre-wrap; word-break: break-word; max-height: 320px; overflow: auto; }
+  .result.err { background: var(--err-bg); color: var(--err); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; }
+  th, td { text-align: left; padding: 6px 8px; border-top: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: 500; }
+  .warn { border-left: 4px solid var(--err); }
+  .banner { background: var(--err-bg); color: var(--err); border-radius: 10px; padding: 12px 16px; margin-bottom: 18px; }
+  code { background: #eeede8; padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+  .note { padding: 6px 0; border-top: 1px solid var(--line); font-size: 14px; }
+  .bm { display: inline-block; padding: 8px 14px; border: 1px dashed var(--accent); border-radius: 8px; color: var(--ink); text-decoration: none; font-weight: 600; cursor: grab; }
+  .note:first-child { border-top: 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>ARTMELLIO</h1>
+  <span class="sub">операционная панель</span>
+  <span id="n8n-pill" class="pill off">n8n…</span>
+  <span class="sub" style="margin-left:auto" id="who"></span>
+</header>
+
+<main>
+  <div id="banner" class="banner" hidden></div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="v" id="k-total">–</div><div class="l">сценариев</div></div>
+    <div class="kpi"><div class="v" id="k-active">–</div><div class="l">включено в n8n</div></div>
+    <div class="kpi"><div class="v" id="k-errors">–</div><div class="l">ошибок за 7 дней</div></div>
+    <div class="kpi"><div class="v" id="k-last" style="font-size:16px">–</div><div class="l">последний запуск</div></div>
+  </div>
+
+  <h2>Уведомления</h2>
+  <div class="card" id="notifications"><p class="hint">пока тихо</p></div>
+
+  <div id="sections"></div>
+
+  <h2>Отчёты</h2>
+  <div class="card" id="reports"><p class="hint">отчётов пока нет — появятся после «Сводки пробелов» или проверки поставщиков</p></div>
+
+  <h2>Закладка «Коллекция»</h2>
+  <div class="card">
+    <p>Собирает коллекцию из избранного на витрине одним нажатием: создаёт, публикует, ставит обложку, добавляет в меню и очищает избранное.</p>
+    <p><b>Установка один раз:</b> перетащите эту кнопку на панель закладок браузера (Ctrl+Shift+B, если панель скрыта):</p>
+    <p><a id="bookmarklet" class="bm" href="#" draggable="true">♥ Коллекция</a></p>
+    <p><b>Пользоваться:</b> наберите сердечки на витрине, откройте <a href="https://www.artmellio.com/pages/wishlist" target="_blank" rel="noopener">страницу избранного</a> и нажмите закладку. Панель должна быть запущена.</p>
+  </div>
+
+  <h2>Закладка «Ключи Comfy»</h2>
+  <div class="card">
+    <p>Один раз передаёт панели ключ входа в Comfy Cloud, чтобы пересъёмка фото работала без открытого браузера. Ключ уходит только на этот компьютер, в файл рядом с ключами Shopify.</p>
+    <p><b>Установка:</b> перетащите кнопку на панель закладок (Ctrl+Shift+B, если панель скрыта):</p>
+    <p><a id="bm-comfy" class="bm" href="#" draggable="true">⚙ Ключи Comfy</a></p>
+    <p><b>Пользоваться:</b> откройте <a href="https://cloud.comfy.org" target="_blank" rel="noopener">cloud.comfy.org</a>, войдите, если просит, и нажмите закладку. Появится сообщение «Ключи Comfy сохранены». Панель должна быть запущена.</p>
+  </div>
+
+  <h2>Журнал действий</h2>
+  <div class="card">
+    <table id="journal"><thead><tr><th>Когда</th><th>Кто</th><th>Что</th><th>Итог</th></tr></thead><tbody></tbody></table>
+  </div>
+</main>
+
+<script>
+const $ = (s, r = document) => r.querySelector(s);
+const esc = (v) => String(v).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const fmt = (s) => {
+  if (!s) return '—';
+  const d = new Date(s.replace(' ', 'T') + (s.endsWith('Z') || s.includes('+') ? '' : 'Z'));
+  if (isNaN(d)) return s;
+  return d.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+};
+const STATUS = {
+  success: ['ok', 'готово'], running: ['run', 'выполняется'], waiting: ['run', 'ожидает'],
+  error: ['err', 'ошибка'], crashed: ['err', 'ошибка'], canceled: ['off', 'отменён'],
+};
+function pill(s) {
+  if (!s.known) return `<span class="pill off">нет в n8n</span>`;
+  if (!s.active && !s.last) return `<span class="pill off">выключен</span>`;
+  if (!s.last) return `<span class="pill off">не запускался</span>`;
+  const [cls, txt] = STATUS[s.last.status] || ['off', s.last.status];
+  return `<span class="pill ${cls}">${txt}</span>`;
+}
+const openResults = {};   // id -> html последнего результата, чтобы не терять при обновлении
+const openHistory = {};
+
+function render(st) {
+  $('#who').textContent = st.operator;
+  const p = $('#n8n-pill');
+  p.className = 'pill ' + (st.n8n.alive ? 'ok' : 'err');
+  p.textContent = st.n8n.alive ? 'n8n работает' : 'n8n не запущен';
+  const b = $('#banner');
+  b.hidden = st.n8n.alive;
+  b.innerHTML = 'n8n не отвечает, статусы показаны из последнего известного состояния. Запустите <code>.\\n8n\\start-n8n.ps1</code> и обновите страницу.';
+
+  const sc = st.scenarios;
+  $('#k-total').textContent = sc.length;
+  $('#k-active').textContent = sc.filter(s => s.active).length;
+  $('#k-errors').textContent = sc.reduce((a, s) => a + (s.errors_7d || 0), 0);
+  const lasts = sc.map(s => s.last && s.last.startedAt).filter(Boolean).sort();
+  $('#k-last').textContent = lasts.length ? fmt(lasts[lasts.length - 1]) : '—';
+
+  const nb = $('#notifications');
+  const notes = st.notifications || [];
+  nb.innerHTML = notes.length
+    ? notes.slice(0, 10).map(n => `<div class="note"><span class="hint">${fmt(n.ts)}</span> <b>${n.title}</b> <span style="color:var(--muted)">${n.text || ''}</span></div>`).join('')
+    : '<p class="hint">пока тихо — сюда придут новые заказы и другие события</p>';
+
+  const rb = $('#reports');
+  const reps = st.reports || [];
+  rb.innerHTML = reps.length
+    ? `<p class="hint">Файлы лежат в папке data\reports репозитория. Excel открывается двойным щелчком, CSV — для импорта.</p><table><thead><tr><th>Отчёт</th><th>Когда</th><th>Скачать</th></tr></thead><tbody>${
+        reps.slice(0, 15).map(r => `<tr><td>${esc(r.name)}</td><td>${fmt(r.modified)}</td><td><a href="/reports/${esc(r.xlsx)}">Excel</a>${r.csv ? ` · <a href="/reports/${esc(r.csv)}">CSV</a>` : ''} <span class="hint">${r.size_kb} КБ</span></td></tr>`).join('')
+      }</tbody></table>`
+    : '<p class="hint">отчётов пока нет — появятся после «Сводки пробелов» или проверки поставщиков</p>';
+
+  const bySection = {};
+  sc.forEach(s => (bySection[s.section] ||= []).push(s));
+  const root = $('#sections');
+  root.innerHTML = '';
+  for (const [name, items] of Object.entries(bySection)) {
+    const h = document.createElement('h2'); h.textContent = name; root.appendChild(h);
+    for (const s of items) {
+      const card = document.createElement('div');
+      card.className = 'card' + (s.errors_7d ? ' warn' : '');
+      card.dataset.id = s.id;
+      const runDisabled = !s.can_run || !st.n8n.alive || !s.active;
+      const why = !s.can_run ? 'запускается только по событию'
+                : !st.n8n.alive ? 'n8n не запущен'
+                : !s.active ? 'сценарий выключен в n8n' : '';
+      card.innerHTML = `
+        <div class="row">
+          <div class="grow">
+            <h3>${s.name} ${pill(s)}</h3>
+            <p>${s.what}</p>
+            <p><b>Когда:</b> ${s.when}</p>
+            <div class="meta">
+              <span>Тип: ${s.trigger}</span>
+              <span>${s.changes_data ? '⚠ меняет данные в магазине' : 'ничего не меняет'}</span>
+              <span>Последний запуск: ${s.last ? fmt(s.last.startedAt) : '—'}</span>
+              <span>Всего запусков: ${s.runs_total}</span>
+              ${s.errors_7d ? `<span style="color:var(--err)">Ошибок за неделю: ${s.errors_7d}</span>` : ''}
+            </div>
+          </div>
+          <div class="actions">
+            <button class="run" ${runDisabled ? 'disabled' : ''}>Запустить</button>
+            ${why ? `<span class="hint">${why}</span>` : `<span class="hint">${s.result_hint || ''}</span>`}
+            <button class="ghost hist">История</button>
+          </div>
+        </div>
+        <div class="result" hidden></div>
+        <div class="history" hidden></div>`;
+      const res = $('.result', card);
+      if (openResults[s.id]) { res.innerHTML = openResults[s.id].html; res.className = openResults[s.id].cls; res.hidden = false; }
+      const hist = $('.history', card);
+      if (openHistory[s.id]) { hist.innerHTML = openHistory[s.id]; hist.hidden = false; }
+      $('.run', card).onclick = () => run(s, card);
+      $('.hist', card).onclick = () => history(s, card);
+      root.appendChild(card);
+    }
+  }
+
+  const tb = $('#journal tbody');
+  tb.innerHTML = st.journal.length ? '' : '<tr><td colspan="4" style="color:var(--muted)">пока пусто</td></tr>';
+  for (const j of st.journal) {
+    const name = (sc.find(s => s.id === j.scenario) || {}).name || j.scenario;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${fmt(j.ts)}</td><td>${j.who}</td><td>${name}</td>
+      <td>${j.ok ? '<span class="pill ok">готово</span>' : '<span class="pill err">ошибка</span>'} ${j.ok ? '' : (j.result || '')}</td>`;
+    tb.appendChild(tr);
+  }
+}
+
+const cell = (v) => {
+  if (v == null) return '';
+  if (typeof v === 'string' && /^https?:\/\//.test(v)) return `<a href="${esc(v)}" target="_blank" rel="noopener">открыть</a>`;
+  if (typeof v === 'object') return esc(JSON.stringify(v));
+  return esc(v);
+};
+// Результат сценария: массив объектов -> таблица; объект -> строки «ключ: значение», вложенные массивы объектов тоже таблицей.
+function renderResult(r) {
+  if (r == null) return '';
+  if (typeof r !== 'object') return esc(r);
+  if (Array.isArray(r)) {
+    if (!r.length) return '<span class="hint">пусто</span>';
+    if (typeof r[0] !== 'object') return esc(r.join(', '));
+    const cols = [...new Set(r.flatMap(o => Object.keys(o)))];
+    return `<div style="overflow-x:auto"><table><thead><tr>${cols.map(c => `<th>${esc(c.replace(/_/g, ' '))}</th>`).join('')}</tr></thead><tbody>${
+      r.map(o => `<tr>${cols.map(c => `<td>${cell(o[c])}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+  }
+  return Object.entries(r).map(([k, v]) => {
+    const label = esc(k.replace(/_/g, ' '));
+    if (Array.isArray(v) && v.length && typeof v[0] === 'object') return `<div><b>${label}</b></div>${renderResult(v)}`;
+    if (v && typeof v === 'object' && !Array.isArray(v)) return `<div><b>${label}</b></div><div style="padding-left:12px">${renderResult(v)}</div>`;
+    return `<div><b>${label}:</b> ${Array.isArray(v) ? esc(v.join(', ')) : cell(v)}</div>`;
+  }).join('');
+}
+
+async function run(s, card) {
+  if (s.changes_data && !confirm(`«${s.name}» изменит данные в магазине. Запустить?`)) return;
+  const btn = $('.run', card), res = $('.result', card);
+  btn.disabled = true; btn.textContent = 'Выполняется…';
+  res.hidden = false; res.className = 'result'; res.textContent = 'Ждём ответ сценария…';
+  try {
+    const r = await fetch('/api/run/' + s.id, { method: 'POST' });
+    const j = await r.json();
+    if (j.ok) {
+      res.className = 'result';
+      res.innerHTML = renderResult(j.result);
+    } else {
+      res.className = 'result err';
+      res.textContent = j.error || 'Не получилось.';
+    }
+  } catch (e) {
+    res.className = 'result err'; res.textContent = 'Панель не ответила: ' + e;
+  }
+  openResults[s.id] = { html: res.innerHTML, cls: res.className };
+  btn.textContent = 'Запустить';
+  refresh();
+}
+
+async function history(s, card) {
+  const box = $('.history', card);
+  if (!box.hidden) { box.hidden = true; delete openHistory[s.id]; return; }
+  const r = await fetch('/api/executions?scenario=' + s.id);
+  const j = await r.json();
+  const rows = j.executions.map(e => {
+    const [cls, txt] = STATUS[e.status] || ['off', e.status];
+    return `<tr><td>${e.id}</td><td><span class="pill ${cls}">${txt}</span></td><td>${e.mode}</td><td>${fmt(e.startedAt)}</td><td>${fmt(e.stoppedAt)}</td></tr>`;
+  }).join('');
+  box.innerHTML = rows
+    ? `<table><thead><tr><th>№</th><th>Статус</th><th>Как запущен</th><th>Начало</th><th>Конец</th></tr></thead><tbody>${rows}</tbody></table>`
+    : '<p class="hint" style="margin-top:10px">запусков ещё не было</p>';
+  box.hidden = false;
+  openHistory[s.id] = box.innerHTML;
+}
+
+async function refresh() {
+  try {
+    const r = await fetch('/api/state');
+    render(await r.json());
+  } catch (e) {
+    $('#n8n-pill').className = 'pill err'; $('#n8n-pill').textContent = 'панель не отвечает';
+  }
+}
+// Закладка: код выполняется на странице витрины и шлёт избранное в панель.
+const BM = `(async()=>{try{const w=JSON.parse(localStorage.getItem('artmellio:wishlist')||'[]');if(!w.length){alert('Избранное пустое');return;}if(!confirm('Собрать коллекцию из '+w.length+' товаров?'))return;const r=await fetch('http://localhost:8787/api/wishlist-collection',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({handles:w})});const j=await r.json();if(j.ok){localStorage.setItem('artmellio:wishlist','[]');alert('Готово: '+j.url+' ('+j.count+' товаров). Избранное очищено.');location.href=j.url;}else{alert('Не получилось: '+(j.error||r.status));}}catch(e){alert('Панель не отвечает. Запущена ли panel\\\\start-panel.ps1? '+e);}})();`;
+const bm = $('#bookmarklet');
+bm.href = 'javascript:' + encodeURIComponent(BM);
+bm.onclick = (e) => { e.preventDefault(); alert('Не нажимайте здесь — перетащите кнопку на панель закладок, а нажимать её нужно на странице избранного витрины.'); };
+
+// Закладка «Ключи Comfy»: выполняется на cloud.comfy.org, шлёт refresh-токен в панель (только 127.0.0.1).
+const BMC = `(async()=>{try{const k=Object.keys(localStorage).find(x=>x.startsWith('firebase:authUser:'));if(!k){alert('Comfy: вход не найден. Войдите в cloud.comfy.org и нажмите закладку снова.');return;}const u=JSON.parse(localStorage.getItem(k));const r=await fetch('http://127.0.0.1:8787/api/comfy-token',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({api_key:u.apiKey,refresh_token:u.stsTokenManager.refreshToken})});const j=await r.json();alert(j.ok?'Ключи Comfy сохранены: '+j.saved:'Не получилось: '+(j.error||r.status));}catch(e){alert('Панель не отвечает. Запущена ли panel\start-panel.ps1? '+e);}})();`;
+const bmc = $('#bm-comfy');
+bmc.href = 'javascript:' + encodeURIComponent(BMC);
+bmc.onclick = (e) => { e.preventDefault(); alert('Не нажимайте здесь — перетащите кнопку на панель закладок, а нажимать её нужно на вкладке cloud.comfy.org.'); };
+
+refresh();
+setInterval(refresh, 15000);
+</script>
+</body>
+</html>

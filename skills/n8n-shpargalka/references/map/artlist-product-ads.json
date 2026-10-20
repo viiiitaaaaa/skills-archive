@@ -1,0 +1,344 @@
+{
+ "id": "mapYFWKZ73R4bGzE",
+ "name": "Карта · Рекламное видео товара в Artlist",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "8d4d9cd1-b56d-412c-8029-3772c4242485",
+   "name": "Старт: Рекламное видео товара в Artlist",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    300
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "31488d68-2aff-42e7-a4c5-cdaaa6735481",
+   "name": "1. ИИ: Написать сценарий таблицей",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    280,
+    300
+   ],
+   "notes": "6–7 кадров, 20–30 с, кадр 1 — крючок с узнаваемым товаром",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "813cf88a-a4b9-4898-9a6d-44b77482434a",
+   "name": "2. Вы: Утвердить сценарий",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    560,
+    300
+   ],
+   "notes": "Язык — под аудиторию: для США английский",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "02161a1e-c9e6-4f37-92be-132f0c7f4b24",
+   "name": "3. ИИ: Назвать цену в кредитах",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    840,
+    300
+   ],
+   "notes": "Перед каждой генерацией; после — остаток баланса",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "6cb1e365-b484-456e-ba3e-e4bc68c36794",
+   "name": "4. Вы: Подтвердить трату",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1120,
+    300
+   ],
+   "notes": "Сама Claude подтверждение цены не ставит",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "5ce29616-1657-4293-b34e-15f773f66ed7",
+   "name": "5. Система: Сгенерировать кадр на каждую сцену",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1400,
+    300
+   ],
+   "notes": "Nano Banana 2, 512px, 60 кредитов, по фото товара",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "1be278b3-f428-48a2-b16d-4cbb82fe382e",
+   "name": "6. Вы: Выбрать и одобрить кадры",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1680,
+    300
+   ],
+   "notes": "",
+   "notesInFlow": false
+  },
+  {
+   "parameters": {},
+   "id": "d6c44768-64d6-422c-861c-f793094d1877",
+   "name": "7. Система: Оживить каждый кадр",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1960,
+    300
+   ],
+   "notes": "Kling 1.6, 300 кредитов за 5 с; промт — только движение камеры",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "66eb967c-27d2-496c-838e-7f5f7fed2091",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "ed5c1fb7-7079-488e-bcc3-7bd34baf81d4",
+   "name": "8. Клип анимирован правильно?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    2240,
+    300
+   ],
+   "notes": "Руки, форма товара, детали",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "df32b2d3-aad0-4e6f-9a96-977b630f95ad",
+   "name": "Нет: Переделать кадр, не промт",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2380,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "fd9f41c9-00b8-4f68-a2a3-9c3257327f07",
+   "name": "9. Система: Озвучить каждый кадр отдельно",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2520,
+    300
+   ],
+   "notes": "Сначала проба двух голосов; акцент задать явно",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "dc316d32-c53c-4aaa-8078-827952b24fe4",
+   "name": "10. Вы: Скачать и прислать клипы",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2800,
+    300
+   ],
+   "notes": "Artlist хранит файлы там, откуда Claude их не достать",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "12b9f818-f1e5-4815-934d-34f340d224b9",
+   "name": "11. Система: Смонтировать в ffmpeg",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    3080,
+    300
+   ],
+   "notes": "9:16, титры реальным шрифтом, без музыки; кредиты не тратятся",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "content": "## Рекламное видео товара в Artlist\n\nДелает вертикальный ролик 9:16 для TikTok/Reels из реальных фото товара: кадры, анимация, озвучка, монтаж.\n\n**Запуск:** «Сделай рекламное видео для товара» · «Оживи фото товара» · «Напиши сценарий ролика»\n\n**Правила:**\n- Всегда явно задавать формат 9:16, разрешение и длину — по умолчанию 16:9.\n- Никогда не делать многосценный ролик одним текстовым промтом — один промт на сцену.\n- Никаких брендов и логотипов, особенно у аксессуаров к брендовым устройствам.\n- Две неудачи на одном дефекте — стоп, предложить альтернативы.\n- Музыку не вшивать: трендовый звук добавляется в самой соцсети.\n\n_Карта логики скилла (skill: artlist-product-ads). Узлы-заглушки: сценарий ничего не делает, пока шаги не заменят на настоящие._",
+    "height": 420,
+    "width": 520,
+    "color": 7
+   },
+   "id": "20c15c83-ee68-4465-aeeb-cec67293231c",
+   "name": "Описание",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -200
+   ]
+  }
+ ],
+ "connections": {
+  "Старт: Рекламное видео товара в Artlist": {
+   "main": [
+    [
+     {
+      "node": "1. ИИ: Написать сценарий таблицей",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1. ИИ: Написать сценарий таблицей": {
+   "main": [
+    [
+     {
+      "node": "2. Вы: Утвердить сценарий",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2. Вы: Утвердить сценарий": {
+   "main": [
+    [
+     {
+      "node": "3. ИИ: Назвать цену в кредитах",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3. ИИ: Назвать цену в кредитах": {
+   "main": [
+    [
+     {
+      "node": "4. Вы: Подтвердить трату",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "4. Вы: Подтвердить трату": {
+   "main": [
+    [
+     {
+      "node": "5. Система: Сгенерировать кадр на каждую сцену",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5. Система: Сгенерировать кадр на каждую сцену": {
+   "main": [
+    [
+     {
+      "node": "6. Вы: Выбрать и одобрить кадры",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6. Вы: Выбрать и одобрить кадры": {
+   "main": [
+    [
+     {
+      "node": "7. Система: Оживить каждый кадр",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "7. Система: Оживить каждый кадр": {
+   "main": [
+    [
+     {
+      "node": "8. Клип анимирован правильно?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "8. Клип анимирован правильно?": {
+   "main": [
+    [
+     {
+      "node": "9. Система: Озвучить каждый кадр отдельно",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Переделать кадр, не промт",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "9. Система: Озвучить каждый кадр отдельно": {
+   "main": [
+    [
+     {
+      "node": "10. Вы: Скачать и прислать клипы",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "10. Вы: Скачать и прислать клипы": {
+   "main": [
+    [
+     {
+      "node": "11. Система: Смонтировать в ffmpeg",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {}
+}

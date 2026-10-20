@@ -1,0 +1,344 @@
+{
+ "id": "mapGz4lgp0ex9nwD",
+ "name": "Карта · Пересъёмка товаров в фирменной сцене",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "fa41ada8-3c8e-4a1a-b438-c79914f8b3b5",
+   "name": "Старт: Пересъёмка товаров в фирменной сцене",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    300
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "301053f5-513f-482c-889b-7a6e7efcdf07",
+   "name": "1. Система: Скачать по 3 кадра товара",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    280,
+    300
+   ],
+   "notes": "С карточки магазина; список — /collections/<handle>/products.json",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "d88cf4d1-6aa8-413c-8d89-433cb98cea3e",
+   "name": "2. ИИ: Выбрать лучший исходник",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    560,
+    300
+   ],
+   "notes": "Контактный лист: крупно, без людей и текста, ракурс три четверти",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "19e6e55e-2bc5-4c1e-b74b-ce4e71edfe82",
+   "name": "3. ИИ: Разложить товары по креплению",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    840,
+    300
+   ],
+   "notes": "Настольные — столешница, настенные — стена, напольные — пол",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "d09bbd55-a244-47bf-b12f-b044f9cac041",
+   "name": "4. ИИ: Выбрать тон сцены",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1120,
+    300
+   ],
+   "notes": "Белый — карточки, тёмный — баннеры и сеты, светлый — тёплый",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "1a39ed3f-5823-43da-b82e-a16a55fe28d1",
+   "name": "5. ИИ: Собрать промт по рецепту",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1400,
+    300
+   ],
+   "notes": "Сцена + общий хвост «убрать логотипы, товар не менять»",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "0e0f2520-748c-42fe-94f8-c95d7b0e571b",
+   "name": "6. Система: Загрузить кадры в облако",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1680,
+    300
+   ],
+   "notes": "Прямо с CDN магазина; 3 ракурса: image1 основной, 2–3 справка",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "8673830f-d0aa-47f8-97a9-e63c065398a5",
+   "name": "7. Система: Прогнать Qwen-Image-Edit",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1960,
+    300
+   ],
+   "notes": "Рецепт не менять: 20 шагов, CFG 2.5, ~40 с на кадр",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "69f466cd-4389-46e0-af51-b2aba271416b",
+   "name": "8. ИИ: Проверить каждый кадр глазами",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2240,
+    300
+   ],
+   "notes": "Не подменён ли товар, не пропали ли детали",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "aff0819d-24d1-41ac-9abf-c1fcda243d18",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "13bec94c-6fff-4590-88bb-930aa9b47b94",
+   "name": "9. Кадр квадратный?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    2520,
+    300
+   ],
+   "notes": "",
+   "notesInFlow": false
+  },
+  {
+   "parameters": {},
+   "id": "e19a2577-870d-49fe-8713-df3a9c054ab0",
+   "name": "Нет: Расширить аутпейнтом в Comfy, не в питоне",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2660,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "88441886-96f6-4e44-a1f6-0cf23980827e",
+   "name": "10. Система: Сразу скачать картинки",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2800,
+    300
+   ],
+   "notes": "По одной с паузой 900 мс, иначе теряются с вкладкой",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "abee8038-7c3e-42a2-a8b0-7bee906eb89e",
+   "name": "11. Вы: Заменить фото в Shopify",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    3080,
+    300
+   ],
+   "notes": "Руками: Products → Media, новое добавить, старое удалить",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "content": "## Пересъёмка товаров в фирменной сцене\n\nЧерез Qwen в ComfyUI Cloud убирает чужие фоны, логотипы и иероглифы и ставит товар в интерьер «дома» ARTMELLIO.\n\n**Запуск:** «Пересними товары» · «Убери иероглифы с фото» · «Сделай фон одинаковый»\n\n**Правила:**\n- Сцену выбирает способ крепления: коврик на столешнице и полка на тумбе — брак.\n- Комнату собирать за один проход коллажем всех товаров, не итерациями; добивка — максимум один проход.\n- Никогда не просить двигать предмет, мебель или менять размер «в N раз».\n- Писать cool, no beige — иначе фон уходит в тёплый бежевый.\n- Дерево в ванной — только мебель тумбы, не поверхность под товаром.\n\n_Карта логики скилла (skill: product-scenes). Узлы-заглушки: сценарий ничего не делает, пока шаги не заменят на настоящие._",
+    "height": 420,
+    "width": 520,
+    "color": 7
+   },
+   "id": "ece11308-6ab9-4202-bcfb-4bd5cb4dd467",
+   "name": "Описание",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -200
+   ]
+  }
+ ],
+ "connections": {
+  "Старт: Пересъёмка товаров в фирменной сцене": {
+   "main": [
+    [
+     {
+      "node": "1. Система: Скачать по 3 кадра товара",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1. Система: Скачать по 3 кадра товара": {
+   "main": [
+    [
+     {
+      "node": "2. ИИ: Выбрать лучший исходник",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2. ИИ: Выбрать лучший исходник": {
+   "main": [
+    [
+     {
+      "node": "3. ИИ: Разложить товары по креплению",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3. ИИ: Разложить товары по креплению": {
+   "main": [
+    [
+     {
+      "node": "4. ИИ: Выбрать тон сцены",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "4. ИИ: Выбрать тон сцены": {
+   "main": [
+    [
+     {
+      "node": "5. ИИ: Собрать промт по рецепту",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5. ИИ: Собрать промт по рецепту": {
+   "main": [
+    [
+     {
+      "node": "6. Система: Загрузить кадры в облако",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6. Система: Загрузить кадры в облако": {
+   "main": [
+    [
+     {
+      "node": "7. Система: Прогнать Qwen-Image-Edit",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "7. Система: Прогнать Qwen-Image-Edit": {
+   "main": [
+    [
+     {
+      "node": "8. ИИ: Проверить каждый кадр глазами",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "8. ИИ: Проверить каждый кадр глазами": {
+   "main": [
+    [
+     {
+      "node": "9. Кадр квадратный?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "9. Кадр квадратный?": {
+   "main": [
+    [
+     {
+      "node": "10. Система: Сразу скачать картинки",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Расширить аутпейнтом в Comfy, не в питоне",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "10. Система: Сразу скачать картинки": {
+   "main": [
+    [
+     {
+      "node": "11. Вы: Заменить фото в Shopify",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {}
+}

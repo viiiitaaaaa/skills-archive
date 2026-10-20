@@ -1,0 +1,352 @@
+{
+ "id": "mapbBb0Lrz4owpeu",
+ "name": "Карта · Чистка текста от «ИИ-стиля»",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "03815aea-dfe6-4078-9864-77f937bbc4f9",
+   "name": "Старт: Чистка текста от «ИИ-стиля»",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "3661fc4d-8fca-4796-8ee2-c0ee691af4a8",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "01ef317f-60be-4a80-a122-42e240500bee",
+   "name": "1. Черновик прислан?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    280,
+    300
+   ],
+   "notes": "",
+   "notesInFlow": false
+  },
+  {
+   "parameters": {},
+   "id": "ef52d60f-cff6-4a88-a8f7-baf8d66262fa",
+   "name": "Нет: просит вставить текст",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    420,
+    520
+   ]
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "fdeb619b-e2f9-4a14-b5c6-70ca5c3f3aef",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "1f7c5ed9-4e24-4999-8ce1-18fd242df104",
+   "name": "2. Понятно, для кого и где?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    560,
+    300
+   ],
+   "notes": "и чего читатель должен захотеть",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "750792bf-4446-4c3e-b0bc-f4bc7e2b6d28",
+   "name": "Нет: задаёт один вопрос",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    700,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "adc0d0eb-c510-4e50-9ada-de59cb566e69",
+   "name": "3. ИИ: Читает текст целиком",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    840,
+    300
+   ],
+   "notes": "",
+   "notesInFlow": false
+  },
+  {
+   "parameters": {},
+   "id": "73a83e65-87da-41f7-8435-829484ffa642",
+   "name": "4. ИИ: Находит главную мысль и черты голоса",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1120,
+    300
+   ],
+   "notes": "лексика, ритм, резкость, юмор; мысль неясна — спросить",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "dfa162a7-ec07-4ac2-ba60-3ef7e01b3bc6",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "e68ad78e-9941-448f-89a9-096ede7526d1",
+   "name": "5. Нужна правка, а не только проверка?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    1400,
+    300
+   ],
+   "notes": "",
+   "notesInFlow": false
+  },
+  {
+   "parameters": {},
+   "id": "db8d7dd7-dd25-4497-a299-3edd026a7a4b",
+   "name": "Нет: список штампов с цитатами и фиксами",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1540,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "4b51a293-4ade-4e7c-a0d2-a4e5c2658592",
+   "name": "6. ИИ: Делает минимальную нужную правку",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1680,
+    300
+   ],
+   "notes": "убирает запретные слова и шаблоны, факты не выдумывает",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "68020310-9b0f-405c-a0f3-d366941a0c95",
+   "name": "7. ИИ: Сверяет результат с eval.md",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1960,
+    300
+   ],
+   "notes": "не прошло — исправить и проверить снова",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "8038bfc9-31c6-44c7-b0f2-4c2ed97cfaa2",
+   "name": "8. ИИ: Выдаёт текст и «Что изменилось»",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2240,
+    300
+   ],
+   "notes": "полный отредактированный черновик",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "content": "## Чистка текста от «ИИ-стиля»\n\nПравит черновик, чтобы звучал живо и по-человечески с голосом автора, или только находит признаки ИИ-текста.\n\n**Запуск:** «Сделай текст живее, без ИИ-стиля» · «Это звучит как ИИ?» · «Проверь черновик на штампы»\n\n**Правила:**\n- Сохранять голос автора, не превращать в гладкий безликий текст\n- При проверке не переписывать, не ставить оценку и не гадать, писал ли ИИ\n- Запрет на слова вроде delve, leverage, robust, game changer\n- Убирать шаблоны «это не X, это Y», драматичные двоеточия, эффектные концовки\n- Не придумывать факты, цифры и источники — если неясно, спросить\n\n_Карта логики скилла (skill: no-ai-slop). Узлы-заглушки: сценарий ничего не делает, пока шаги не заменят на настоящие._",
+    "height": 420,
+    "width": 520,
+    "color": 7
+   },
+   "id": "6730d4f6-ec6a-40ab-bd6b-ed6961719329",
+   "name": "Описание",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -200
+   ]
+  }
+ ],
+ "connections": {
+  "Старт: Чистка текста от «ИИ-стиля»": {
+   "main": [
+    [
+     {
+      "node": "1. Черновик прислан?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1. Черновик прислан?": {
+   "main": [
+    [
+     {
+      "node": "2. Понятно, для кого и где?",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: просит вставить текст",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2. Понятно, для кого и где?": {
+   "main": [
+    [
+     {
+      "node": "3. ИИ: Читает текст целиком",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: задаёт один вопрос",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3. ИИ: Читает текст целиком": {
+   "main": [
+    [
+     {
+      "node": "4. ИИ: Находит главную мысль и черты голоса",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "4. ИИ: Находит главную мысль и черты голоса": {
+   "main": [
+    [
+     {
+      "node": "5. Нужна правка, а не только проверка?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5. Нужна правка, а не только проверка?": {
+   "main": [
+    [
+     {
+      "node": "6. ИИ: Делает минимальную нужную правку",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: список штампов с цитатами и фиксами",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6. ИИ: Делает минимальную нужную правку": {
+   "main": [
+    [
+     {
+      "node": "7. ИИ: Сверяет результат с eval.md",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "7. ИИ: Сверяет результат с eval.md": {
+   "main": [
+    [
+     {
+      "node": "8. ИИ: Выдаёт текст и «Что изменилось»",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {}
+}

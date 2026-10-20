@@ -1,0 +1,272 @@
+{
+ "id": "mapVh2YixSgmsi55",
+ "name": "Карта · Импорт товаров в Dsers",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "b3f4ed0c-e41c-4867-85af-fb15d58a3b67",
+   "name": "Старт: Импорт товаров в Dsers",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    300
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "7e158c7d-3ed9-401a-a568-e61fe0c152cc",
+   "name": "1. Вы: Есть Excel со ссылками",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    280,
+    300
+   ],
+   "notes": "Из скилла product-links",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "651fcdf6-c893-4e22-943a-fa0eda18f2a0",
+   "name": "2. Система: Перевести Excel в список ссылок",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    560,
+    300
+   ],
+   "notes": "export_links.py: txt по одной ссылке, дубли убираются",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "e5d109f6-e2bf-424c-810c-0452bfb1effd",
+   "name": "3. Система: Пробный прогон на 3 ссылках",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    840,
+    300
+   ],
+   "notes": "dsers_import.py --limit 3 в профиле 859648353",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "25a7650d-0423-434b-bf00-22629b10c21b",
+   "name": "4. Система: Добавить все ссылки по одной",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1120,
+    300
+   ],
+   "notes": "Поле «Please enter the product link», кнопка OK справа от поля",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "52e7b61b-3451-452c-8589-1a104248f7f6",
+   "name": "5. Система: Ждать ~5 секунд на товар",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1400,
+    300
+   ],
+   "notes": "Без паузы Dsers теряет товары; 124 ссылки ≈ 15 минут",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "d5385cb2-b6fd-4a36-93dc-11c6a769edb7",
+   "name": "6. Система: Сверить итог по счётчику",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1680,
+    300
+   ],
+   "notes": "dsers_check.py перезагружает страницу и читает «Import list N»",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "fea10f80-ae49-4214-b9c4-16c08dd9e840",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "9d89231d-64a2-41f2-be3d-c6aa3b79dcb0",
+   "name": "7. Все товары доехали?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    1960,
+    300
+   ],
+   "notes": "",
+   "notesInFlow": false
+  },
+  {
+   "parameters": {},
+   "id": "3f7b4045-42cd-447c-a739-bb4531c17cc4",
+   "name": "Нет: Повторить прогон — дублей не будет",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2100,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "b67ad04c-d91c-42b0-b87a-c5572721372d",
+   "name": "8. Вы: Товары в Import list",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2240,
+    300
+   ],
+   "notes": "Магазин Shopify kmfmxn-r4, регион US",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "content": "## Импорт товаров в Dsers\n\nДобавляет товары AliExpress по ссылкам в Import list Dsers, чтобы потом выгрузить их в магазин Shopify.\n\n**Запуск:** «Добавь товары в dsers» · «Закинь в import list» · «Нажми add to dsers»\n\n**Правила:**\n- Успех проверять только счётчиком после перезагрузки, не по карточкам на странице.\n- На странице товара жать только «Add To DSers», никогда «Add all to DSers».\n- Сверить по ID AliExpress нельзя — Dsers хранит свои ID.\n- Import list — адрес /application/import_list; страница грузится ~15 с, ждать элементы.\n\n_Карта логики скилла (skill: dsers-import). Узлы-заглушки: сценарий ничего не делает, пока шаги не заменят на настоящие._",
+    "height": 420,
+    "width": 520,
+    "color": 7
+   },
+   "id": "5030040b-48a6-4cb3-9e8d-da96b4003cf2",
+   "name": "Описание",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -200
+   ]
+  }
+ ],
+ "connections": {
+  "Старт: Импорт товаров в Dsers": {
+   "main": [
+    [
+     {
+      "node": "1. Вы: Есть Excel со ссылками",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1. Вы: Есть Excel со ссылками": {
+   "main": [
+    [
+     {
+      "node": "2. Система: Перевести Excel в список ссылок",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2. Система: Перевести Excel в список ссылок": {
+   "main": [
+    [
+     {
+      "node": "3. Система: Пробный прогон на 3 ссылках",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3. Система: Пробный прогон на 3 ссылках": {
+   "main": [
+    [
+     {
+      "node": "4. Система: Добавить все ссылки по одной",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "4. Система: Добавить все ссылки по одной": {
+   "main": [
+    [
+     {
+      "node": "5. Система: Ждать ~5 секунд на товар",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5. Система: Ждать ~5 секунд на товар": {
+   "main": [
+    [
+     {
+      "node": "6. Система: Сверить итог по счётчику",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6. Система: Сверить итог по счётчику": {
+   "main": [
+    [
+     {
+      "node": "7. Все товары доехали?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "7. Все товары доехали?": {
+   "main": [
+    [
+     {
+      "node": "8. Вы: Товары в Import list",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Повторить прогон — дублей не будет",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {}
+}

@@ -1,0 +1,336 @@
+{
+ "id": "mapHSpSBcjL9Apoh",
+ "name": "Карта · Кто продаёт товар в США — по фото",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "39d5bdf4-76f1-4843-ba19-f1b84952a211",
+   "name": "Старт: Кто продаёт товар в США — по фото",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    300
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "1b0334ce-d807-45e5-8914-a9d539783734",
+   "name": "1. Вы: Даёт фото товаров",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    280,
+    300
+   ],
+   "notes": "Скрины AliExpress/1688, картинки из xlsx, папка Google Drive",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "e41ba954-ea77-4dda-a63f-6b881e75616a",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "00ba573f-4ab5-4685-8b2b-290b61269615",
+   "name": "2. Товаров не больше 8–10?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    560,
+    300
+   ],
+   "notes": "Иначе контекст переполняется",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "fcb90753-e1ed-4781-8678-3d468561ad69",
+   "name": "Нет: Предупредить, разбить на заходы",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    700,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "7b4b7d5b-0325-4498-bd7d-63f6ad2dcc78",
+   "name": "3. Система: Достать картинки из xlsx",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    840,
+    300
+   ],
+   "notes": "Привязать к строке, имя «номер_название»",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "1e2145e5-1602-440f-bd6c-e5a60c7178c9",
+   "name": "4. Система: Открыть картинку крупно в Drive",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1120,
+    300
+   ],
+   "notes": "Скриншот без интерфейса вокруг, без обрезки zoom",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "e72e0493-c7b6-432e-a353-1bb4eb08f61d",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "44f68dc8-743a-4abc-a3bc-0f0ddb01631b",
+   "name": "5. Google Lens доступен?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    1400,
+    300
+   ],
+   "notes": "",
+   "notesInFlow": false
+  },
+  {
+   "parameters": {},
+   "id": "683b85db-6397-4f37-9518-b863e667edf9",
+   "name": "Нет: Сказать прямо, текстом не подменять",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1540,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "fc91d76a-860c-4aba-9ee5-5c431302fc6d",
+   "name": "6. Система: Загрузить снимок в Lens",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1680,
+    300
+   ],
+   "notes": "Через upload_image; не сработал ref — пробовать следующий",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "4d8ed8a7-bb73-4725-8d5b-03d1603960f4",
+   "name": "7. Система: Переключить выдачу на США",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1960,
+    300
+   ],
+   "notes": "В адрес добавить udm=44&hl=en&gl=us&cr=countryUS",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "4db3706e-5106-4837-a21a-4be6907b13ff",
+   "name": "8. ИИ: Сгруппировать продавцов",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2240,
+    300
+   ],
+   "notes": "Маркетплейсы США, Shopify-магазины, фабрика, Amazon других стран; шум убрать",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "12d4f2f3-e91a-49ed-a7ca-f8620e92b0ab",
+   "name": "9. ИИ: Ответ списком ссылок",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2520,
+    300
+   ],
+   "notes": "По каждому товару площадки и названия, без выводов",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "content": "## Кто продаёт товар в США — по фото\n\nПрогоняет фото товара через Google Lens и находит, кто уже продаёт именно этот товар в США.\n\n**Запуск:** «Найди этот товар в гугле» · «Кто продаёт это в США» · «Найди 1 в 1 такой же»\n\n**Правила:**\n- Тот же товар определяется только поиском по картинке, никогда текстом\n- Скриншот с рамкой интерфейса — Lens ищет не товар, а скриншот\n- Много Shopify-магазинов с товаром — ниша занята\n- Товар только на Amazon других стран — сигнал свободной ниши\n\n_Карта логики скилла (skill: lens-us-supplier-lookup). Узлы-заглушки: сценарий ничего не делает, пока шаги не заменят на настоящие._",
+    "height": 420,
+    "width": 520,
+    "color": 7
+   },
+   "id": "b4a8dd91-96e8-4d36-8102-966b42071cce",
+   "name": "Описание",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -200
+   ]
+  }
+ ],
+ "connections": {
+  "Старт: Кто продаёт товар в США — по фото": {
+   "main": [
+    [
+     {
+      "node": "1. Вы: Даёт фото товаров",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1. Вы: Даёт фото товаров": {
+   "main": [
+    [
+     {
+      "node": "2. Товаров не больше 8–10?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2. Товаров не больше 8–10?": {
+   "main": [
+    [
+     {
+      "node": "3. Система: Достать картинки из xlsx",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Предупредить, разбить на заходы",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3. Система: Достать картинки из xlsx": {
+   "main": [
+    [
+     {
+      "node": "4. Система: Открыть картинку крупно в Drive",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "4. Система: Открыть картинку крупно в Drive": {
+   "main": [
+    [
+     {
+      "node": "5. Google Lens доступен?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5. Google Lens доступен?": {
+   "main": [
+    [
+     {
+      "node": "6. Система: Загрузить снимок в Lens",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Сказать прямо, текстом не подменять",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6. Система: Загрузить снимок в Lens": {
+   "main": [
+    [
+     {
+      "node": "7. Система: Переключить выдачу на США",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "7. Система: Переключить выдачу на США": {
+   "main": [
+    [
+     {
+      "node": "8. ИИ: Сгруппировать продавцов",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "8. ИИ: Сгруппировать продавцов": {
+   "main": [
+    [
+     {
+      "node": "9. ИИ: Ответ списком ссылок",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {}
+}

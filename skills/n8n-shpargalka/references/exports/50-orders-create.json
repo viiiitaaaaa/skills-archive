@@ -1,0 +1,155 @@
+{
+ "id": "artmOrderNew001",
+ "name": "Shopify orders/create - уведомление о новом заказе",
+ "active": false,
+ "settings": {
+  "executionOrder": "v1",
+  "errorWorkflow": "artmErrAlert001"
+ },
+ "nodes": [
+  {
+   "parameters": {
+    "httpMethod": "POST",
+    "path": "shopify-orders-create",
+    "options": {}
+   },
+   "id": "f6000000-0000-4000-8000-000000000001",
+   "name": "Вебхук Shopify",
+   "type": "n8n-nodes-base.webhook",
+   "typeVersion": 2,
+   "position": [
+    -460,
+    0
+   ],
+   "webhookId": "f6000000-0000-4000-8000-0000000000w1",
+   "notes": "Shopify шлёт сюда orders/create через туннель (n8n/start-tunnel.ps1). Проверять можно POST-ом с примером заказа."
+  },
+  {
+   "parameters": {
+    "jsCode": "// Shopify кладёт заказ в body. Собираем короткое человеческое уведомление.\nconst o = $input.first().json.body || $input.first().json;\nconst items = (o.line_items || []).map((i) => `${i.title} ×${i.quantity}`).join(', ');\nconst country = (o.shipping_address && o.shipping_address.country_code) || '';\nconst esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\nconst tgLines = [\n  `🛒 <b>Новый заказ ${esc(o.name || '')}</b>`,\n  `${esc(o.total_price || '?')} ${esc(o.currency || '')}${country ? ' · ' + esc(country) : ''}`,\n  ...(o.line_items || []).map((i) => `• ${esc(i.title)} ×${i.quantity}`),\n];\nreturn [{ json: {\n  kind: 'order',\n  title: `Новый заказ ${o.name || ''}`.trim(),\n  text: [`${o.total_price || '?'} ${o.currency || ''}`.trim(), country, items].filter(Boolean).join(' · '),\n  order: o.name || null,\n  created_at: o.created_at || null,\n  telegram_text: tgLines.join('\\n'),\n  telegram_on: Boolean($env.TELEGRAM_BOT_TOKEN && $env.TELEGRAM_CHAT_ID),\n} }];"
+   },
+   "id": "f6000000-0000-4000-8000-000000000002",
+   "name": "Собрать уведомление",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -240,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "http://127.0.0.1:8787/api/notify",
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify({ kind: $json.kind, title: $json.title, text: $json.text, order: $json.order, created_at: $json.created_at }) }}",
+    "options": {}
+   },
+   "id": "f6000000-0000-4000-8000-000000000003",
+   "name": "В панель",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    -20,
+    -120
+   ],
+   "onError": "continueRegularOutput",
+   "notes": "Уведомление уходит в операционную панель (panel/server.py). Именно 127.0.0.1, не localhost: localhost n8n резолвит в IPv6 ::1, а панель слушает только IPv4 — будет EACCES. Если панель выключена, ветка не валит воркфлоу: Telegram всё равно уйдёт."
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "id": "tg-on",
+       "leftValue": "={{ $json.telegram_on }}",
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "f6000000-0000-4000-8000-000000000004",
+   "name": "Telegram настроен?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    -20,
+    120
+   ],
+   "notes": "Токен и chat_id берутся из окружения (start-n8n.ps1 читает файл «telegram bot.txt»). Нет ключей — ветка молча пропускается."
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendMessage",
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify({ chat_id: $env.TELEGRAM_CHAT_ID, text: $json.telegram_text, parse_mode: 'HTML' }) }}",
+    "options": {}
+   },
+   "id": "f6000000-0000-4000-8000-000000000005",
+   "name": "В Telegram",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    200,
+    120
+   ],
+   "notes": "Bot API, метод sendMessage. Текст уже собран в узле «Собрать уведомление» с экранированием HTML."
+  }
+ ],
+ "connections": {
+  "Вебхук Shopify": {
+   "main": [
+    [
+     {
+      "node": "Собрать уведомление",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Собрать уведомление": {
+   "main": [
+    [
+     {
+      "node": "В панель",
+      "type": "main",
+      "index": 0
+     },
+     {
+      "node": "Telegram настроен?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Telegram настроен?": {
+   "main": [
+    [
+     {
+      "node": "В Telegram",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    []
+   ]
+  }
+ }
+}

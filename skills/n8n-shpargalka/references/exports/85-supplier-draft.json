@@ -1,0 +1,133 @@
+{
+ "id": "artmSupDraft001",
+ "name": "Поставщики: снять с продажи недоступные",
+ "active": false,
+ "settings": {
+  "executionOrder": "v1",
+  "errorWorkflow": "artmErrAlert001"
+ },
+ "nodes": [
+  {
+   "parameters": {
+    "httpMethod": "POST",
+    "path": "panel/supplier-draft",
+    "responseMode": "lastNode",
+    "options": {}
+   },
+   "id": "80000000-0000-4000-8000-000000000011",
+   "name": "Кнопка в панели",
+   "type": "n8n-nodes-base.webhook",
+   "typeVersion": 2,
+   "position": [
+    -460,
+    0
+   ],
+   "webhookId": "80000000-0000-4000-8000-0000000000w3"
+  },
+  {
+   "parameters": {
+    "command": "py -3.13 \"C:\\Users\\User\\artmellio-system\\scripts\\suppliers\\check_suppliers.py\" --draft-unavailable --json"
+   },
+   "id": "80000000-0000-4000-8000-000000000012",
+   "name": "Перевести в черновик",
+   "type": "n8n-nodes-base.executeCommand",
+   "typeVersion": 1,
+   "position": [
+    -240,
+    0
+   ],
+   "notes": "Берёт список недоступных из последнего снимка data/suppliers/latest.json, в Dsers не ходит."
+  },
+  {
+   "parameters": {
+    "jsCode": "// Скрипт печатает ход работы в stderr, а итог — последней строкой stdout: RESULT:{...}\nconst out = $input.first().json;\nconst lines = String(out.stdout || '').split(/\\r?\\n/).filter(Boolean);\nconst line = [...lines].reverse().find((l) => l.startsWith('RESULT:'));\nif (!line) {\n  throw new Error('Скрипт не вернул итог. Код выхода ' + out.exitCode + '. ' + String(out.stderr || '').slice(-600));\n}\nconst r = JSON.parse(line.slice('RESULT:'.length));\nif (!r.ok) throw new Error(r['ошибка'] || 'проверка не удалась');\nreturn [{ json: r }];"
+   },
+   "id": "80000000-0000-4000-8000-000000000013",
+   "name": "Разобрать итог",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -20,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "http://127.0.0.1:8787/api/notify",
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify({ kind: 'warning', title: 'Сняты с продажи: ' + $json['снято_с_продажи'], text: 'товары с недоступным поставщиком переведены в черновик' }) }}",
+    "options": {}
+   },
+   "id": "80000000-0000-4000-8000-000000000014",
+   "name": "Уведомление в панель",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    200,
+    -120
+   ],
+   "onError": "continueRegularOutput"
+  },
+  {
+   "parameters": {
+    "jsCode": "const r = $('Разобрать итог').first().json;\nreturn [{ json: {\n  снято_с_продажи: r['снято_с_продажи'],\n  уже_не_активны: r['уже_не_активны'],\n  по_снимку_от: r['по_снимку_от'],\n  список: r['список'],\n} }];"
+   },
+   "id": "80000000-0000-4000-8000-000000000015",
+   "name": "Итог",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    420,
+    0
+   ]
+  }
+ ],
+ "connections": {
+  "Кнопка в панели": {
+   "main": [
+    [
+     {
+      "node": "Перевести в черновик",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Перевести в черновик": {
+   "main": [
+    [
+     {
+      "node": "Разобрать итог",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Разобрать итог": {
+   "main": [
+    [
+     {
+      "node": "Уведомление в панель",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Уведомление в панель": {
+   "main": [
+    [
+     {
+      "node": "Итог",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ }
+}

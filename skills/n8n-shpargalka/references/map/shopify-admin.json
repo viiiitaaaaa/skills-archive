@@ -1,0 +1,360 @@
+{
+ "id": "mapvlnuA1dyQi80a",
+ "name": "Карта · Правки магазина через Admin API",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "48d49778-3469-4c84-aa60-8bd64f6f0113",
+   "name": "Старт: Правки магазина через Admin API",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    300
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "e2fb53ea-7266-4eab-8d21-b18fae77f978",
+   "name": "1. Система: Получить токен Admin API",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    280,
+    300
+   ],
+   "notes": "shop_api.py по Client ID и secret, токен живёт 24 часа",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "f66cf46b-53e9-4f2f-a78c-2686229ecfa1",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "8677d8fa-0086-4857-a935-ede210a70c2d",
+   "name": "2. Прав приложения хватает?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    560,
+    300
+   ],
+   "notes": "проверка запросом accessScopes",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "30ce8c1a-8740-4c18-954d-5002ea1cd236",
+   "name": "Нет: Выдать весь набор, удалить кэш",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    700,
+    520
+   ]
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "b660ab47-dff4-44f8-bffd-1b66de44ceda",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "96c72952-765b-4057-998e-ea12250ac4aa",
+   "name": "3. Задача решается через API?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    840,
+    300
+   ],
+   "notes": "не решаются: чекаут, платежи, домены, налоги, SEO магазина",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "382bfd15-089f-45ba-a2fb-b2deda28317a",
+   "name": "Нет: Инструкция ей, правит в админке",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    980,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "b6daa1cf-6166-424c-b500-a5c3e64055fc",
+   "name": "4. Система: Скрипт пишет результат в JSON",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1120,
+    300
+   ],
+   "notes": "в магазин ещё ничего не записано",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "c5fa9554-c4ea-457d-82bc-e86058c44f45",
+   "name": "5. ИИ: Сверить результат до записи",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1400,
+    300
+   ],
+   "notes": "названия пишутся руками по одному, handle не трогать",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "e44ff7c9-f15b-4dc3-b831-297b4c7b6eb7",
+   "name": "6. Система: Записать в магазин отдельным проходом",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1680,
+    300
+   ],
+   "notes": "tagsAdd / tagsRemove / productUpdate",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "4f0b6491-25ec-40db-9a72-92b9e3e8627e",
+   "name": "7. Система: Файлы темы заливать через upsert.py",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1960,
+    300
+   ],
+   "notes": "не через CLI: theme push может соврать об успехе",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "49533503-14af-4715-bb9d-1fcc398d0dfc",
+   "name": "8. Система: Проверить саму страницу витрины",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2240,
+    300
+   ],
+   "notes": "код ответа страницы; легла — listfiles.py покажет пропавший файл",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "8a2e39b9-f4cc-4136-bb11-7f1487f3a381",
+   "name": "9. Вы: Вписывает тексты чекаута вручную",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2520,
+    300
+   ],
+   "notes": "по одной строке: «Ищем: ключ / Вставляем: текст»",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "172262aa-1c14-406b-b3d9-6589eceb2922",
+   "name": "10. Система: Проверить применённое по API",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2800,
+    300
+   ],
+   "notes": "translatableContent показывает актуальные значения",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "content": "## Правки магазина через Admin API\n\nМеняет товары, коллекции, главную, страницы, меню, доставку и тему запросами Admin API, а не кликами в админке, где мешает капча.\n\n**Запуск:** «Переименуй товары и почисти описания» · «Почему всё Sold out?» · «Собери главную / сделай страницы и футер»\n\n**Правила:**\n- Права запрашивать сразу всем списком; после релиза удалить кэш токена.\n- Страну и город в текстах магазина не упоминать; компанию и налоговые номера не выдумывать.\n- Sold out при наличии остатков — искать отсутствующую зону доставки для страны.\n- Пороги скидок живут в трёх местах: скидки, полоса в корзине, FAQ — менять все.\n- Не брать таймеры, всплывашки «кто-то купил», промо-попапы — ломают спокойный дорогой вид.\n\n_Карта логики скилла (skill: shopify-admin). Узлы-заглушки: сценарий ничего не делает, пока шаги не заменят на настоящие._",
+    "height": 420,
+    "width": 520,
+    "color": 7
+   },
+   "id": "a0ca655e-d26b-4a39-9859-b6b28fca81fc",
+   "name": "Описание",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -200
+   ]
+  }
+ ],
+ "connections": {
+  "Старт: Правки магазина через Admin API": {
+   "main": [
+    [
+     {
+      "node": "1. Система: Получить токен Admin API",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1. Система: Получить токен Admin API": {
+   "main": [
+    [
+     {
+      "node": "2. Прав приложения хватает?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2. Прав приложения хватает?": {
+   "main": [
+    [
+     {
+      "node": "3. Задача решается через API?",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Выдать весь набор, удалить кэш",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3. Задача решается через API?": {
+   "main": [
+    [
+     {
+      "node": "4. Система: Скрипт пишет результат в JSON",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Инструкция ей, правит в админке",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "4. Система: Скрипт пишет результат в JSON": {
+   "main": [
+    [
+     {
+      "node": "5. ИИ: Сверить результат до записи",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5. ИИ: Сверить результат до записи": {
+   "main": [
+    [
+     {
+      "node": "6. Система: Записать в магазин отдельным проходом",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6. Система: Записать в магазин отдельным проходом": {
+   "main": [
+    [
+     {
+      "node": "7. Система: Файлы темы заливать через upsert.py",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "7. Система: Файлы темы заливать через upsert.py": {
+   "main": [
+    [
+     {
+      "node": "8. Система: Проверить саму страницу витрины",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "8. Система: Проверить саму страницу витрины": {
+   "main": [
+    [
+     {
+      "node": "9. Вы: Вписывает тексты чекаута вручную",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "9. Вы: Вписывает тексты чекаута вручную": {
+   "main": [
+    [
+     {
+      "node": "10. Система: Проверить применённое по API",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {}
+}

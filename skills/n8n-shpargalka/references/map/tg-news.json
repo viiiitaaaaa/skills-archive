@@ -1,0 +1,344 @@
+{
+ "id": "mapw6Z8xVrkzuQSU",
+ "name": "Карта · Новости из Telegram-каналов",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "b0ac57e3-da90-43fa-bbee-dc661c6a82a0",
+   "name": "Старт: Новости из Telegram-каналов",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    300
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "b8c401fb-08f3-42ec-b575-a4991d949626",
+   "name": "1. Вы: Пишет «новости»",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    280,
+    300
+   ],
+   "notes": "Весь цикл сразу, без лишних вопросов",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "38d5c8a3-1aae-4de4-95f9-02fc91908c04",
+   "name": "2. Система: Сбор новых постов news.py",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    560,
+    300
+   ],
+   "notes": "Догоняет пропуски до 31 дня, печатает «нужен разбор»",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "4737b4a2-855a-4a88-81fc-5ad083d969bb",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "0c0cc275-4cc4-4929-9d66-9abb5856ec68",
+   "name": "3. Telegram Web залогинен?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    840,
+    300
+   ],
+   "notes": "Нужен для скрытых постов и закрытых каналов",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "b8f46a12-05c2-44c0-b5e0-c3e7905eadaf",
+   "name": "Нет: Сказать ей — вход делает она",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    980,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "4a03c2f5-f4fd-42d2-baf5-822f491f2fa2",
+   "name": "4. Система: Дочитать скрытое через Telegram Web",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1120,
+    300
+   ],
+   "notes": "Закрытые anita_bold, moda_po_sprosu; личные чаты не читать",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "49cd37be-cbed-4c00-9e08-8c1d42e655ca",
+   "name": "5. Система: Прочитать чаты shopify и вайбкодинга",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1400,
+    300
+   ],
+   "notes": "Важные вопросы сразу с ответами, без спама и рекламы",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "133f122f-564e-4d57-aef1-fabed7b89f8e",
+   "name": "6. ИИ: Разбор каждого нового поста",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1680,
+    300
+   ],
+   "notes": "В notes.json: по делу, инструмент, фоново, пропуск, курс; дописывать",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "4f07bd8e-5854-4337-8848-6b3a521ccf19",
+   "name": "7. ИИ: Модные посты — в радар трендов",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1960,
+    300
+   ],
+   "notes": "Пометки «как ищут в США» и темы, не в панель новостей",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "d777e4e8-2e3e-4f4f-a871-90275391f81e",
+   "name": "8. Система: Пересобрать панель news.py --build",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2240,
+    300
+   ],
+   "notes": "Заодно пишется файл моды для радара",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "3709e23e-7563-46cd-ac0a-9e4e20850550",
+   "name": "9. Система: Открыть, опубликовать панель и радар",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2520,
+    300
+   ],
+   "notes": "Сначала локальная копия, потом артефакт; радар пересобрать и опубликовать",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "4e9f0b2b-f4d7-46a4-9e89-ffda04d9f783",
+   "name": "10. ИИ: Коротко в чате",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2800,
+    300
+   ],
+   "notes": "Сколько новых, 3–5 главных новостей, ссылка",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "75492815-2f19-46dc-86c9-a5401015838e",
+   "name": "11. ИИ: В конце сводки — одно напоминание из dropship-lesson",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    3080,
+    300
+   ],
+   "notes": "Список «когда будет время», по очереди",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "content": "## Новости из Telegram-каналов\n\nОдной командой собирает свежие посты каналов, пересказывает новые и обновляет «Рабочую панель».\n\n**Запуск:** «Новости» · «Что нового в каналах» · «Обнови панель новостей»\n\n**Правила:**\n- Старые новости не удалять: база копится, панель показывает 45 дней\n- Установленное из новостей всегда помечать «Установлено» или «Не ставили»\n- Скрытые посты не помечать пропуском — спросить текст или оставить ссылку\n- Автосбор только задача TG_Monitor раз в день в 9:00\n- Громкие заявления подавать как «канал пишет», не как факт\n\n_Карта логики скилла (skill: tg-news). Узлы-заглушки: сценарий ничего не делает, пока шаги не заменят на настоящие._",
+    "height": 420,
+    "width": 520,
+    "color": 7
+   },
+   "id": "766ff523-0dab-437d-ab35-55dcee2874fe",
+   "name": "Описание",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -200
+   ]
+  }
+ ],
+ "connections": {
+  "Старт: Новости из Telegram-каналов": {
+   "main": [
+    [
+     {
+      "node": "1. Вы: Пишет «новости»",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1. Вы: Пишет «новости»": {
+   "main": [
+    [
+     {
+      "node": "2. Система: Сбор новых постов news.py",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2. Система: Сбор новых постов news.py": {
+   "main": [
+    [
+     {
+      "node": "3. Telegram Web залогинен?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3. Telegram Web залогинен?": {
+   "main": [
+    [
+     {
+      "node": "4. Система: Дочитать скрытое через Telegram Web",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Сказать ей — вход делает она",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "4. Система: Дочитать скрытое через Telegram Web": {
+   "main": [
+    [
+     {
+      "node": "5. Система: Прочитать чаты shopify и вайбкодинга",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5. Система: Прочитать чаты shopify и вайбкодинга": {
+   "main": [
+    [
+     {
+      "node": "6. ИИ: Разбор каждого нового поста",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6. ИИ: Разбор каждого нового поста": {
+   "main": [
+    [
+     {
+      "node": "7. ИИ: Модные посты — в радар трендов",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "7. ИИ: Модные посты — в радар трендов": {
+   "main": [
+    [
+     {
+      "node": "8. Система: Пересобрать панель news.py --build",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "8. Система: Пересобрать панель news.py --build": {
+   "main": [
+    [
+     {
+      "node": "9. Система: Открыть, опубликовать панель и радар",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "9. Система: Открыть, опубликовать панель и радар": {
+   "main": [
+    [
+     {
+      "node": "10. ИИ: Коротко в чате",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "10. ИИ: Коротко в чате": {
+   "main": [
+    [
+     {
+      "node": "11. ИИ: В конце сводки — одно напоминание из dropship-lesson",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {}
+}

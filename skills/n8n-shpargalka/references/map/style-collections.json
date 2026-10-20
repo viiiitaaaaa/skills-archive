@@ -1,0 +1,296 @@
+{
+ "id": "mapm73zHzKdKOqyv",
+ "name": "Карта · Раскладка товаров по 10 стилям",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "bc460b58-49cf-4612-8292-da374ca3935d",
+   "name": "Старт: Раскладка товаров по 10 стилям",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    300
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "9e3fe795-8084-4780-9624-ed6fb1d0c733",
+   "name": "1. Система: Сначала нарезка скиллом cut-products",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    280,
+    300
+   ],
+   "notes": "работает поверх готовых вырезок",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "555056fd-4f74-4bc5-a52a-6ee845c9fcfd",
+   "name": "2. Система: Сделать листы make_sheets.py",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    560,
+    300
+   ],
+   "notes": "обзорный лист + пачки по 60, номер на каждой картинке",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "10aba758-defd-4a96-bc86-b970946588fe",
+   "name": "3. Вы: Решает, все ли товары размечать",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    840,
+    300
+   ],
+   "notes": "спрашивают только на больших магазинах",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "2198a1cb-0917-4dac-884a-e8606e85b608",
+   "name": "4. ИИ: Посмотреть overview.png",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1120,
+    300
+   ],
+   "notes": "понять ассортимент и какие стили применимы",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "b87733d2-1287-407b-a288-9e7d57ea7fca",
+   "name": "5. ИИ: Каждому номеру дать код 0–10",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1400,
+    300
+   ],
+   "notes": "по признакам стиля; не ложится ни в один — код 0",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "6d5c470a-91d9-490c-8dd7-ebfa080f0bce",
+   "name": "6. Система: Записывать labels.txt после каждого листа",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1680,
+    300
+   ],
+   "notes": "строки «номер код», не копить в голове",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "bf1a13d5-4622-48d2-840a-4d434ef57189",
+   "name": "7. Система: Разложить make_collections.py",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1960,
+    300
+   ],
+   "notes": "отсев повторов aHash, порог 10; копирует, не переносит",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "d2025bb8-a218-4531-92a8-38ced51495ea",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "efe4bcda-e594-4c8e-82f1-4044dc72f388",
+   "name": "8. Раскладку нужно поправить?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    2240,
+    300
+   ],
+   "notes": "",
+   "notesInFlow": false
+  },
+  {
+   "parameters": {},
+   "id": "4cc5fa11-bbf0-4704-a047-79cb6f9c90d0",
+   "name": "Нет: Готово: папки стилей",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2380,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "3416abb8-cb90-4db2-8fa7-2411b13b0022",
+   "name": "9. ИИ: Править labels.txt и перезапустить",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2520,
+    300
+   ],
+   "notes": "листы заново делать не нужно",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "content": "## Раскладка товаров по 10 стилям\n\nРаскладывает нарезанные фото товаров магазина по папкам десяти интерьерных стилей 2025–2026, каждый товар ровно в одну.\n\n**Запуск:** «Разбей товары по коллекциям» · «Разложи по стилям 25-26» · «Подбери товары под стиль интерьера»\n\n**Правила:**\n- Один товар — ровно одна коллекция.\n- Код 0 обязателен: одежда, новогоднее, религиозное, утиль, еда, детский китч — вне коллекций.\n- Не натягивать вещь на стиль: не подходит — честно код 0.\n- Порог повторов 10 не поднимать: при 22+ ловятся разные похожие товары.\n- Маленькие коллекции (Dark Academia, Color Drenching) — это нормально.\n\n_Карта логики скилла (skill: style-collections). Узлы-заглушки: сценарий ничего не делает, пока шаги не заменят на настоящие._",
+    "height": 420,
+    "width": 520,
+    "color": 7
+   },
+   "id": "00be53de-115a-440b-abf0-265e3ba05676",
+   "name": "Описание",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -200
+   ]
+  }
+ ],
+ "connections": {
+  "Старт: Раскладка товаров по 10 стилям": {
+   "main": [
+    [
+     {
+      "node": "1. Система: Сначала нарезка скиллом cut-products",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1. Система: Сначала нарезка скиллом cut-products": {
+   "main": [
+    [
+     {
+      "node": "2. Система: Сделать листы make_sheets.py",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2. Система: Сделать листы make_sheets.py": {
+   "main": [
+    [
+     {
+      "node": "3. Вы: Решает, все ли товары размечать",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3. Вы: Решает, все ли товары размечать": {
+   "main": [
+    [
+     {
+      "node": "4. ИИ: Посмотреть overview.png",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "4. ИИ: Посмотреть overview.png": {
+   "main": [
+    [
+     {
+      "node": "5. ИИ: Каждому номеру дать код 0–10",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5. ИИ: Каждому номеру дать код 0–10": {
+   "main": [
+    [
+     {
+      "node": "6. Система: Записывать labels.txt после каждого листа",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6. Система: Записывать labels.txt после каждого листа": {
+   "main": [
+    [
+     {
+      "node": "7. Система: Разложить make_collections.py",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "7. Система: Разложить make_collections.py": {
+   "main": [
+    [
+     {
+      "node": "8. Раскладку нужно поправить?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "8. Раскладку нужно поправить?": {
+   "main": [
+    [
+     {
+      "node": "9. ИИ: Править labels.txt и перезапустить",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Готово: папки стилей",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {}
+}

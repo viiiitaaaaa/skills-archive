@@ -1,0 +1,193 @@
+{
+ "id": "artmTgTest00001",
+ "name": "Проверка Telegram: тестовое сообщение",
+ "active": false,
+ "settings": {
+  "executionOrder": "v1",
+  "errorWorkflow": "artmErrAlert001"
+ },
+ "nodes": [
+  {
+   "parameters": {
+    "httpMethod": "POST",
+    "path": "panel/telegram-test",
+    "responseMode": "lastNode",
+    "options": {}
+   },
+   "id": "f7000000-0000-4000-8000-000000000001",
+   "name": "Кнопка в панели",
+   "type": "n8n-nodes-base.webhook",
+   "typeVersion": 2,
+   "position": [
+    -460,
+    0
+   ],
+   "webhookId": "f7000000-0000-4000-8000-0000000000w1",
+   "notes": "Ручной запуск из операционной панели (panel/server.py)."
+  },
+  {
+   "parameters": {
+    "jsCode": "const token = $env.TELEGRAM_BOT_TOKEN || '';\nconst chat = $env.TELEGRAM_CHAT_ID || '';\nif (!token || !chat) {\n  return [{ json: { ok: false, telegram_on: false,\n    'связь': 'нет',\n    'причина': 'n8n запущен без ключей Telegram. Нужен файл «telegram bot.txt» рядом с ключами Shopify (токен и chat_id) и перезапуск .\\\\n8n\\\\start-n8n.ps1.' } }];\n}\nconst now = new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Warsaw' });\nreturn [{ json: { ok: true, telegram_on: true, text: `🔔 ARTMELLIO: проверка связи из панели, ${now}` } }];"
+   },
+   "id": "f7000000-0000-4000-8000-000000000002",
+   "name": "Есть ли ключи",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -240,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "id": "tg-on",
+       "leftValue": "={{ $json.telegram_on }}",
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "f7000000-0000-4000-8000-000000000003",
+   "name": "Telegram настроен?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    -20,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendMessage",
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify({ chat_id: $env.TELEGRAM_CHAT_ID, text: $json.text }) }}",
+    "options": {}
+   },
+   "id": "f7000000-0000-4000-8000-000000000004",
+   "name": "В Telegram",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    200,
+    -120
+   ],
+   "onError": "continueErrorOutput"
+  },
+  {
+   "parameters": {
+    "jsCode": "const r = $input.first().json;\nconst m = r.result || {};\nreturn [{ json: {\n  'связь': 'есть',\n  'чат': String(m.chat && (m.chat.username ? '@' + m.chat.username : m.chat.first_name || m.chat.title || m.chat.id)),\n  'сообщение': 'отправлено, проверьте Telegram',\n} }];"
+   },
+   "id": "f7000000-0000-4000-8000-000000000005",
+   "name": "Итог",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    420,
+    -160
+   ]
+  },
+  {
+   "parameters": {
+    "jsCode": "const r = $input.first().json;\nconst err = r.error || r;\nconst msg = (err && (err.description || err.message)) || JSON.stringify(err).slice(0, 300);\nlet hint = '';\nif (/chat not found/i.test(msg)) hint = 'Бот не знает этот чат: напишите боту /start и запустите python scripts\\\\telegram\\\\setup_telegram.py.';\nelse if (/unauthorized|not found/i.test(msg)) hint = 'Токен неверный или бот удалён: проверьте первую строку «telegram bot.txt».';\nreturn [{ json: { 'связь': 'нет', 'ошибка': msg, 'подсказка': hint } }];"
+   },
+   "id": "f7000000-0000-4000-8000-000000000006",
+   "name": "Ошибка отправки",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    420,
+    -40
+   ]
+  },
+  {
+   "parameters": {
+    "jsCode": "const r = $input.first().json;\nreturn [{ json: { 'связь': r['связь'], 'причина': r['причина'] } }];"
+   },
+   "id": "f7000000-0000-4000-8000-000000000007",
+   "name": "Ключей нет",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    200,
+    120
+   ]
+  }
+ ],
+ "connections": {
+  "Кнопка в панели": {
+   "main": [
+    [
+     {
+      "node": "Есть ли ключи",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Есть ли ключи": {
+   "main": [
+    [
+     {
+      "node": "Telegram настроен?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Telegram настроен?": {
+   "main": [
+    [
+     {
+      "node": "В Telegram",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Ключей нет",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "В Telegram": {
+   "main": [
+    [
+     {
+      "node": "Итог",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Ошибка отправки",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ }
+}

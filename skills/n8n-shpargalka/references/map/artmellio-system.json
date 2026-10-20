@@ -1,0 +1,368 @@
+{
+ "id": "mapFcwxfqAtmfDe8",
+ "name": "Карта · Связка инструментов ARTMELLIO",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "305245b7-b557-44a1-8891-3e8109f6d103",
+   "name": "Старт: Связка инструментов ARTMELLIO",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    300
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "5c79b7c1-1814-4c10-9504-cd480585446c",
+   "name": "1. ИИ: Свериться с планом из 10 этапов",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    280,
+    300
+   ],
+   "notes": "PDF-план и таблица состояния этапов в скилле",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "4c1de6de-f579-4d17-8efe-2e7d60de4862",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "8711b0ac-aed5-4776-95e9-b8fb26a1f1cb",
+   "name": "2. Действие целиком внутри Shopify?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    560,
+    300
+   ],
+   "notes": "правило разделения инструментов",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "f7700044-55f8-444c-a11a-f48411e17fa7",
+   "name": "Нет: Делается через n8n",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    700,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "bce89825-acba-44b6-84f2-5905b673f09a",
+   "name": "3. Система: Shopify Flow: триггер → условие → действие",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    840,
+    300
+   ],
+   "notes": "только то, что не выходит за Shopify",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "a7929a26-75a2-4164-889c-04fa0823c34f",
+   "name": "4. ИИ: Код кладётся в репозиторий artmellio-system",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1120,
+    300
+   ],
+   "notes": "папка по назначению: scripts/, n8n/exports/, shopify-theme/",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "64d620ae-fe2d-4028-a611-b99cc7066e6d",
+   "name": "5. ИИ: Одна задача — одна ветка feature/…",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1400,
+    300
+   ],
+   "notes": "отпочковывать от актуальной main, dev бывает отставшей",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "ac0476cc-160b-4301-8cf2-b5e36010e3a1",
+   "name": "6. Система: Запустить n8n",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1680,
+    300
+   ],
+   "notes": "start-n8n.ps1; ждать строку «Editor is now accessible»",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "e0bf1852-709e-431b-815e-a21832fdf213",
+   "name": "7. Система: Поднять бесплатный туннель Cloudflare",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1960,
+    300
+   ],
+   "notes": "start-tunnel.ps1 сам перерегистрирует вебхуки Shopify",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "418cf0a9-3ee4-4457-bfde-e6c0ed8ce8ee",
+   "name": "8. Система: Запустить операционную панель",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2240,
+    300
+   ],
+   "notes": "start-panel.ps1, адрес localhost:8787",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "9d111915-6489-4abb-9c0f-b31905b15fc7",
+   "name": "9. Вы: Нажимает кнопки сценариев в панели",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2520,
+    300
+   ],
+   "notes": "отвечают только включённые воркфлоу; разметку товаров делает сама",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "bab37abd-fe47-424d-a85b-bb0680bb9dd5",
+   "name": "10. Система: Экспорт воркфлоу в n8n/exports и коммит",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2800,
+    300
+   ],
+   "notes": "единственный способ хранить версии воркфлоу",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "8d472ef8-c99a-4bd2-af6b-1b2439f2de6a",
+   "name": "11. Вы: Публикует в живую тему вручную",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    3080,
+    300
+   ],
+   "notes": "автоматически в live-тему — никогда",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "07b7a525-e635-4c7a-8a1f-525198ae1df6",
+   "name": "12. Вы: Делает git push сама",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    3360,
+    300
+   ],
+   "notes": "в сессии Claude push блокировался разрешениями",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "content": "## Связка инструментов ARTMELLIO\n\nДержит общую схему проекта: какой инструмент за что отвечает, где лежит код, какие этапы плана готовы и как запускать n8n с панелью.\n\n**Запуск:** «Продолжаем ARTMELLIO» · «Настрой n8n» · «Какой этап сейчас и куда класть скрипты?»\n\n**Правила:**\n- Shopify хранит бизнес, Cursor и Claude Code пишут код, n8n всё связывает, ComfyUI делает визуалы.\n- Вход в Shopify только через профиль Dolphin 836461485; системный Chrome запрещён.\n- Узел Shopify в n8n подключать только по токену, не по OAuth.\n- Тему править через themeFilesUpsert: theme push затирает тему целиком.\n- PS-скрипты сохранять в UTF-8 с BOM, иначе ломаются русские строки.\n\n_Карта логики скилла (skill: artmellio-system). Узлы-заглушки: сценарий ничего не делает, пока шаги не заменят на настоящие._",
+    "height": 420,
+    "width": 520,
+    "color": 7
+   },
+   "id": "5cad6b39-68df-4cf4-a444-d2738de8bfdd",
+   "name": "Описание",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -200
+   ]
+  }
+ ],
+ "connections": {
+  "Старт: Связка инструментов ARTMELLIO": {
+   "main": [
+    [
+     {
+      "node": "1. ИИ: Свериться с планом из 10 этапов",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1. ИИ: Свериться с планом из 10 этапов": {
+   "main": [
+    [
+     {
+      "node": "2. Действие целиком внутри Shopify?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2. Действие целиком внутри Shopify?": {
+   "main": [
+    [
+     {
+      "node": "3. Система: Shopify Flow: триггер → условие → действие",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Делается через n8n",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3. Система: Shopify Flow: триггер → условие → действие": {
+   "main": [
+    [
+     {
+      "node": "4. ИИ: Код кладётся в репозиторий artmellio-system",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "4. ИИ: Код кладётся в репозиторий artmellio-system": {
+   "main": [
+    [
+     {
+      "node": "5. ИИ: Одна задача — одна ветка feature/…",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5. ИИ: Одна задача — одна ветка feature/…": {
+   "main": [
+    [
+     {
+      "node": "6. Система: Запустить n8n",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6. Система: Запустить n8n": {
+   "main": [
+    [
+     {
+      "node": "7. Система: Поднять бесплатный туннель Cloudflare",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "7. Система: Поднять бесплатный туннель Cloudflare": {
+   "main": [
+    [
+     {
+      "node": "8. Система: Запустить операционную панель",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "8. Система: Запустить операционную панель": {
+   "main": [
+    [
+     {
+      "node": "9. Вы: Нажимает кнопки сценариев в панели",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "9. Вы: Нажимает кнопки сценариев в панели": {
+   "main": [
+    [
+     {
+      "node": "10. Система: Экспорт воркфлоу в n8n/exports и коммит",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "10. Система: Экспорт воркфлоу в n8n/exports и коммит": {
+   "main": [
+    [
+     {
+      "node": "11. Вы: Публикует в живую тему вручную",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "11. Вы: Публикует в живую тему вручную": {
+   "main": [
+    [
+     {
+      "node": "12. Вы: Делает git push сама",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {}
+}

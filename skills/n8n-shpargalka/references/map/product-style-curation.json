@@ -1,0 +1,296 @@
+{
+ "id": "map9PbvB0ANdntdF",
+ "name": "Карта · Подбор сочетающихся товаров в сет",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "7d270046-de87-4b8d-86a8-df73c86b7d8f",
+   "name": "Старт: Подбор сочетающихся товаров в сет",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "c0c36b89-a710-4fe4-b17d-8b5118c6fe65",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "e40af3f4-1c81-4eb1-a10b-cd3801a07ecd",
+   "name": "1. Папка подключена?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    280,
+    300
+   ],
+   "notes": "",
+   "notesInFlow": false
+  },
+  {
+   "parameters": {},
+   "id": "f5eb63f6-c0d2-4a96-826d-77564b0676a2",
+   "name": "Нет: Запросить доступ или «Add folder»",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    420,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "b5e15fcd-b337-4b56-b19f-770a57d3743f",
+   "name": "2. Система: Собрать список всех файлов",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    560,
+    300
+   ],
+   "notes": "Вместе с вложенными папками",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "bb6c96c0-16d8-4693-b54f-000cee549073",
+   "name": "3. Система: Загрузить фото в работу",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    840,
+    300
+   ],
+   "notes": "До 50 файлов за раз",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "889086aa-7bdf-4ca2-a456-a04a6d8b15be",
+   "name": "4. Система: Собрать контактные листы",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1120,
+    300
+   ],
+   "notes": "Сетка 4×3 миниатюр с именами файлов",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "6aee1ad6-0aa6-4bd9-af07-41b1d78bfccb",
+   "name": "5. ИИ: Выписать материал, тон, фактуру",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1400,
+    300
+   ],
+   "notes": "Для каждого интересного товара; стиль — по её справочнику стилей",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "0e72a7c5-9053-45dd-8ddb-abf088533223",
+   "name": "6. ИИ: Собрать сет из 4–5 предметов",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1680,
+    300
+   ],
+   "notes": "Одна палитра + 2–3 повторяющихся материала, не одна категория",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "896648fd-5ef1-4106-a0ea-fc067a7e0bdb",
+   "name": "7. ИИ: Назвать комнату по итогу",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1960,
+    300
+   ],
+   "notes": "По функции большинства предметов, а не заранее",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "64bc3dd5-4071-4998-a228-aa7a476d1a71",
+   "name": "8. Система: Скопировать выбранное в новую папку",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2240,
+    300
+   ],
+   "notes": "Например «Подборка — Ванная (Organic Luxe)», с номерами",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "59a2744f-faaf-439e-b3d2-a9658ec092cb",
+   "name": "9. ИИ: Коротко обосновать выбор",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2520,
+    300
+   ],
+   "notes": "Прозой: почему сочетаются и для какой комнаты",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "content": "## Подбор сочетающихся товаров в сет\n\nИз папки фото товаров собирает 4–5 предметов, которые сочетаются по материалу, цвету и фактуре, и определяет комнату.\n\n**Запуск:** «Подбери товары в одном стиле» · «Чтобы сочетались между собой» · «Собери сет из папки»\n\n**Правила:**\n- Не собирать сет по формальной категории («всё с кухни») — искать стилевое родство.\n- Не читать десятки фото по одному — только контактными листами.\n- Комната — вывод из подборки, а не отправная точка.\n- Если в папке преобладает другой тип товаров — отметить отдельно, это не противоречие.\n- Обязательно физически сохранить результат в новую подпапку.\n\n_Карта логики скилла (skill: product-style-curation). Узлы-заглушки: сценарий ничего не делает, пока шаги не заменят на настоящие._",
+    "height": 420,
+    "width": 520,
+    "color": 7
+   },
+   "id": "15c83f09-aa3d-4c60-8449-ebad6782148f",
+   "name": "Описание",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -200
+   ]
+  }
+ ],
+ "connections": {
+  "Старт: Подбор сочетающихся товаров в сет": {
+   "main": [
+    [
+     {
+      "node": "1. Папка подключена?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1. Папка подключена?": {
+   "main": [
+    [
+     {
+      "node": "2. Система: Собрать список всех файлов",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Запросить доступ или «Add folder»",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2. Система: Собрать список всех файлов": {
+   "main": [
+    [
+     {
+      "node": "3. Система: Загрузить фото в работу",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3. Система: Загрузить фото в работу": {
+   "main": [
+    [
+     {
+      "node": "4. Система: Собрать контактные листы",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "4. Система: Собрать контактные листы": {
+   "main": [
+    [
+     {
+      "node": "5. ИИ: Выписать материал, тон, фактуру",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5. ИИ: Выписать материал, тон, фактуру": {
+   "main": [
+    [
+     {
+      "node": "6. ИИ: Собрать сет из 4–5 предметов",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6. ИИ: Собрать сет из 4–5 предметов": {
+   "main": [
+    [
+     {
+      "node": "7. ИИ: Назвать комнату по итогу",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "7. ИИ: Назвать комнату по итогу": {
+   "main": [
+    [
+     {
+      "node": "8. Система: Скопировать выбранное в новую папку",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "8. Система: Скопировать выбранное в новую папку": {
+   "main": [
+    [
+     {
+      "node": "9. ИИ: Коротко обосновать выбор",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {}
+}

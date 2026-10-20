@@ -1,0 +1,400 @@
+{
+ "id": "map62yDgF4lPSfyo",
+ "name": "Карта · Тренд-радар женской одежды (США)",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "d76ee6e3-aae3-4cd6-aed0-671c3151e576",
+   "name": "Старт: Тренд-радар женской одежды (США)",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    300
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "f08ee541-04bd-4434-b3c0-5f7e0f6b51ac",
+   "name": "1. Вы: Команда на сбор данных",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    280,
+    300
+   ],
+   "notes": "Сборы только по её команде, никаких расписаний и автозапусков",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "dc30c125-8371-4deb-9d7a-8de6f76b2cb0",
+   "name": "2. Система: Сбор каналов скриптами",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    560,
+    300
+   ],
+   "notes": "Google, Pinterest, YouTube, TikTok, Amazon, бренды, Instagram; Dolphin только 859648353",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "2977f18a-3132-4a9a-ab90-b4d0d1754e8f",
+   "name": "3. ИИ: Проверка новых кандидатов по её правилам",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    840,
+    300
+   ],
+   "notes": "Вещь, не тема; рост к году; осень–зима; аудитория 28+; США — до показа",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "d4527511-7f5d-4033-bbaf-1d08226b95fa",
+   "name": "4. Система: Расчёт run_radar.py",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1120,
+    300
+   ],
+   "notes": "Последние 8 недель против тех же 8 недель год назад, порог +5%",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "0dff3dba-6322-4c4f-b019-65b898d16adc",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "8adf927a-6f31-4466-9fa4-b25c93c524bd",
+   "name": "5. Сезон не короче 2 месяцев?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    1400,
+    300
+   ],
+   "notes": "По Google Trends, запасной — Pinterest",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "399c4407-7511-4ea9-837c-aac075873492",
+   "name": "Нет: Отказ «короткий сезон»",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1540,
+    520
+   ]
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "2216f1cd-8f31-4e33-9289-abfe911fb879",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "37845f7a-7a67-406d-a364-20d923f4b8bb",
+   "name": "6. Стабильный рост по Pinterest?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    1680,
+    300
+   ],
+   "notes": "8 недель и ≥3 из 4 кварталов выше прошлого года на 5%+",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "dbccae7c-0c40-40c9-920d-12153b01f9dd",
+   "name": "Нет: Большой спрос — наблюдать, иначе отказ",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1820,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "9758237a-2136-4969-9fac-d16ed55a0279",
+   "name": "7. ИИ: Голосование каналов",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1960,
+    300
+   ],
+   "notes": "Из 7 проверок: 5–7 тестировать, 3–4 наблюдать, 0–2 отказ",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "a3b88d87-b50d-46a3-8bd0-bc0a809e6e80",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "c3319bfe-1090-4393-8c24-2b69f49e9f3b",
+   "name": "8. Сезон сейчас или скоро?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    2240,
+    300
+   ],
+   "notes": "Для «наблюдать»: текущий или 2 ближайших месяца",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "38e0aadb-3d97-4db0-ad71-0962607f7cc8",
+   "name": "Нет: Решение «позже»",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2380,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "e8760061-df15-4602-982e-83fd8a23baab",
+   "name": "9. Вы: Ручное решение и спорные случаи",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2520,
+    300
+   ],
+   "notes": "Колонки manual_decision в candidates.csv перекрывают авто; спорное решает она",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "d7e2916a-4e72-40dd-a994-d82f903732c4",
+   "name": "10. Система: Дашборд: пересобрать, открыть, опубликовать",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2800,
+    300
+   ],
+   "notes": "build_dashboard.py --open, затем артефакт и ссылка — сразу после любой правки",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "content": "## Тренд-радар женской одежды (США)\n\nПроверяет вещи-кандидаты несколькими независимыми каналами за 2 года и решает: тестировать, наблюдать или отказ.\n\n**Запуск:** «Запусти тренд радар» · «Пересчитай радар» · «Проверь кандидата»\n\n**Правила:**\n- Никаких автозапусков: каждый сбор только по её команде\n- Весенне-летние вещи — отказ «не наш сезон», даже сильные\n- Падает к прошлому году — вон, даже при большом объёме\n- Ранний тренд ценнее подтверждённого; ручное решение вместо подкрутки правил\n- После любого изменения — сразу пересчёт и дашборд без просьбы\n\n_Карта логики скилла (skill: trend-radar). Узлы-заглушки: сценарий ничего не делает, пока шаги не заменят на настоящие._",
+    "height": 420,
+    "width": 520,
+    "color": 7
+   },
+   "id": "a11f6adb-8cb4-432f-9179-7e9413eac382",
+   "name": "Описание",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -200
+   ]
+  }
+ ],
+ "connections": {
+  "Старт: Тренд-радар женской одежды (США)": {
+   "main": [
+    [
+     {
+      "node": "1. Вы: Команда на сбор данных",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1. Вы: Команда на сбор данных": {
+   "main": [
+    [
+     {
+      "node": "2. Система: Сбор каналов скриптами",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2. Система: Сбор каналов скриптами": {
+   "main": [
+    [
+     {
+      "node": "3. ИИ: Проверка новых кандидатов по её правилам",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3. ИИ: Проверка новых кандидатов по её правилам": {
+   "main": [
+    [
+     {
+      "node": "4. Система: Расчёт run_radar.py",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "4. Система: Расчёт run_radar.py": {
+   "main": [
+    [
+     {
+      "node": "5. Сезон не короче 2 месяцев?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5. Сезон не короче 2 месяцев?": {
+   "main": [
+    [
+     {
+      "node": "6. Стабильный рост по Pinterest?",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Отказ «короткий сезон»",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6. Стабильный рост по Pinterest?": {
+   "main": [
+    [
+     {
+      "node": "7. ИИ: Голосование каналов",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Большой спрос — наблюдать, иначе отказ",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "7. ИИ: Голосование каналов": {
+   "main": [
+    [
+     {
+      "node": "8. Сезон сейчас или скоро?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "8. Сезон сейчас или скоро?": {
+   "main": [
+    [
+     {
+      "node": "9. Вы: Ручное решение и спорные случаи",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Решение «позже»",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "9. Вы: Ручное решение и спорные случаи": {
+   "main": [
+    [
+     {
+      "node": "10. Система: Дашборд: пересобрать, открыть, опубликовать",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {}
+}

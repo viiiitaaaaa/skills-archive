@@ -770,3 +770,9 @@ YouTube с этого компьютера не открывается — см�
 **Из книг, новые книги — первое прочтение (09.10.2026)** — ещё 509 приёмов по книгам в `references/iz_knig_novye.md`; открывать при задаче по теме скилла.
 
 **Из книг, книги 13.10 — первое прочтение (09.10.2026)** — ещё 148 приёмов по книгам в `references/iz_knig_novye13.md`; открывать при задаче по теме скилла.
+
+## Amazon FBA + Shopify (Miller) — 19.10.2026
+Правила — `references/amazon_fba_pravila.md`; карточки — `references/karty/amazon_fba/`. Бэкап: `knigi_kupleno\sistemaekap_skillov_fba`. Коротко, метка источника, цифры не смешивать, ничего про накрутку и занижение пошлин.
+
+## Entrepreneurial Marketing (Kotler) — 19.10.2026
+Правила — `references/entrepreneurial_marketing_pravila.md`; карточки — `references/karty/entrepreneurial_marketing/`. Бэкап: `knigi_kupleno\sistemaekap_skillov_em`.

@@ -1,0 +1,368 @@
+{
+ "id": "mapUXIGYjJgrd3Ec",
+ "name": "Карта · Коллекции Shopify: три типа сетов",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "ebc2528b-1fe1-48ed-ac9a-4845a987d67b",
+   "name": "Старт: Коллекции Shopify: три типа сетов",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    300
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "79e6aaf9-8127-41fe-9a53-9fb332f0e74c",
+   "name": "1. Вы: Добавляет товары как есть",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    280,
+    300
+   ],
+   "notes": "теги и стили сама не определяет",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "7265ca7d-5814-4701-b942-9e8e9bddaba8",
+   "name": "2. ИИ: Определить теги по фото и названию",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    560,
+    300
+   ],
+   "notes": "cat, mat, room и style по таблице признаков стилей",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "89da1c2d-da04-4261-8cfa-fabdcf7e0d57",
+   "name": "3. ИИ: Решить, какие вещи собрать в set:",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    840,
+    300
+   ],
+   "notes": "авторское решение, механически не выводится",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "72bd18da-9d30-48f7-823c-58885c89df58",
+   "name": "4. ИИ: Выдать CSV Handle,Tags для импорта",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1120,
+    300
+   ],
+   "notes": "импорт перезаписывает теги — в файле полный набор",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "46936638-bc06-4bea-852f-b42d876ede5c",
+   "name": "5. ИИ: Выбрать тип коллекции",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1400,
+    300
+   ],
+   "notes": "1 — комната+стиль, 2 — категория+стиль, 3 — тег set:",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "517810a9-944d-4c67-8829-f978369053f8",
+   "name": "6. ИИ: Задать handle со слагом стиля",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1680,
+    300
+   ],
+   "notes": "латиницей; без слага коллекция теряет цвет",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "e2343e50-f1db-4294-942b-f065c28642ae",
+   "name": "7. Система: Создать коллекцию через Admin API",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1960,
+    300
+   ],
+   "notes": "make_collections.py, условия «all conditions»",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "70f8af48-e2bd-447b-a55c-531709285bb3",
+   "name": "8. Система: Опубликовать в Online Store и Shop",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2240,
+    300
+   ],
+   "notes": "без публикации витрина отдаёт 404",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "d9397867-28b9-468a-9a96-d5436b6cad77",
+   "name": "9. ИИ: Назначить шаблон темы",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2520,
+    300
+   ],
+   "notes": "room-set, category или capsule",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "2a3a19d3-8276-4b10-974a-e0bf64edda52",
+   "name": "10. ИИ: Написать описание по-английски",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2800,
+    300
+   ],
+   "notes": "2–3 предложения, без «идеальный», «стильный», без списка товаров",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "1115b0bf-8092-468d-9b58-8ce0ef7b1153",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "ef6395b5-fdea-4b29-b0a0-ff484284f1ab",
+   "name": "11. Тип 1 или 3 (нужен баннер)?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    3080,
+    300
+   ],
+   "notes": "у типа 2 фото не обязательно",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "5d895114-2f5e-4412-b1cd-790a89f1afd7",
+   "name": "Нет: Коллекция готова без баннера",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    3220,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "8a20870c-5af8-422f-aa7f-d9c206d3ed68",
+   "name": "12. Система: Поставить баннер-кадр коллекции",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    3360,
+    300
+   ],
+   "notes": "2400px, около 1.85:1, резать низ; имя файла версионировать",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "content": "## Коллекции Shopify: три типа сетов\n\nРаскладывает товары тегами и заводит автоматические коллекции трёх типов: комнатный сет, категория в стиле, мини-сет.\n\n**Запуск:** «Сделай коллекцию» · «Собери сет / мини-сет» · «Разложи товары по стилям в магазине»\n\n**Правила:**\n- Один товар одновременно во многих коллекциях — поэтому всё держится на тегах.\n- Мини-сет (тип 3) нельзя собрать по стилю и категории — только ручной тег set:.\n- Сначала теги на товарах, потом коллекции: пустая коллекция не видна.\n- Удалённые хозяйкой коллекции не восстанавливать молча — спрашивать.\n- Для сетов картинки в сетке всегда квадратные (image_ratio: square).\n\n_Карта логики скилла (skill: shopify-collections). Узлы-заглушки: сценарий ничего не делает, пока шаги не заменят на настоящие._",
+    "height": 420,
+    "width": 520,
+    "color": 7
+   },
+   "id": "11dee329-7d5d-43fa-923b-b9e4543ce0a3",
+   "name": "Описание",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -200
+   ]
+  }
+ ],
+ "connections": {
+  "Старт: Коллекции Shopify: три типа сетов": {
+   "main": [
+    [
+     {
+      "node": "1. Вы: Добавляет товары как есть",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1. Вы: Добавляет товары как есть": {
+   "main": [
+    [
+     {
+      "node": "2. ИИ: Определить теги по фото и названию",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2. ИИ: Определить теги по фото и названию": {
+   "main": [
+    [
+     {
+      "node": "3. ИИ: Решить, какие вещи собрать в set:",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3. ИИ: Решить, какие вещи собрать в set:": {
+   "main": [
+    [
+     {
+      "node": "4. ИИ: Выдать CSV Handle,Tags для импорта",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "4. ИИ: Выдать CSV Handle,Tags для импорта": {
+   "main": [
+    [
+     {
+      "node": "5. ИИ: Выбрать тип коллекции",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5. ИИ: Выбрать тип коллекции": {
+   "main": [
+    [
+     {
+      "node": "6. ИИ: Задать handle со слагом стиля",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6. ИИ: Задать handle со слагом стиля": {
+   "main": [
+    [
+     {
+      "node": "7. Система: Создать коллекцию через Admin API",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "7. Система: Создать коллекцию через Admin API": {
+   "main": [
+    [
+     {
+      "node": "8. Система: Опубликовать в Online Store и Shop",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "8. Система: Опубликовать в Online Store и Shop": {
+   "main": [
+    [
+     {
+      "node": "9. ИИ: Назначить шаблон темы",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "9. ИИ: Назначить шаблон темы": {
+   "main": [
+    [
+     {
+      "node": "10. ИИ: Написать описание по-английски",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "10. ИИ: Написать описание по-английски": {
+   "main": [
+    [
+     {
+      "node": "11. Тип 1 или 3 (нужен баннер)?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "11. Тип 1 или 3 (нужен баннер)?": {
+   "main": [
+    [
+     {
+      "node": "12. Система: Поставить баннер-кадр коллекции",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Коллекция готова без баннера",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {}
+}

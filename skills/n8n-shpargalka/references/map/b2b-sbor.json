@@ -1,0 +1,248 @@
+{
+ "id": "mapP4doSWKRb1VFq",
+ "name": "Карта · Партнёры, конкуренты, клиенты-коммерция (lead-engine)",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "dfc5c5ac-3ae6-4135-9382-7c4068b60473",
+   "name": "Старт: Партнёры, конкуренты, клиенты-коммерция (lead-engine)",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    300
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "704a704f-5605-43fe-9d37-ffb528010fc7",
+   "name": "1. Система: Монтажники и коммерция из 2ГИС",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    280,
+    300
+   ],
+   "notes": "klimat_montazhniki.py, kommerciya_klienty.py — бесплатно, три округа, контакты, сети",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "efd991f7-2a14-49db-ab4a-04a04115b3e8",
+   "name": "2. ИИ: Досье по сайтам",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    560,
+    300
+   ],
+   "notes": "list_dossier --no-search --no-egrul: ИНН, соцсети, наши посёлки, премиум- и масс-слова",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "0bce652a-a552-4726-97f5-214a7fe5aaca",
+   "name": "3. ИИ: Отбор партнёров",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    840,
+    300
+   ],
+   "notes": "montazhniki_elita: сегмент, профиль, партнёр?; ЕГРЮЛ строго по одному",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "43e5e937-96d5-4c12-8839-0fcfbf408e2f",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "a3d8257a-f5ed-4eb9-924c-21a6856a41a8",
+   "name": "4. Компания в нашем профиле?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    1120,
+    300
+   ],
+   "notes": "септики, газ, производители и магазины — не партнёры",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "9f209f80-8819-4aa5-9afc-1a0820098652",
+   "name": "Нет: Пометить «не наш профиль» или «производитель/магазин» (",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1260,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "bddb9499-0f0b-4a3b-9581-c0c1d6f37880",
+   "name": "5. Система: Поиск Яндекса в Chrome",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1400,
+    300
+   ],
+   "notes": "отзывы, форумы, статьи, объекты; файл в Загрузки → dossier_chrome_search",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "4160fa39-7a2a-4bc9-9b10-0690eb979836",
+   "name": "6. ИИ: Боли по оборудованию",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1680,
+    300
+   ],
+   "notes": "klimat_boli + форумы ForumHouse/Мастерград/АВОК → раздел 7а",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "15fff3e1-2583-40f7-99aa-d0f824f7e3ef",
+   "name": "7. ИИ: Документ и панель",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1960,
+    300
+   ],
+   "notes": "razdel10 → build_landing_doc, build_dashboard → GitHub и Диск, открыть",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "content": "## Партнёры, конкуренты, клиенты-коммерция (lead-engine)\n\nДля Frivent находит монтажные компании «под ключ» (постоянных покупателей), конкурентов и коммерческие объекты на территории, собирает досье и боли по нашему оборудованию, выводит в раздел 10 документа и в панель.\n\n**Запуск:** «Собери партнёров» · «Собери конкурентов» · «Коммерческие клиенты на территории» · «Собери всё по …» · «Боли по оборудованию»\n\n**Правила:**\n- Брокеры и УК посёлков — не партнёры; партнёры — все монтажники «под ключ» и подрядчики элитной недвижимости\n- Не обещать монтаж, септики, газ, свет, коробку дома\n- Юрлицо только по ИНН с сайта; 3–5 примеров глазами перед выводом\n- Только бесплатные пути: Bright Data без денег, Apify сверх тарифа\n\n_Карта логики скилла (skill: b2b-sbor). Узлы-заглушки: сценарий ничего не делает, пока шаги не заменят на настоящие._",
+    "height": 420,
+    "width": 520,
+    "color": 7
+   },
+   "id": "34b14cdd-a5c1-4f00-aaa1-549ffe07adee",
+   "name": "Описание",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -200
+   ]
+  }
+ ],
+ "connections": {
+  "Старт: Партнёры, конкуренты, клиенты-коммерция (lead-engine)": {
+   "main": [
+    [
+     {
+      "node": "1. Система: Монтажники и коммерция из 2ГИС",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1. Система: Монтажники и коммерция из 2ГИС": {
+   "main": [
+    [
+     {
+      "node": "2. ИИ: Досье по сайтам",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2. ИИ: Досье по сайтам": {
+   "main": [
+    [
+     {
+      "node": "3. ИИ: Отбор партнёров",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3. ИИ: Отбор партнёров": {
+   "main": [
+    [
+     {
+      "node": "4. Компания в нашем профиле?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "4. Компания в нашем профиле?": {
+   "main": [
+    [
+     {
+      "node": "5. Система: Поиск Яндекса в Chrome",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Пометить «не наш профиль» или «производитель/магазин» (",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5. Система: Поиск Яндекса в Chrome": {
+   "main": [
+    [
+     {
+      "node": "6. ИИ: Боли по оборудованию",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6. ИИ: Боли по оборудованию": {
+   "main": [
+    [
+     {
+      "node": "7. ИИ: Документ и панель",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {}
+}

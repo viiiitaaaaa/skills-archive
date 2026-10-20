@@ -1,0 +1,147 @@
+{
+ "id": "artmSelfTest001",
+ "name": "Самопроверка: токен и связь с Shopify",
+ "active": false,
+ "settings": {
+  "executionOrder": "v1",
+  "errorWorkflow": "artmErrAlert001"
+ },
+ "nodes": [
+  {
+   "parameters": {
+    "inputSource": "passthrough"
+   },
+   "id": "d4000000-0000-4000-8000-000000000001",
+   "name": "Запуск",
+   "type": "n8n-nodes-base.executeWorkflowTrigger",
+   "typeVersion": 1.1,
+   "position": [
+    -460,
+    0
+   ],
+   "notes": "Триггер именно такой, потому что только его понимает n8n execute --id=..."
+  },
+  {
+   "parameters": {
+    "httpMethod": "POST",
+    "path": "panel/selftest",
+    "responseMode": "lastNode",
+    "options": {}
+   },
+   "id": "d4000000-0000-4000-8000-000000000009",
+   "name": "Кнопка в панели",
+   "type": "n8n-nodes-base.webhook",
+   "typeVersion": 2,
+   "position": [
+    -460,
+    200
+   ],
+   "webhookId": "d4000000-0000-4000-8000-0000000000w9",
+   "notes": "Ручной запуск из операционной панели (panel/server.py). Работает только у включённого воркфлоу."
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "https://kmfmxn-r4.myshopify.com/admin/oauth/access_token",
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={\n  \"client_id\": \"{{ $env.SHOPIFY_CLIENT_ID }}\",\n  \"client_secret\": \"{{ $env.SHOPIFY_CLIENT_SECRET }}\",\n  \"grant_type\": \"client_credentials\"\n}",
+    "options": {}
+   },
+   "id": "d4000000-0000-4000-8000-000000000002",
+   "name": "Выпустить токен",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    -240,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "https://kmfmxn-r4.myshopify.com/admin/api/2026-07/graphql.json",
+    "sendHeaders": true,
+    "headerParameters": {
+     "parameters": [
+      {
+       "name": "X-Shopify-Access-Token",
+       "value": "={{ $json.access_token }}"
+      }
+     ]
+    },
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify({ query: '{ shop { name currencyCode } productsCount { count } }' }) }}",
+    "options": {}
+   },
+   "id": "d4000000-0000-4000-8000-000000000003",
+   "name": "Спросить магазин",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    -20,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "jsCode": "const d = $input.first().json.data;\nreturn [{ json: {\n  связь: 'есть',\n  магазин: d.shop.name,\n  валюта: d.shop.currencyCode,\n  товаров: d.productsCount.count,\n} }];"
+   },
+   "id": "d4000000-0000-4000-8000-000000000004",
+   "name": "Итог",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    200,
+    0
+   ]
+  }
+ ],
+ "connections": {
+  "Запуск": {
+   "main": [
+    [
+     {
+      "node": "Выпустить токен",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Кнопка в панели": {
+   "main": [
+    [
+     {
+      "node": "Выпустить токен",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Выпустить токен": {
+   "main": [
+    [
+     {
+      "node": "Спросить магазин",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Спросить магазин": {
+   "main": [
+    [
+     {
+      "node": "Итог",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ }
+}

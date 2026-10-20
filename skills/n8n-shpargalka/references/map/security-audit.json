@@ -1,0 +1,296 @@
+{
+ "id": "mapZ6pkjHVc3dJzL",
+ "name": "Карта · Проверка кода на уязвимости",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "8f01a79e-599b-4695-bf89-d3d05be246de",
+   "name": "Старт: Проверка кода на уязвимости",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "e2f6ead7-da66-4b67-857b-9423c2f81d4c",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "5836b8d6-8e68-4eac-bb6a-dd2899eb913f",
+   "name": "1. Просили полный аудит или отчёт?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    280,
+    300
+   ],
+   "notes": "неясно — один уточняющий вопрос",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "2ea2fb91-c3b9-4abb-8092-e7a7556e68ff",
+   "name": "Нет: точечный ответ, без файлов",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    420,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "b91c8001-c9f0-49da-8faa-3a63df46cff5",
+   "name": "2. ИИ: Настраивает запуск: цель, папка, профиль",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    560,
+    300
+   ],
+   "notes": "папка вне проекта; quick / standard / deep, бюджет",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "94f8faf8-65cd-4fbc-b4e8-1df1755bf72b",
+   "name": "3. ИИ: Разведка: карта кода и границ доверия",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    840,
+    300
+   ],
+   "notes": "RECONNAISSANCE.md, план покрытия, прошлые запуски",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "adc3c368-0ca1-43ba-b150-c63e4df4066f",
+   "name": "4. ИИ: Волны поиска уязвимостей агентами",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1120,
+    300
+   ],
+   "notes": "HUNTING.md, ATTACK-CLASSES.md, затем проверка покрытия",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "67e540d0-287a-4cfa-815e-e342edc4026d",
+   "name": "5. Система: Локальные проверки только в песочнице",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1400,
+    300
+   ],
+   "notes": "без сети, фиктивные данные; нет песочницы — не запускать",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "e8401678-07b8-4a0e-ae5f-db43976e2346",
+   "name": "6. ИИ: Каждого кандидата проверяет свежий агент",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1680,
+    300
+   ],
+   "notes": "VALIDATION-AND-REPORTING.md",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "0feb4409-bb27-4d20-b96e-12d7d1a63f2b",
+   "name": "7. Система: Записывает findings.json и валидирует",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1960,
+    300
+   ],
+   "notes": "report-schema.json, validate-findings.cjs, validate-coverage-ledger.cjs",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "69f6a977-00bf-493d-8935-ae018d9328b1",
+   "name": "8. ИИ: Независимая перепроверка итоговых записей",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2240,
+    300
+   ],
+   "notes": "свежими агентами",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "494c8645-24e4-42c7-87bf-bf8ecafe2ba0",
+   "name": "9. ИИ: Пишет отчёты REPORT и NEEDS-VALIDATION",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2520,
+    300
+   ],
+   "notes": "или помечает запуск незавершённым с причиной",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "content": "## Проверка кода на уязвимости\n\nИщет в коде реальные уязвимости с доказательствами и предлагает минимальные исправления, только локально и безопасно.\n\n**Запуск:** «Проверь этот код на безопасность» · «Сделай полный аудит безопасности репозитория» · «Это уязвимость или нет?»\n\n**Правила:**\n- Находка — только если нарушена реальная граница доверия с конкретным результатом\n- Никаких проверок на живых серверах, чужих данных и платных API\n- Серьёзность ставится только подтверждённым находкам, не «требует проверки»\n- Код проекта не менять — только описывать минимальный фикс\n- Один проход не охватывает всё — не заявлять полное покрытие\n\n_Карта логики скилла (skill: security-audit). Узлы-заглушки: сценарий ничего не делает, пока шаги не заменят на настоящие._",
+    "height": 420,
+    "width": 520,
+    "color": 7
+   },
+   "id": "f5ca04e5-32b5-45cd-8c50-3f3aa6da9bd0",
+   "name": "Описание",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -200
+   ]
+  }
+ ],
+ "connections": {
+  "Старт: Проверка кода на уязвимости": {
+   "main": [
+    [
+     {
+      "node": "1. Просили полный аудит или отчёт?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1. Просили полный аудит или отчёт?": {
+   "main": [
+    [
+     {
+      "node": "2. ИИ: Настраивает запуск: цель, папка, профиль",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: точечный ответ, без файлов",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2. ИИ: Настраивает запуск: цель, папка, профиль": {
+   "main": [
+    [
+     {
+      "node": "3. ИИ: Разведка: карта кода и границ доверия",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3. ИИ: Разведка: карта кода и границ доверия": {
+   "main": [
+    [
+     {
+      "node": "4. ИИ: Волны поиска уязвимостей агентами",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "4. ИИ: Волны поиска уязвимостей агентами": {
+   "main": [
+    [
+     {
+      "node": "5. Система: Локальные проверки только в песочнице",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5. Система: Локальные проверки только в песочнице": {
+   "main": [
+    [
+     {
+      "node": "6. ИИ: Каждого кандидата проверяет свежий агент",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6. ИИ: Каждого кандидата проверяет свежий агент": {
+   "main": [
+    [
+     {
+      "node": "7. Система: Записывает findings.json и валидирует",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "7. Система: Записывает findings.json и валидирует": {
+   "main": [
+    [
+     {
+      "node": "8. ИИ: Независимая перепроверка итоговых записей",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "8. ИИ: Независимая перепроверка итоговых записей": {
+   "main": [
+    [
+     {
+      "node": "9. ИИ: Пишет отчёты REPORT и NEEDS-VALIDATION",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {}
+}

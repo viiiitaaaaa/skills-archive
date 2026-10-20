@@ -1,0 +1,312 @@
+{
+ "id": "mapwadqMgGsQOV0t",
+ "name": "Карта · Ссылки на товары по фото",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "5c94030a-2db6-47a4-bef1-b56326008484",
+   "name": "Старт: Ссылки на товары по фото",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    300
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "33f00582-816b-4859-b322-36a7b1a35ee6",
+   "name": "1. Вы: Дать папку с отобранными фото",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    280,
+    300
+   ],
+   "notes": "После нарезки и коллекций; имя файла <Магазин>-001.png",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "5c1c5bb9-01fd-4b39-b1a8-5272d20339da",
+   "name": "2. Система: Определить магазин по имени файла",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    560,
+    300
+   ],
+   "notes": "Ссылка на магазин — из state_tabs.json",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "2ac11e1b-a5bf-4efe-be4b-60c066f73f16",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "9a28fd3d-02c1-40d6-86eb-7cd63b187f23",
+   "name": "3. Ссылка на магазин нашлась?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    840,
+    300
+   ],
+   "notes": "",
+   "notesInFlow": false
+  },
+  {
+   "parameters": {},
+   "id": "e570f2ae-f768-4df2-b24f-36afe1eed57a",
+   "name": "Нет: Строка: «ССЫЛКА НА МАГАЗИН НЕ НАЙДЕНА»",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    980,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "3e38ec05-0c54-43ca-8028-8a7f89298db9",
+   "name": "4. Система: Обойти каталог магазина в Dolphin",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1120,
+    300
+   ],
+   "notes": "match_folder.py из dolphin_anty; каждый магазин один раз, листать кликом",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "45c07c9a-951b-4e91-b903-c433d3e2cec1",
+   "name": "5. Система: Сравнить фото с превью карточек",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1400,
+    300
+   ],
+   "notes": "По phash — «отпечатку» картинки, считается расстояние",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "91f70069-8d10-4405-b564-ced0a2b73fbf",
+   "name": "6. Система: Записать Excel после каждого магазина",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1680,
+    300
+   ],
+   "notes": "«ссылки на товары.xlsx» в той же папке, падение не обнуляет",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "e1f40d6a-455a-4b3e-94a7-ecf4f64a456a",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "220d7885-7809-4ce9-8c80-d9426e5f0739",
+   "name": "7. Расстояние до 8?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    1960,
+    300
+   ],
+   "notes": "0–2 то же фото, до 8 тот же товар",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "32b93e3d-331e-4a10-afca-1369658908d1",
+   "name": "Нет: 9–16 глазами, >16 — нет товара",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2100,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "613bc9c9-ccc2-4880-804e-6e2ea4c7a53b",
+   "name": "8. Вы: Получить Excel со ссылками",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2240,
+    300
+   ],
+   "notes": "Магазин, файл, ссылка, расстояние, уверенность, название",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "content": "## Ссылки на товары по фото\n\nПо папке фото товаров находит их ссылки на AliExpress, сравнивая с каталогом магазина, и выдаёт Excel.\n\n**Запуск:** «Найди ссылки на товары» · «Сделай эксель со ссылками» · «По каким ссылкам эти картинки»\n\n**Правила:**\n- Запускать из папки dolphin_anty, с python -u — иначе лог пуст до конца.\n- &page=N каталог не листает — только клик по пагинатору, иначе ссылки мусорные.\n- Только aliexpress.com; с американским прокси бывает aliexpress.us — ID товара тот же.\n- Цепочка: cut-products → style-collections → этот скилл → dsers-import.\n\n_Карта логики скилла (skill: product-links). Узлы-заглушки: сценарий ничего не делает, пока шаги не заменят на настоящие._",
+    "height": 420,
+    "width": 520,
+    "color": 7
+   },
+   "id": "10094b2d-a4a4-4003-8647-a7d71bf9fa0d",
+   "name": "Описание",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -200
+   ]
+  }
+ ],
+ "connections": {
+  "Старт: Ссылки на товары по фото": {
+   "main": [
+    [
+     {
+      "node": "1. Вы: Дать папку с отобранными фото",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1. Вы: Дать папку с отобранными фото": {
+   "main": [
+    [
+     {
+      "node": "2. Система: Определить магазин по имени файла",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2. Система: Определить магазин по имени файла": {
+   "main": [
+    [
+     {
+      "node": "3. Ссылка на магазин нашлась?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3. Ссылка на магазин нашлась?": {
+   "main": [
+    [
+     {
+      "node": "4. Система: Обойти каталог магазина в Dolphin",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Строка: «ССЫЛКА НА МАГАЗИН НЕ НАЙДЕНА»",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "4. Система: Обойти каталог магазина в Dolphin": {
+   "main": [
+    [
+     {
+      "node": "5. Система: Сравнить фото с превью карточек",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5. Система: Сравнить фото с превью карточек": {
+   "main": [
+    [
+     {
+      "node": "6. Система: Записать Excel после каждого магазина",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6. Система: Записать Excel после каждого магазина": {
+   "main": [
+    [
+     {
+      "node": "7. Расстояние до 8?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "7. Расстояние до 8?": {
+   "main": [
+    [
+     {
+      "node": "8. Вы: Получить Excel со ссылками",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: 9–16 глазами, >16 — нет товара",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {}
+}

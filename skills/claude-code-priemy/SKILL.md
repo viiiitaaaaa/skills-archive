@@ -630,3 +630,9 @@ Shopify-скилла отправляет событие на `https://shopify.d
 **Из книг, новые книги — первое прочтение (09.10.2026)** — ещё 36 приёмов по книгам в `references/iz_knig_novye.md`; открывать при задаче по теме скилла.
 
 **Из книг, книги 13.10 — первое прочтение (09.10.2026)** — ещё 143 приёмов по книгам в `references/iz_knig_novye13.md`; открывать при задаче по теме скилла.
+
+## Co-Intelligence (Mollick) — 19.10.2026
+Правила — `references/co_intelligence_pravila.md`; карточки — `references/karty/co_intelligence/`. Бэкап: `knigi_kupleno\sistemaekap_skillov_cointel`. Коротко (до ~12 строк), метка «из книги / не из книги», честное «не знаю», 🟢🟡🔴 до отправки.
+
+## Build an AI Agent From Scratch — 19.10.2026
+Правила — `references/build_ai_agent_pravila.md`; карточки — `references/karty/build_ai_agent/`. Бэкап: `knigi_kupleno\sistemaekap_skillov_agent`.

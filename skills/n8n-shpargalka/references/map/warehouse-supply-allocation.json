@@ -1,0 +1,384 @@
+{
+ "id": "mapmjaXTWtjfu5D4",
+ "name": "Карта · Раскладка поставки по складам",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "0bcd111f-735f-4af9-955a-852e889d06b5",
+   "name": "Старт: Раскладка поставки по складам",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    300
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "5c74c1f2-d564-49c0-ae1f-27a740673780",
+   "name": "1. Вы: Даёт лист Export и лист поставки",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    280,
+    300
+   ],
+   "notes": "спрос по складам + количество к отгрузке по артикулам",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "021ab0a3-af61-4068-8418-e0d215e8f79b",
+   "name": "2. ИИ: Сопоставляет по артикулу продавца, не по названию",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    560,
+    300
+   ],
+   "notes": "строку «итого» без артикула исключает",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "427fe734-e5f9-489d-95bd-0969a39f3445",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "e933b368-928b-4abd-bb8c-d7e474c6baf5",
+   "name": "3. Сумма поставки совпадает с названной?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    840,
+    300
+   ],
+   "notes": "проверка до любых расчётов",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "a967c8bd-4763-496f-a14d-d981080a9e20",
+   "name": "Нет: выясняет расхождение",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    980,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "94530a20-af28-48fa-bd89-8b1a0a9fca12",
+   "name": "4. Система: Замораживает формулы со ссылками на чужие файлы",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1120,
+    300
+   ],
+   "notes": "подставляет последние значения перед сохранением",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "87cbda1f-4798-4e4a-b809-f8b687737ef8",
+   "name": "5. Вы: Подтверждает правила раскладки",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1400,
+    300
+   ],
+   "notes": "порог на артикул или на всю поставку, N, шаг округления, объединения складов",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "05b83a6e-72ac-4288-8715-d2030f9721e7",
+   "name": "6. Вы: Проверяет вручную 1–2 примера артикулов",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1680,
+    300
+   ],
+   "notes": "до запуска на весь лист",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "48cc155a-85cc-4ce9-800a-203dea08f1ba",
+   "name": "7. Система: Считает раскладку скриптом allocate.py",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1960,
+    300
+   ],
+   "notes": "порог по всей поставке, округление наибольшим остатком",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "41bdf44f-8a9d-48d6-a802-98a9cf6cdc27",
+   "name": "8. ИИ: Проверяет результат построчно",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2240,
+    300
+   ],
+   "notes": "сумма по складам = количество; нет складов ниже минимума",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "c7fea0c7-8f6f-424d-a8f3-0865b0d916c6",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "6dc7e76b-3901-435a-86f8-7ca0df12d426",
+   "name": "9. Нужно внести в заявку Ozon?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    2520,
+    300
+   ],
+   "notes": "seller.ozon.ru, по ozon-browser-workflow.md",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "13ff9042-2106-4cd1-9aaa-9e3e70f46fb2",
+   "name": "Нет: готово, отдаёт таблицу",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2660,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "c8a75e57-b1d1-49c5-bd1b-19ba0d67ed48",
+   "name": "10. Система: Вносит количества в заявку через браузер",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2800,
+    300
+   ],
+   "notes": "новые артикулы сначала ищет в каталоге Ozon",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "900ac359-7267-4b74-a4ea-3493d8d9e0b9",
+   "name": "11. ИИ: Сообщает, каким артикулам нужна карточка",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    3080,
+    300
+   ],
+   "notes": "если товара нет в каталоге Ozon",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "content": "## Раскладка поставки по складам\n\nДелит поставку по складам/кластерам WB или Ozon пропорционально спросу с порогом минимума на склад.\n\n**Запуск:** «Распредели поставку по складам» · «Раскладка по кластерам» · «Сколько отгружать на каждый склад»\n\n**Правила:**\n- Какой порог — на артикул или на всю поставку — спросить, не угадывать\n- Обычно нужен порог по всей поставке: склад убирается, если его итог меньше N\n- Доля убранного склада перераспределяется между оставшимися\n- Проверять суммы по каждой строке, а не только общий итог\n- Артикул без истории спроса часто не создан в Ozon — не биться с интерфейсом\n\n_Карта логики скилла (skill: warehouse-supply-allocation). Узлы-заглушки: сценарий ничего не делает, пока шаги не заменят на настоящие._",
+    "height": 420,
+    "width": 520,
+    "color": 7
+   },
+   "id": "679ab063-0eed-4b9a-abf4-7f08f61e3c43",
+   "name": "Описание",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -200
+   ]
+  }
+ ],
+ "connections": {
+  "Старт: Раскладка поставки по складам": {
+   "main": [
+    [
+     {
+      "node": "1. Вы: Даёт лист Export и лист поставки",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1. Вы: Даёт лист Export и лист поставки": {
+   "main": [
+    [
+     {
+      "node": "2. ИИ: Сопоставляет по артикулу продавца, не по названию",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2. ИИ: Сопоставляет по артикулу продавца, не по названию": {
+   "main": [
+    [
+     {
+      "node": "3. Сумма поставки совпадает с названной?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3. Сумма поставки совпадает с названной?": {
+   "main": [
+    [
+     {
+      "node": "4. Система: Замораживает формулы со ссылками на чужие файлы",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: выясняет расхождение",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "4. Система: Замораживает формулы со ссылками на чужие файлы": {
+   "main": [
+    [
+     {
+      "node": "5. Вы: Подтверждает правила раскладки",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5. Вы: Подтверждает правила раскладки": {
+   "main": [
+    [
+     {
+      "node": "6. Вы: Проверяет вручную 1–2 примера артикулов",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6. Вы: Проверяет вручную 1–2 примера артикулов": {
+   "main": [
+    [
+     {
+      "node": "7. Система: Считает раскладку скриптом allocate.py",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "7. Система: Считает раскладку скриптом allocate.py": {
+   "main": [
+    [
+     {
+      "node": "8. ИИ: Проверяет результат построчно",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "8. ИИ: Проверяет результат построчно": {
+   "main": [
+    [
+     {
+      "node": "9. Нужно внести в заявку Ozon?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "9. Нужно внести в заявку Ozon?": {
+   "main": [
+    [
+     {
+      "node": "10. Система: Вносит количества в заявку через браузер",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: готово, отдаёт таблицу",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "10. Система: Вносит количества в заявку через браузер": {
+   "main": [
+    [
+     {
+      "node": "11. ИИ: Сообщает, каким артикулам нужна карточка",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {}
+}

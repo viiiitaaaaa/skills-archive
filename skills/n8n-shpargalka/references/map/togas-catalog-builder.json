@@ -1,0 +1,360 @@
+{
+ "id": "mapGE1wSLjweVPTz",
+ "name": "Карта · Каталог коллекций из выгрузок 1688",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "a589b90f-aecd-473e-80b7-e11f7e2f2cce",
+   "name": "Старт: Каталог коллекций из выгрузок 1688",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    300
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "def3c6d9-7c8b-40d5-8011-d253141138ec",
+   "name": "1. Вы: Загрузить выгрузки 采购助手",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    280,
+    300
+   ],
+   "notes": "Файлы «商品列表-1688采购助手*.xlsx»",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "3a0466f6-6794-4224-a4a4-25bb8a6bb811",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "9e6ea648-ac94-4b02-acd7-40e5b0ba7fb9",
+   "name": "2. Внутри файла есть картинки?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    560,
+    300
+   ],
+   "notes": "Папка xl/media внутри xlsx",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "7de34810-81f8-40c1-aa39-6fa76d29270f",
+   "name": "Нет: Стоп: попросить перевыгрузить",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    700,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "ef1aed83-adaa-4fef-89ac-499d9473d2bc",
+   "name": "3. Система: Извлечь фото и промерить тон",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    840,
+    300
+   ],
+   "notes": "Светлота, теплота, насыщенность, «баннерность» по центру кадра",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "9754c685-95ce-4910-b55b-71a56cb3c5c3",
+   "name": "4. Система: Отсеять мусор",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1120,
+    300
+   ],
+   "notes": "Стоп-слова в названии, яркие принты, рекламные коллажи",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "adebc822-acd9-42c7-94dd-3d46893b3049",
+   "name": "5. ИИ: Набрать коллекции по тону",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1400,
+    300
+   ],
+   "notes": "Один материал + один тон: Обсидиан, Травертин, Каррара…",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "5e487511-5de6-4df1-a703-cd565bd616ab",
+   "name": "6. ИИ: Проверить контактным листом глазами",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    1680,
+    300
+   ],
+   "notes": "3–5 итераций фильтров — норма",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict"
+     },
+     "conditions": [
+      {
+       "id": "74345747-93fb-4188-b9ae-252378b76de4",
+       "leftValue": true,
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "id": "011fb023-dbb3-4a22-a7e2-d9b715a414cd",
+   "name": "7. В коллекции 7+ позиций?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    1960,
+    300
+   ],
+   "notes": "",
+   "notesInFlow": false
+  },
+  {
+   "parameters": {},
+   "id": "99adbe8c-3f37-40dc-8c89-6551efd6b198",
+   "name": "Нет: Предложить выбор или убрать коллекцию",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2100,
+    520
+   ]
+  },
+  {
+   "parameters": {},
+   "id": "07a15ab5-9f0e-47a5-8d44-e61b52492c45",
+   "name": "8. Система: Собрать xlsx из трёх листов",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2240,
+    300
+   ],
+   "notes": "Параметры, Ассортимент с фото 110 px, Коллекции; только формулы",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "63365772-3ab9-428b-b4ea-487416e6ceac",
+   "name": "9. Система: Пересчитать формулы",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2520,
+    300
+   ],
+   "notes": "recalc.py — ошибок должно быть ноль",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {},
+   "id": "cc7db39a-6392-485a-9ba3-fdfc1f909cc4",
+   "name": "10. ИИ: Назвать риски",
+   "type": "n8n-nodes-base.noOp",
+   "typeVersion": 1,
+   "position": [
+    2800,
+    300
+   ],
+   "notes": "Регионы отгрузки, габариты, что не влезло и почему",
+   "notesInFlow": true
+  },
+  {
+   "parameters": {
+    "content": "## Каталог коллекций из выгрузок 1688\n\nРаскладывает товары из выгрузок 1688采购助手 по тональным коллекциям и выдаёт Excel с фото, закупкой, розницей и маржой.\n\n**Запуск:** «Собери каталог из выгрузки 1688» · «Разложи товары по коллекциям» · «Подбери позиции в тон, под Togas»\n\n**Правила:**\n- Названию товара на 1688 не верить — тон только по фото.\n- Фото брать из самого файла, а не из сети — CDN Alibaba отдаёт 403.\n- Фото вставлять настоящими картинками, не формулой =IMAGE().\n- Меньше 7 подходящих — не ослаблять фильтр, а честно сказать.\n- Названия по-русски с итальянским именем в «ёлочках»; строки заливать цветом коллекции.\n\n_Карта логики скилла (skill: togas-catalog-builder). Узлы-заглушки: сценарий ничего не делает, пока шаги не заменят на настоящие._",
+    "height": 420,
+    "width": 520,
+    "color": 7
+   },
+   "id": "95e43963-252a-4664-b72d-15b5b36af715",
+   "name": "Описание",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -200
+   ]
+  }
+ ],
+ "connections": {
+  "Старт: Каталог коллекций из выгрузок 1688": {
+   "main": [
+    [
+     {
+      "node": "1. Вы: Загрузить выгрузки 采购助手",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1. Вы: Загрузить выгрузки 采购助手": {
+   "main": [
+    [
+     {
+      "node": "2. Внутри файла есть картинки?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2. Внутри файла есть картинки?": {
+   "main": [
+    [
+     {
+      "node": "3. Система: Извлечь фото и промерить тон",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Стоп: попросить перевыгрузить",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3. Система: Извлечь фото и промерить тон": {
+   "main": [
+    [
+     {
+      "node": "4. Система: Отсеять мусор",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "4. Система: Отсеять мусор": {
+   "main": [
+    [
+     {
+      "node": "5. ИИ: Набрать коллекции по тону",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5. ИИ: Набрать коллекции по тону": {
+   "main": [
+    [
+     {
+      "node": "6. ИИ: Проверить контактным листом глазами",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6. ИИ: Проверить контактным листом глазами": {
+   "main": [
+    [
+     {
+      "node": "7. В коллекции 7+ позиций?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "7. В коллекции 7+ позиций?": {
+   "main": [
+    [
+     {
+      "node": "8. Система: Собрать xlsx из трёх листов",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Нет: Предложить выбор или убрать коллекцию",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "8. Система: Собрать xlsx из трёх листов": {
+   "main": [
+    [
+     {
+      "node": "9. Система: Пересчитать формулы",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "9. Система: Пересчитать формулы": {
+   "main": [
+    [
+     {
+      "node": "10. ИИ: Назвать риски",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {}
+}
