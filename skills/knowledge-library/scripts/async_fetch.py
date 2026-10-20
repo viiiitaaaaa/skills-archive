@@ -60,12 +60,15 @@ async def fetch_all(urls, limit=5, retries=3, timeout=20, progress=True):
     async with aiohttp.ClientSession(headers={"User-Agent": UA}) as session:
         async def wrapped(u):
             nonlocal done
-            r = await fetch_one(session, sem, u, retries, timeout)
+            try:
+                r = await fetch_one(session, sem, u, retries, timeout)
+            except Exception as e:  # любая неожиданная ошибка одного адреса не роняет весь сбор
+                r = {"url": u, "status": None, "text": None, "error": f"{type(e).__name__}: {e}"[:200], "tries": 1}
             done += 1
             if progress:
                 print(f"  {done} из {len(urls)}  [{r['status'] or 'ошибка'}] {u}", file=sys.stderr)
             return r
-        rows = await asyncio.gather(*(wrapped(u) for u in urls))
+        rows = await asyncio.gather(*(wrapped(u) for u in urls))  # ok-proverka: ошибки ловит wrapped
     if progress:
         print(f"Готово за {time.time() - t0:.1f} с", file=sys.stderr)
     return rows
