@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "rules": [
+    {
+      "id": "AP-1",
+      "category": "prefix-stability",
+      "default_severity": "high",
+      "summary": "Volatile prefix.",
+      "search": "datetime, uuid, request_id, trace_id, user, tenant, cwd.",
+      "fix": "Move volatile facts late.",
+      "avoid": "Masking drift with cache keys.",
+      "validation": "Prefix hash stable."
+    },
+    {
+      "id": "AP-2",
+      "category": "tool-schema-stability",
+      "default_severity": "high",
+      "summary": "Tool/schema drift.",
+      "search": "unsorted tools, json.dumps, dynamic response_format.",
+      "fix": "Sort schemas/tools; remove consts.",
+      "avoid": "Tenant/time/request IDs in schemas.",
+      "validation": "Canonical hash stable."
+    },
+    {
+      "id": "AP-3",
+      "category": "rendering-stability",
+      "default_severity": "medium",
+      "summary": "Render drift.",
+      "search": "duplicate templates, strip drift, signed URLs.",
+      "fix": "Use one renderer; pin media settings.",
+      "avoid": "Visible-text-only diff.",
+      "validation": "Provider payloads match."
+    },
+    {
+      "id": "AP-4",
+      "category": "agent-tools",
+      "default_severity": "high",
+      "summary": "Dynamic agent tools.",
+      "search": "get_active_tools, listToolsets, prepareStep activeTools.",
+      "fix": "After the global Applicability Gate and economics check, use a stable full catalog plus an endpoint/version-verified allow-list; otherwise use stable bundles/tool search/deferred loading or a smaller stable catalog.",
+      "avoid": "Mutating activeTools without prefix/economics measurement; assuming Responses support on Chat Completions or wrappers; ignoring SDK warnings.",
+      "validation": "Compare tools/prefix hashes, final wire tool_choice, warnings, provider cache usage, and cached/uncached economics."
+    },
+    {
+      "id": "AP-5",
+      "category": "history-stability",
+      "default_severity": "high",
+      "summary": "Context management mutates anchors.",
+      "search": "summarize, compact, truncate, pop, system edits.",
+      "fix": "Preserve system/tools/schemas/first turns.",
+      "avoid": "Silent anchor loss.",
+      "validation": "Anchor survives."
+    },
+    {
+      "id": "AP-6",
+      "category": "framework-injection",
+      "default_severity": "medium",
+      "summary": "Mode metadata drift.",
+      "search": "mode swaps, run_id, platform, cwd, date.",
+      "fix": "Stable base; mode facts late.",
+      "avoid": "Mid-session system/tool replacement.",
+      "validation": "Mode hashes match."
+    },
+    {
+      "id": "AP-7",
+      "category": "routing-locality",
+      "default_severity": "high",
+      "summary": "Proposed rollout or open measured outcome gap with an unmeasured routing outcome; round robin/prefix-aware policies are candidates, not defects.",
+      "search": "round-robin, Kubernetes Service, replicas, fallback, openrouter/auto.",
+      "fix": "Compare candidate with current production via the Routing Outcome Gate in references/mechanics.md and matched-workload comparison.",
+      "avoid": "Hit-only success, unmeasured pinning, or locality-driven trust/isolation expansion.",
+      "validation": "Objective/SLO; p95/p99 latency, capacity at SLO, queue/replica/KV skew, errors/retries, rewarm."
+    },
+    {
+      "id": "AP-8",
+      "category": "cold-prefix-fanout",
+      "default_severity": "medium",
+      "summary": "Cold fan-out.",
+      "search": "asyncio.gather, Promise.all, ThreadPoolExecutor.",
+      "fix": "No-op warm-up with telemetry.",
+      "avoid": "Warming mutating prompts/tools.",
+      "validation": "Warm-up telemetry."
+    },
+    {
+      "id": "AP-9",
+      "category": "cache-lifetime",
+      "default_severity": "medium",
+      "summary": "TTL/KV mismatch.",
+      "search": "sparse traffic, many prefixes, high max_model_len.",
+      "fix": "Match TTL/KV to cadence.",
+      "avoid": "Blindly raising retention/KV.",
+      "validation": "Cadence/KV/TTFT correlate."
+    },
+    {
+      "id": "AP-9b",
+      "category": "cache-isolation",
+      "default_severity": "medium",
+      "summary": "Isolation fragmentation.",
+      "search": "cache_salt, per-user keys, tenant routing.",
+      "fix": "Use coarsest safe trust boundary.",
+      "avoid": "Weakening privacy or ZDR.",
+      "validation": "Boundary/loss documented."
+    },
+    {
+      "id": "AP-10",
+      "category": "experiment-fragmentation",
+      "default_severity": "medium",
+      "summary": "Experiment fragmentation.",
+      "search": "variant, experiment, feature_flag, provider.order.",
+      "fix": "Move differences late or bucket.",
+      "avoid": "Blending experiment buckets.",
+      "validation": "Metrics bucketed."
+    },
+    {
+      "id": "AP-11",
+      "category": "explicit-cache-policy",
+      "default_severity": "high",
+      "summary": "Invalid GPT-5.6 cache controls.",
+      "search": "prompt_cache_options, prompt_cache_breakpoint, prompt_cache_retention.",
+      "fix": "Use the documented mode, TTL, and supported content-block markers.",
+      "avoid": "Applying direct OpenAI rules to provider wrappers.",
+      "validation": "Lint the request and verify cache read/write telemetry."
+    },
+    {
+      "id": "AP-12",
+      "category": "continuity-state",
+      "default_severity": "medium",
+      "summary": "Conversation or reasoning continuity is discarded.",
+      "search": "previous_interaction_id, previous_response_id, session_id, clear_thinking.",
+      "fix": "Preserve the documented opaque handle within one intended conversation.",
+      "avoid": "Reusing raw IDs across tenants or logging them in plaintext.",
+      "validation": "Compare keyed handle hash, cache fields, and TTFT across continuation steps."
+    },
+    {
+      "id": "AP-13",
+      "category": "engine-config-compatibility",
+      "default_severity": "medium",
+      "summary": "vLLM retention advice ignores runtime capability or KV-group geometry.",
+      "search": "prefix_cache_retention_interval, VLLM_PREFIX_CACHE_RETENTION_INTERVAL, missing vllm version/SHA, unknown SlidingWindowSpec or MambaSpec topology.",
+      "fix": "Establish the runtime version/SHA and feature presence, inspect every KV group and scheduler block size, verify the shared tier, then resolve the effective interval.",
+      "avoid": "Guessing a version floor or treating an env name, model architecture, or full-attention group as proof that retention applies.",
+      "validation": "Startup is accepted; resolved config and per-group behavior match the runtime matrix; hit/TTFT are compared with deployment version and route."
+    },
+    {
+      "id": "AP-14",
+      "category": "cache-identity-compatibility",
+      "default_severity": "medium",
+      "summary": "Cross-process hash compatibility is conflated with cache isolation.",
+      "search": "prefix_caching_hash_algo, PYTHONHASHSEED, seed mismatch, mixed vLLM versions, shared FS/OBJ/P2P KV tier, missing cache_salt boundary.",
+      "fix": "Within an authorized sharing group, align algorithm, effective seed, serialization/runtime, and all cache-key inputs; retain a separate cache_salt boundary.",
+      "avoid": "Logging raw seed, storing or transmitting a shared xxhash seed outside protected secret configuration, using a predictable non-crypto seed, using PYTHONHASHSEED as tenant isolation, or replacing cache_salt with a hash seed.",
+      "validation": "For P2P, verify handshake and reject-on-mismatch plus config fingerprint/block length and a read; for FS/OBJ, independently verify config and a real cross-process read without exposing the seed."
+    },
+    {
+      "id": "AP-15",
+      "category": "effort-continuity",
+      "default_severity": "medium",
+      "summary": "Effort or reasoning configuration changes between requests of one cached conversation.",
+      "search": "reasoning.effort, reasoning_effort, output_config.effort, thinking budget_tokens, configuration_update, role system output_config, per-request effort routing.",
+      "fix": "Hold request-level effort/thinking constant inside a cached conversation; on standard single-agent gpt-6/gpt-6-astra/gpt-6-sol/gpt-6-luna/gpt-6.1-sol append a configuration_update input item; on Claude Fable 5.1/Mythos 5.1/Opus 5/claude-opus-5-5/claude-sonnet-5-5 append an effort-only role system message with the mid-conversation-output-config beta header; on claude-sonnet-5-5 vary effort only under adaptive thinking.",
+      "avoid": "Toggling top-level effort per step, using configuration_update in pro mode or on other models, sending per-message output_config to models without per-message effort, changing per-message effort under claude-sonnet-5-5 thinking between_tools, or calling an effort change free without cache-read telemetry.",
+      "validation": "Cache read fields hold on the turn after the change; usage buckets split by effort level and change type."
+    }
+  ]
+}

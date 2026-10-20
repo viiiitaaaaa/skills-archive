@@ -1,0 +1,201 @@
+# Prompt Cache Observability
+
+Use for dashboards, alerts, traces, release guardrails, and CI smoke tests.
+
+## Minimum Telemetry Contract
+
+- Provider fields: `cached_tokens`, `cache_read_tokens`, `cache_read_input_tokens`, `cache_creation_input_tokens`, `cache_write_tokens`, or provider equivalents.
+- Token totals: input, output, cache read, cache write/create, total effective denominator.
+- Latency: p50/p95/p99 TTFT or prefill, final/end-to-end latency, output/decode time, tool time.
+- Dimensions: route, prompt family, prompt version, model, provider, region, replica, SDK version, deploy SHA.
+- Hashes: `prefix_hash`, `first_256_token_hash`, tool-name hash, schema hash, stable document hash.
+- Router/KV/workload: actual routed provider/model/replica, hit/query, KV pressure/eviction, arrival/concurrency, throughput/capacity at SLO, queue, per-replica request/token and KV skew; use the `Routing Outcome Gate` in `references/mechanics.md`.
+- Reliability/lifecycle: declared SLO, error/retry/fallback rates, restart/scale/failover, rewarm loss/recovery time.
+- Continuity: keyed hash and kind of cache/session/conversation handle (for example `prompt_cache_key`, `session_id`, `previous_interaction_id`, or `previous_response_id`), never the raw value.
+
+Do not log raw prompts. Use keyed hashes for tenant/user-derived or low-entropy prompt content.
+
+### Self-hosted vLLM dimensions
+
+For engine KV, external KV, and shared-tier audits, add these dimensions to
+events, traces, or deployment evidence as applicable:
+
+```text
+engine_version
+engine_commit
+image_digest
+retention_feature_present
+retention_effective_value
+attention_geometry
+scheduler_block_size
+hash_algorithm
+seed_compatibility_status
+pythonhashseed_present
+pythonhashseed_match_status
+kv_tier_type
+cache_salt_boundary_fingerprint
+extra_key_schema_status
+lora_key_path_status
+lora_identity_status
+lora_identity_fingerprint
+salt_adapter_collision_status
+```
+
+Raw seed is prohibited. `seed_compatibility_status` and `pythonhashseed_match_status` use safe values
+such as `matched`, `mismatched`, and `unknown`; `pythonhashseed_present` is a
+boolean. For `xxhash`/`xxhash_cbor`, the effective seed
+is a protected secret, so expose only compatibility status, boolean presence,
+or a keyed fingerprint. A fixed cryptographic default after the verified
+upstream change is public and is not a secret, but runtime/handshake logs still
+need a separate redaction review.
+
+`cache_salt_boundary_fingerprint` is a keyed, non-reversible fingerprint. It
+must not contain raw salt, tenant ID, or user identity, and it is primarily a
+trace/log dimension. Metrics require bounded cardinality; never create an
+unbounded metric cardinality label per tenant or salt. The
+fingerprint records the isolation boundary and does not replace `cache_salt`.
+
+For LoRA-serving vLLM, record the extra-key and adapter identity evidence from
+the `cache_salt` and LoRA extra-key namespace section of
+`references/vllm.md` next to `engine_version` and `engine_commit`:
+
+- `extra_key_schema_status`: `source_tagged`, `untagged`, or `unknown`, from
+  source at the deployed SHA, never from KV event shape;
+- `lora_key_path_status`: `included`, `excluded`, or `unknown`, whether the
+  deployed LoRA block-hash key contains the adapter path, from source at the
+  deployed SHA; a `source_tagged` build can still key LoRA by name only;
+- `lora_identity_status`: `matched`, `mismatched`, or `unknown` for adapter
+  name plus path across workers sharing a tier;
+- `lora_identity_fingerprint`: keyed fingerprint of name and path, for traces
+  and deployment evidence only;
+- `salt_adapter_collision_status`: `not_applicable` (tagged schema),
+  `excluded` (server-derived salts cannot equal an adapter name), `open`, or
+  `unknown`, from passive source/config review, not a cross-tenant probe.
+
+Keep the statuses as bounded metric labels; never use a fingerprint, salt,
+adapter path, or tenant ID as a metric label. KV event `extra_keys` can carry
+bare salt values and adapter names, so redact event payloads before logging.
+
+## Usage Evidence Contract
+
+`analyze_usage_logs.py --jsonl-normalized` emits one canonical event per record. Four fields decide whether a cache ratio is decision-grade:
+
+```json
+{
+  "schema_version": 1,
+  "source_fields": {
+    "input_tokens": "usage.prompt_tokens",
+    "cached_tokens": "usage.prompt_tokens_details.cached_tokens",
+    "cache_read_input_tokens": null,
+    "cache_creation_input_tokens": null,
+    "cache_write_tokens": null,
+    "output_tokens": "usage.completion_tokens"
+  },
+  "accounting_semantics": "inclusive",
+  "denominator_status": "valid",
+  "warnings": []
+}
+```
+
+- `schema_version` versions this normalized event contract, not the provider's raw schema.
+- `source_fields` names which raw field produced each canonical value, or `null` when the value is absent or derived.
+- `accounting_semantics` is `inclusive`, `additive`, or `ambiguous`.
+- `denominator_status` is `valid`, `ambiguous` (unresolved wrapper semantics, or no measured input), or `invalid` (an adapter invariant is contradicted, for example cached input above an inclusive input total). The aggregate takes the worst observed status: `invalid > ambiguous > valid`.
+- `warnings` carries the stable normalization warning codes; it is the only warning list.
+- Labeled OpenAI-compatible vendors (`provider` set to `moonshot`, `deepseek`, `qwen`, `minimax`, `xai`, `mistral`, `tencent`, `xiaomi`, `upstage`, `zai`, `yandex`, or their aliases) resolve to `inclusive` for OpenAI-shaped usage that carries a cached-token field (`cached_tokens`, `prompt_cache_hit_tokens`, `cached_token`, `cached_prompt_text_tokens`) and to `additive` when the record carries Anthropic-shaped `cache_read_input_tokens`/`cache_creation_input_tokens` without `prompt_tokens`. The label is the opt-in; unlabeled wrapper usage, and labeled usage with no cached-token field, stays `ambiguous`.
+
+Only a `valid` denominator supports a savings or hit-rate claim. Report `ambiguous` and `invalid` ratios as non-decision-grade evidence and fix accounting first.
+
+A `valid` denominator is arithmetic validity, not numerator provenance. For
+vLLM prefill/decode disaggregation, D-reported `cached_tokens` can count KV
+transferred from P rather than P-side APC hits, and absent
+`prompt_tokens_details` is unobserved, not zero; establish provenance per
+[`references/vllm.md` P/D cached-token accounting](vllm.md#pd-cached-token-accounting)
+before treating the ratio as hits, savings, latency, or rollout evidence.
+
+## Provider aggregate evidence boundary
+
+Provider aggregates are evidence objects, not request events. Record the source,
+scope, granularity, filters, and definition status before calculating a ratio:
+
+```text
+evidence_source: provider_dashboard_aggregate | provider_usage_api_aggregate | request_level_provider_usage | gateway_or_replica_telemetry | rendered_prefix_evidence
+provider: <provider>
+time_window: <UTC interval>
+granularity: <bucket or request>
+filters: <grouping and filters>
+displayed_metric: <metric>
+displayed_value: <value>
+evidence_definition_status: provider_documented | unknown
+evidence_denominator_status: provider_documented | unknown
+evidence_accounting_semantics: inclusive | additive | provider_defined | unknown
+request_correlation: present | absent
+route_correlation: present | absent
+```
+
+Treat the Prompt Caching dashboard as `provider_dashboard_aggregate`. Unless
+the provider documents the formula and denominator, its evidence definition,
+denominator, and accounting statuses remain `unknown`. It can confirm a trend
+but cannot establish a request-level or route-level cause.
+
+Treat the documented OpenAI Organization Usage API completion fields as
+`provider_usage_api_aggregate`. Preserve its time buckets, grouping, filters,
+and bucket boundaries. For the OpenAI Organization Usage API, `input_tokens` is
+inclusive of cached and cache-write tokens. `input_uncached_tokens` is uncached
+input excluding cache-write tokens; it is neither cache reads nor writes. The
+OpenAI prompt-caching guide documents a request-level read/write/neither partition.
+For the OpenAI Organization Usage API, do not add breakdowns onto inclusive
+`input_tokens` or manufacture a
+denominator/residual from missing optional fields or mismatched
+bucket/group/filter scope. The documented mixed decomposition uses
+provider-defined accounting, not permission to sum fields.
+For documented OpenAI Organization Usage API fields set `evidence_definition_status=provider_documented`,
+`evidence_denominator_status=unknown` unless the provider documents the
+denominator, and
+`evidence_accounting_semantics=provider_defined`. Optional or missing fields
+remain absent/unknown; never zero. These semantics do not make a dashboard
+ratio equivalent to a Usage API ratio.
+
+For the OpenAI Organization Usage API, an auditor-defined ratio is not
+provider-documented or decision-grade aggregate evidence without scope proof.
+
+For an additive provider aggregate, such as an Anthropic or Bedrock reference,
+use the documented component sum only when the provider reference documents
+additive fields and the full total/denominator at matching bucket/group/filter
+scopes. That documented sum is the provider-defined denominator: record
+`evidence_accounting_semantics=additive` and
+`evidence_denominator_status=provider_documented`. If the provider does not
+document the full denominator or mismatched bucket/group/filter scopes occur,
+keep the denominator unknown. Do not apply this additive rule to OpenAI's
+inclusive `input_tokens`.
+
+Keep dashboard aggregate, Usage API aggregate, request-level provider usage,
+and gateway/replica telemetry in separate series. Do not compute a dashboard
+denominator, convert an aggregate into request events, or make a causal claim
+without request and route correlation. Request/prefix/tool/schema hashes and
+raw provider usage remain required for causal findings.
+
+### Source Path Handling
+
+`source_fields` values are human-readable dot paths for reviewers, not machine-resolvable JSONPath expressions. Unknown wrapper envelopes can place usage under dynamic map keys, so a path may not be reusable as a selector and can itself carry request- or tenant-derived identifiers. Treat normalized telemetry as sensitive and apply the same handling policy as the rest of your token telemetry. Paths never contain leaf values or raw envelopes.
+
+### Backward Compatibility
+
+Event, summary, and report changes are additive: no existing key is renamed or removed, and strict JSON consumers must allow new event, summary, and report fields rather than failing closed. Only normalized events are versioned today; aggregate and report schema versioning remains deferred until a breaking migration needs it.
+
+## Dashboard
+
+Show cache read ratio, write/read ratio, cached-token share, output-token share, TTFT/prefill by route, final latency, route/provider/replica split, prompt/schema/tool hash changes, deploy correlation, and top prefix families by cost.
+
+Normalize provider accounting before charting: OpenAI/Gemini cached-token fields are commonly inclusive in prompt input, while Bedrock cache read/write fields are additive. A dashboard that sums all fields indiscriminately will fabricate an apparent usage regression.
+
+Before charting any aggregate, attach its `evidence_source`, provider, time
+window, granularity, filters, `evidence_definition_status`,
+`evidence_denominator_status`, and `evidence_accounting_semantics`; do not
+merge dashboard and Usage API ratios silently.
+
+## Alerts And CI
+
+- Alert on sudden cache-read drop, write-without-read spike, TTFT regression, prefix hash churn, tool/schema hash churn, or route/replica imbalance.
+- CI smoke test: render representative requests and fail when the cacheable prefix changes unexpectedly.
+- Store before/after prompt snapshots in a privacy-safe location or store hashes plus first divergence metadata when raw prompts are sensitive.

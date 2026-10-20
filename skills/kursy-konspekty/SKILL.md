@@ -19,6 +19,7 @@ description: "Конспекты бесплатных курсов, которы
 | CMU 11-768 AI Agents (Neubig, Fried) — 13 лекций слайдами, 9 видео, задания 1–2 | `references\cmu-11-768-ai-agents.md` | устройство агента: контекст, память и скиллы, планирование, deep research, безопасность браузера |
 | Stanford CS329Z Engineering AI Agents — слайды 1–4, задание 1, чтения Anthropic/OpenHands | `references\stanford-cs329z.md` | оценка агентов, долгие задачи (файл прогресса), context engineering, RAG, data flywheel |
 | Gábor Békés — Data Analysis with AI (5 недель + проект) | `references\gabor-data-analysis-ai.md` | таблицы отбора 1688, сверка PDD↔1688, радар, скоринг текстов через LLM, где ИИ ошибается в данных |
+| «Claude Code для непрограммистов» (Automatica, А. Вдовиченко) — 33 демо, 20 скиллов, задания для Виты, безопасность (контейнер НЕ ставим) | `references\cc_dlya_neprogrammistov.md` | нужны упражнения по Claude Code, идеи для скиллов/хуков/субагентов, пример-демо под сайт, 1688, резюме |
 
 Ранее (29.09) записанное по CMU/Stanford — три задачи агента, тест из 4 частей, pass@k/pass^k, чек-лист «Ревизия
 скилла» — в `knowledge-library\references\agents-prompts-2026-09.md`; здесь — глубже, из самих лекций.
