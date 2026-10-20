@@ -154,3 +154,5 @@ https://claude.ai/artifact/Dv2dQZiD5NK4fgNranKeTV — карточки (12 её 
 
 ## Obviously Awesome (19.10.2026, «дальше»)
 Правила 58–64 — `references/obviously_awesome_pravila.md`; карточки — `references/karty/obviously_awesome/`. Бэкап: `knigi_kupleno\sistemaekap_skillov_oa`.
+
+**Из панели новостей 20.10 (подробно — `references/iz_paneli_2010.md`)** — 1 пунктов с источником: Цена и КП. Открывать при задаче по теме.

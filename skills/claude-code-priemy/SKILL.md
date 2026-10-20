@@ -638,3 +638,5 @@ Shopify-скилла отправляет событие на `https://shopify.d
 Правила — `references/build_ai_agent_pravila.md`; карточки — `references/karty/build_ai_agent/`. Бэкап: `knigi_kupleno\sistemaekap_skillov_agent`.
 
 **Из новостей 20.10 (подробно — `references/iz_novostey_2010.md`)** — контекст и лимиты (idleCompaction, /export), безопасность агента (пароли, фишинг, prompt injection), как Anthropic проверяет код, Python-приёмы для учёбы (TaskGroup, uv, pydantic), чужие инструменты — только в карантин.
+
+**Из панели новостей 20.10 (подробно — `references/iz_paneli_2010.md`)** — 229 пунктов с источником: Лимиты и кэш, Безопасность агента, Промпты, Безопасность аккаунта, ИИ-инструменты для работы, Озвучка и расшифровка. Открывать при задаче по теме.
