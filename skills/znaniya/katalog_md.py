@@ -1,6 +1,6 @@
 """Каталог «Что мы умеем и знаем» одним .md-файлом — для Context проекта в Claude Desktop.
 
-python katalog_md.py  →  Рабочий стол\\Файлы для проектов Claude\\Что мы умеем и знаем.md
+python katalog_md.py  →  Рабочий стол\\Новая папка (2)\\Файлы для проектов Claude\\Что мы умеем и знаем.md
 """
 import json
 import sys
@@ -10,7 +10,8 @@ from pathlib import Path
 sys.stdout.reconfigure(encoding="utf-8")
 import katalog as k  # noqa: E402
 
-OUT = Path(r"C:\Users\User\Desktop\Файлы для проектов Claude\Что мы умеем и знаем.md")
+# 20.10: она перенесла папку в «Новая папка (2)» (рабочий стол — её метки порядка, назад не двигать)
+OUT = Path(r"C:\Users\User\Desktop\Новая папка (2)\Файлы для проектов Claude\Что мы умеем и знаем.md")
 ZNAK = {"da": "✅", "zhdet": "⏳", "net": "❌"}
 
 
