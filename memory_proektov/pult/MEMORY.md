@@ -19,3 +19,4 @@
 - [Проверять, что вкладка открылась](proveryat-chto-vkladka-otkrylas.md) — после new смотреть list; 18.10 «Принтер» не открылся; Canon MF4010 лист не вышел
 - [Прямая просьба — делать сразу](pryamaya-prosba-delat-srazu.md) — её «сделай» = new --force даже при 🔴; не в «Мои дела», не «всё равно?»
 - [Фоновое — на табло](fonovye-zadachi-na-tablo.md) — скрипт без вкладки сразу на agent_status.py --glob, иначе она не видит
+- [Голос: черновики](golos-chernoviki.md) — с 22.10 сказанное не теряется; потерянное — golos\chernoviki\<дата>.txt; расшифровка на ПК ждёт памяти

@@ -1,3 +1,4 @@
 - [Эспада ДГИ — выводы 17.10](espada-dgi-vyvody-2026-10-17.md) — арифметика, площадь 87,1/87,7, упущенная выгода 0, повторная экспертиза
 - [Сон ноутбука и .bat](son-noutbuka-i-bat.md) — звук держал без сна, зарядка будила; .bat только ASCII
-- [Почта для дел — gokjhfrr](pochta-dela-gokjhfrr.md) — сторож pochta_dela.py; с tehrez21 она пересылает сама
+- [Почта для дел — gokjhfrr](pochta-dela-gokjhfrr.md) — сторож pochta_dela.py; с tehrez21 она пересылает сама; ПК выключен — Apps Script «Pochta Yurka» + облако
+- [Мособлсуд с ПК не открыть](mosoblsud-s-pk-ne-otkryt.md) — DNS суда отказывает всем, сразу просить телефон; дело 3fb61489

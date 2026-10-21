@@ -11,3 +11,5 @@
 - [WeChat — полуручной способ](wechat-polu-ruchnoy.md) — снимок окна, она отправляет сама; скилл wechat; ботов не ставить без её да
 - [n8n удалён](n8n-udalen.md) — 20.10 удалён, шпаргалка n8n-shpargalka; механику — на расписание (в её делах «потом»)
 - [Лимиты Cloudflare](cloudflare-limity.md) — 20.10 «50%» = записи KV от doki-bot (/alive), исправлено; остальное далеко от лимитов
+- [Копии по дням](kopii-po-dnyam.md) — при подключении D: Планировщик копирует изменённое (предел 300 ГБ) в D:\Копии по дням\<дата>; вернуть — rezerv\kopii\vernut.py
+- [Happ: сайты напрямую](happ-napryamuyu-routing.md) — napryamuyu.txt + сторож раз в час; routing.json Happ берёт сразу; все .ru и .рф напрямую; Мособлсуд = oblsud.mo.sudrf.ru

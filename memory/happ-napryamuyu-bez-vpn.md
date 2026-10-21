@@ -18,3 +18,5 @@ metadata:
 02.10 добавлены напрямую: admagazine.ru, tenderplan.ru, fabrikant.ru, b2b-center.ru, tender.pro, rts-tender.ru, zakupki.gov.ru;
 сервер теперь называется «… | Китай+тендеры напрямую ДД.ММ». Без её копии можно собрать из cj\happ_china_latest.json (но сервер может устареть).
 02.10: ярлыка «Happ 1688 сервер.bat» у неё НЕТ, и буфер обмена ей недоступен («сделай так, чтобы был доступен»); мой процесс её буфер тоже не видит. Поэтому СНАЧАЛА пробовать обход без Happ: программа выходит с адреса Wi-Fi (source_address=192.168.0.x) мимо адаптера happ-xray — так заработала почта Gmail (case-bot\mail_out.py smtp_login). Править AppData\Local\Happ\config.json бесполезно. Подробности механизма — [[1688-dinamika-prodazh]]. См. [[lead-engine-proekt]].
+
+**22.10.2026 — новый способ без её рук:** см. память komputer [[happ-napryamuyu-routing]] (routing.json профиль «1688» + napryamuyu.txt + сторож).
