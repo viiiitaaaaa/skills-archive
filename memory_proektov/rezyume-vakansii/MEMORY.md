@@ -19,3 +19,4 @@
 - [Поднятие вкладки — сверить все дела](podnyatie-sveryat-vse-dela.md) — сначала все открытые дела темы в pult\dela.json, не только №N
 - [Грин-карта — статус 18.10](greencard-dv-status-18-10.md) — приём DV закрыт, greencard.html готов; сбор 1 $, скан паспорта
 - [Игра английского 21.10](angliyskiy-igra-21-10.md) — igra.html + 9 книг в knigi\, OCR Windows, сборка sobrat_igru.py, скилл angliyskiy
+- [Фоновые команды не забывать](fonovye-komandy-ne-zabyvat.md) — забытая фоновая команда держала вкладку «в работе» и ноут бодрым
