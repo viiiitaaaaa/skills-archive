@@ -4,7 +4,7 @@
 - [Документы — по эталону суда](dokumenty-po-etalonu-suda.md) — только суть, без [скобок]; Дела\_образцы
 - [Перенос чата в Claude Code](perenos-chata-v-claude-code.md) — она кладёт «переписка claude.ai <дата>.md» в _служебное
 - [Бот пуст — молчать (16.10)](bot-pusto-molchat.md) — нового нет → не сообщать; пульт проверяет бот сам тихо
-- [Голосовые и память ПК (18.10)](golosovye-pamyat-pk.md) — mkl_malloc: лимит подкачки; повтор расшифровки, ответ в группу всегда
+- [Голосовые и память ПК (18.10)](golosovye-pamyat-pk.md) — mkl_malloc; модели whisper на D:\whisper\models (21.10); повторы при Timed out
 - [Бот в облако (18.10)](case-bot-v-oblako.md) — переезд делает «Мой бот» после образца бота любви; дела через Google Диск
 - [«Готово» в личку — сам, хук Stop (18.10)](tablo-dlya-napominaniya.md) — после каждого хода с делом gotovo_stop.py шлёт «✅»; табло всё равно вести
 - [NotFair — только где нужен (20.10)](notfair-gde-nuzhen.md) — SEO сами через Google/Яндекс напрямую; NotFair MCP — когда запустит рекламу

@@ -229,6 +229,7 @@ site/utp_content.py); один лендинг без ссылок на друг�
   инструменты в C:\Users\User\tools\site-dist). wrangler часто падает «fetch failed» (VPN) — повторять до «Deployed frivent-site».
   Не держать тестовый сервер внутри dist (EPERM при пересборке). GitHub-превью выключено. noindex до её «запускаем» (-Index).
 - **Автопроверка**: `python site/qa_site.py <адрес> <папка>` (37 стр. × 1440/768/375) + агент design-review (~/.claude/agents, Playwright MCP).
+- **Проверка «4 новичка»** (22.10, из новостей) — 4 субагента-пользователя проходят путь до заявки, таблица «где застряли» → правка на превью → 4 новых повторяют; `references/qa_4_novichka.md`. Перед показом сайта людям, по её «делай».
 - **Gemini во вкладке расширения**: промт — execCommand('insertText') в div[contenteditable], модель Pro. Скачивание — перехват fetch
   `googleusercontent.com/rd-gg/` (blob > 500 КБ, ждать до 90 с) → своя `<a download>`. В ФОНОВОЙ вкладке Chrome тормозит таймеры и не грузит
   картинки → вести шагами из Claude (отправил → проверил «готово» → следующий), качать потом по номеру ответа. Лимит картинок у Gemini есть
