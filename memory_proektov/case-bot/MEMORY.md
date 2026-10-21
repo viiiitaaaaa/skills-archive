@@ -9,3 +9,4 @@
 - [«Готово» в личку — сам, хук Stop (18.10)](tablo-dlya-napominaniya.md) — после каждого хода с делом gotovo_stop.py шлёт «✅»; табло всё равно вести
 - [NotFair — только где нужен (20.10)](notfair-gde-nuzhen.md) — SEO сами через Google/Яндекс напрямую; NotFair MCP — когда запустит рекламу
 - [Обрывы VPN Happ (20.10)](vpn-obryvy-happ.md) — бот «тупит» из-за обрывов туннеля happ-xray; счётчик komputer\proverki\vpn_obryvy.py
+- [Доска дел и значки (21.10)](doska-i-znachki.md) — «приложение Юрки» = Доска из _дорожка.json; реакции по одной (лимит Telegram); C забит → выгрузка падает
