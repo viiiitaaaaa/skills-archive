@@ -15,7 +15,7 @@ description: Пульт агентов — её программа C:\Users\User
 | `app\app.js`, `app\style.css`, `app\index.html` | интерфейс: «Главная», категории со списком задач, вкладки (dockview, полоса вкладок скрыта по её слову) |
 | `categories.json` | категории = папки проектов; правятся в программе (✎) или `razdat.py newcat` |
 | `dispatcher.md` | роль «Главной» (передаётся `--append-system-prompt-file`) — править здесь, если раздаёт не так |
-| `razdat.py` | `list` / `new --cat --name --task` / `send --to <tabId> --task` / `close --to <tabId>` (как крестик + `state.closeReq`, после перезапуска не поднимется; spoki/list её пропускают) / `todo --text --task <tabId>` (дело с кнопкой «⤴ Поднять») / `newcat` → json в `inbox\` |
+| `razdat.py` | `list` (у каждой вкладки «контекст N%, идёт ответ/ждёт»; больше 20% — ⚠, её правило 23.10) / `new --cat --name --task` / `send --to <tabId> --task` / `close --to <tabId>` (как крестик + `state.closeReq`, после перезапуска не поднимется; spoki/list её пропускают) / `todo --text --task <tabId>` (дело с кнопкой «⤴ Поднять») / `newcat` → json в `inbox\` |
 | `state.json` | задачи и раскладка (не в git) |
 | `PLAN.md` | чеклист |
 Ярлык: `Desktop\Пульт агентов.lnk` (electron.exe "C:\Users\User\pult").
@@ -49,6 +49,13 @@ description: Пульт агентов — её программа C:\Users\User
 (центр → категории → задачи → последние 8 шагов, скиллы ◆, файлы ▮) и «Шаги задачи» (блоки со стрелками). Скиллы и файлы
 приходят с табло: `agent_status.py set <id> --skill <имя> --file "<путь>"`. Макет-образец — `dizayn\karta.html`
 (`karta_data.py` делает ему снимок данных).
+
+## Красная метка «разрешить?» (23.10.2026, её слово: «Telegram-а перед глазами нет — должно гореть красным в задаче»)
+Хук `hooks\razreshenie_tg.py` (PermissionRequest), пока ждёт, держит `razresheniya\<rid>.json` {session, time, transcript}
+и шлёт вопрос в бот. `main.js pollPerm` (1,5 с) → `perm` в окно: задача в «Ждут тебя» с красной мигающей точкой и
+ярлыком «разрешить?», красная точка у категории, «🔴 разрешить: N» в заголовке, двойной сигнал, мигает значок на панели
+задач. Ответила на экране (переписка новее вопроса) → пульт кладёт `<rid>.otvet = ekran`, хук правит сообщение в боте
+«уже ответила на экране». Оповещения Windows по-прежнему выключены (NO_NOTIFY). Проверка — `PULT_RAZ=<temp>` в копии.
 
 ## «📝 Мои дела» (15.10.2026)
 Её дела-напоминания (не вкладка Claude): `pult\dela.json` (не в git). Вкладки пишут:
