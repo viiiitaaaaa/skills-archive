@@ -14,3 +14,4 @@
 - [Копии по дням](kopii-po-dnyam.md) — при подключении D: Планировщик копирует изменённое (предел 300 ГБ) в D:\Копии по дням\<дата>; вернуть — rezerv\kopii\vernut.py
 - [Happ: сайты напрямую](happ-napryamuyu-routing.md) — napryamuyu.txt + сторож раз в час; routing.json Happ берёт сразу; все .ru и .рф напрямую; бот читает их через case-bot/sayt.py; Мособлсуд = oblsud.mo.sudrf.ru
 - [Группа: снимок с подписью](gruppa-snimok-s-podpisyu.md) — карточка дела = картинка + вывод под ней (gruppa_send --snimok)
+- [Разборы звонков о деньгах](razbory-zvonkov.md) — разборы в dogovorennosti\references\razbory + журнал скилла + бот «Равновесие» + папка проекта
