@@ -40,3 +40,5 @@ Harness2). Берём из Harness2 приёмы для пульта (предл
 (в её делах). Описание — скилл pult, раздел «Красная метка». Не закоммичено: в тех же файлах пульта чужие правки других вкладок.
 Не доделано: удалить `C:\Users\User\tools\harness2` (44 МБ) — только по её «удали».
 Запуск: `wsl -d Ubuntu -- bash -lc "cd ~/harness2 && .venv/bin/harness2-demo ..."`.
+
+23.10: карта «где учиться harness engineering» (Perplexity, глубокое исследование) — `komputer\hermes_obuchenie.html`; выжимка — kursy-konspekty/references/learn-harness-engineering.md. Статья Harness²: arXiv 2610.14224.

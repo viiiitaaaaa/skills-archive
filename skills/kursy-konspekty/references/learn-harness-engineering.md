@@ -69,3 +69,13 @@
 ## 5. Не удалось прочитать
 
 Все 14 лекций и 8 проектов открылись и прочитаны (через пересказ страницы). Не читал: ресурсы и шаблоны (`docs/en/resources/`), разборы «обвязок» Pi / Claude Code / Codex / DeepSeek (`harness-designs/`), скилл `harness-creator` и скрипт `audit-harness.sh` из репозитория (не запускал и не открывал — чужой код), стартовые и итоговые папки проектов (`projects/project-NN/starter|solution`), видео и скриншоты. Названия P04 и P06 на сайте и содержание их страниц частично не совпадают (в пересказе P04 описан как «наблюдаемость и баг индексации», P06 — как «капстоун»); я записал то, что вернулось, без догадок.
+
+## Где учиться дальше (Perplexity, глубокое исследование 23.10.2026)
+
+Полная карта со ссылками — `C:\Users\User\komputer\hermes_obuchenie.html`. Главное:
+- Порядок: Claude Code best practices → скиллы → PLANS.md/прогресс → проверки (evals) → набор задач из своих ошибок → один узкий проверяльщик → только потом самоулучшение (DSPy → ADAS → DGM → Harness2).
+- Читать по порядку: Anthropic «Building effective agents», «Effective context engineering», «Effective harnesses for long-running agents» (26.11.2025), OpenAI «Using PLANS.md», Anthropic «Demystifying evals for AI agents».
+- Курсы: academy.claude.com (Claude Code 101, agent skills, subagents, MCP); DeepLearning.AI DSPy и LangGraph (временно бесплатно).
+- Книга: Michael Albada «Building Applications with AI Agents» (O’Reilly, платно).
+- Harness² — arXiv 2610.14224, harness2.github.io (Perplexity сам не нашёл — взято из README).
+- Слова поиска: agent harness, agent scaffold, context engineering, long-running agents, agent evaluation, self-improving agents.
