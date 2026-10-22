@@ -15,3 +15,4 @@
 - [Happ: сайты напрямую](happ-napryamuyu-routing.md) — napryamuyu.txt + сторож раз в час; routing.json Happ берёт сразу; все .ru и .рф напрямую; бот читает их через case-bot/sayt.py; Мособлсуд = oblsud.mo.sudrf.ru
 - [Группа: снимок с подписью](gruppa-snimok-s-podpisyu.md) — карточка дела = картинка + вывод под ней (gruppa_send --snimok)
 - [Разборы звонков о деньгах](razbory-zvonkov.md) — разборы в dogovorennosti\references\razbory + журнал скилла + бот «Равновесие» + папка проекта
+- [Микрофон и Audacity](mikrofon-audacity.md) — 22.10: запись с микрофона ноутбука, моно 48 кГц, усиление 0 дБ (было +7,4 — хрип); расшифровка — turbo в кэше
