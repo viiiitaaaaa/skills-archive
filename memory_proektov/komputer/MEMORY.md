@@ -16,3 +16,6 @@
 - [Группа: снимок с подписью](gruppa-snimok-s-podpisyu.md) — карточка дела = картинка + вывод под ней (gruppa_send --snimok)
 - [Разборы звонков о деньгах](razbory-zvonkov.md) — разборы в dogovorennosti\references\razbory + журнал скилла + бот «Равновесие» + папка проекта
 - [Микрофон и Audacity](mikrofon-audacity.md) — 22.10: запись с микрофона ноутбука, моно 48 кГц, усиление 0 дБ (было +7,4 — хрип); расшифровка — turbo в кэше
+- [Harness2 и Linux](harness2-wsl.md) — 22.10 проверен 🟢, tools\harness2; WSL+Ubuntu поставлен, ждёт перезагрузки, потом демо в Linux
+- [Расшифровка длинных записей](rasshifrovka-dlinnyh-zapisey.md) — >30 мин: small int8, 2 потока, Idle (turbo вешал голос пульта); кто говорит — плашка Zoom в углу
+- [Микропродукты — её новый проект](mikroprodukty-proekt.md) — 22.10 конспект Зуева + план + 32 курса; ждём «сами или буткэмп» (до 25.10) и «подбираем идею»

@@ -1,0 +1,21 @@
+---
+name: mikroprodukty-proekt
+description: "22.10.2026 она хочет «вкатиться» в микропродукты (расширения Chrome по методу Зуева captain.works); конспект, план и обзор курсов готовы, ждём её решения «сами или буткэмп» и «подбираем идею»"
+metadata:
+  node_type: memory
+  type: project
+  originSessionId: a04c6b1d-ad2b-4961-90e0-98bb1e74780c
+  modified: 2026-10-22T19:51:09.214Z
+---
+
+22.10.2026 после вебинара Игоря Зуева (captain.works, Zoom 21.10) сказала: «я тоже хочу попробовать вкатиться в это».
+Сделано: расшифровка (`Downloads\GMT20261021-150326_Recording_1920x1108.txt`), конспект + разбор + план 5 шагов
+(`kursy-konspekty\references\captain-works-mikroprodukty.md`, для чтения — `Downloads\Конспект_вебинар_микропродукты_2110.html`),
+обзор 32 похожих курсов из Perplexity (по её просьбе) — `kursy-konspekty\references\mikroprodukty-kursy-perplexity-2210.md`.
+Буткэмп Зуева: 92k/142k/242k ₽, набор до вс 25.10.2026 23:59. Мой совет — сначала сами; в «Моих делах» пункт с решением.
+
+Не изучено: как ей принимать оплаты из-за рубежа и налоги (страна/ИП), правила Chrome Web Store для смены поисковика.
+
+**How to apply:** «подбираем идею» → шаг 1 плана (30 запросов, pytrends из fashion-trend-radar\.venv, эталоны «site blocker»/«ad
+blocker», США 12 мес., софтовость выдачи, конкуренты в Chrome Web Store) → таблица .html. Новая папка проекта → сразу
+приватный GitHub. Связано: [[perplexity-poisk]].
