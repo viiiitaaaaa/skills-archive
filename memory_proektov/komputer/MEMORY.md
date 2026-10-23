@@ -19,3 +19,4 @@
 - [Harness2 и Linux](harness2-wsl.md) — 22.10 🟢; работает в WSL Ubuntu (польз. vita без пароля), ~/harness2, демо 2/2; Google Cloud отказал — не нужен
 - [Расшифровка длинных записей](rasshifrovka-dlinnyh-zapisey.md) — >30 мин: small int8, 2 потока, Idle (turbo вешал голос пульта); кто говорит — плашка Zoom в углу
 - [Микропродукты — её новый проект](mikroprodukty-proekt.md) — 22.10 конспект Зуева + план + 32 курса; ждём «сами или буткэмп» (до 25.10) и «подбираем идею»
+- [Учим Claude — её решения 23.10](uchim-claude-resheniya.md) — пилот «дорого»; да: сжать CLAUDE.md, архив, сверка, deny; нет: шаблон плана; план в obuchenie_istochniki

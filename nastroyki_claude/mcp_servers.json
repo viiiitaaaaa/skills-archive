@@ -1,9 +1,5 @@
 {
   "obshchie": {
-    "inspo": {
-      "type": "http",
-      "url": "https://inspomcp.dev/api/mcp"
-    },
     "stealth-browser": {
       "type": "stdio",
       "command": "C:\\Users\\User\\tools\\stealth-browser-mcp\\venv\\Scripts\\python.exe",

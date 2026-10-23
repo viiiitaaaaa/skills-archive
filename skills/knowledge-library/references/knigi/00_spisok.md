@@ -28,6 +28,11 @@
 в `<скилл>\references\iz_knig_2.md` + строка-ссылка в SKILL.md; после правки `dop\` — перезапустить скрипт. MM — 3 файла
 (`kotler_mm_a/b/c`), Grewal — 2 (`grewal_a/b`). Всё это видно в «Рабочей панели», раздел «Все приёмы».
 
+Разобраны через NotebookLM (конспект и пересказ — `C:\Users\User\knigi_kupleno\notebooklm\` и `pereskaz_vse\`):
+| Файл | Книга | С чего открывать |
+|---|---|---|
+| `notebooklm\albada_agents_uchoba.html` (+ `_v_skilly.md`, `pereskaz_vse\albada_agents_01..04.md`) | Michael Albada «Building Applications with AI Agents» (O'Reilly, ранний выпуск: гл. 1–8 из 13; 23.10.2026, сверено 29/29) | устройство агента: путаница похожих навыков, цепочки шагов, память, уроки из опыта (ExpeL), уверенность и слепое доверие; приёмы — claude-code-priemy `references/kak-uchit-claude.md`, раздел 7 |
+
 Не законспектированы:
 - `seni_penulisan_copywriting.md` — **черновик** (стр. 1–~18) индонезийской книги Dian Martin о копирайтинге;
   по её решению 09.10 книгу пропустили, файл не использовать как полный конспект.

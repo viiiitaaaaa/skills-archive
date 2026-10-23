@@ -33,6 +33,7 @@
       "mcp__claude-in-chrome"
     ],
     "deny": [
+      "mcp__claude_ai_Claude_Docs",
       "PowerShell(Remove-Item -Recurse *)",
       "Bash(rm -rf *)",
       "Read(.env*)",
