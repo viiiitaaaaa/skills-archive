@@ -9,5 +9,7 @@ metadata:
 приёмы с пометками «есть / новое / ждёт да» — `claude-code-priemy/references/obvyazka_dobavka_2310.md`.
 Её личный список учёбы — `komputer\obuchenie_dlya_vity.html` (не путать с `claude_obuchenie_dlya_vity.html` — «что дать Claude»).
 
+**Книги Lanham и Koenigstein (куплены) разобраны 24.10 — `references/knigi_agenty_lanham_koenigstein_2310.md`.**
+
 **Why:** она велела изучать бесплатное самой, без вопросов; повторный обход тех же ссылок — дубль.
 **How to apply:** новые приёмы не писать в CLAUDE.md без её «да»; OpenAI harness — по пересказам (оригинал 403, руками по желанию), видео, X.com, платные книги. Связано: [[uchim-claude-resheniya]], [[harness2-wsl]].
