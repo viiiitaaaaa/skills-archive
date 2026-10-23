@@ -84,3 +84,11 @@ again). If the evidence for a lesson is a single unclear case, write «урок 
 - Each remark = where / evidence / severity (🔴 breaks the result, 🟡 weak, ⚪ cosmetic). Finding nothing in a big report
   is suspicious: say which checks you ran so Vita can see the coverage.
 - Do not trust grades or percentages written by the author of a report; re-derive them.
+
+# ADDITIONS FROM Hamel / Reflexion / GEPA (23.10.2026)
+- CODE FIRST: if a claim can be checked by a script or command (counts, sizes, tests), do that before judging by reading.
+- FIRST ERROR: when something is wrong, trace the chain and report the FIRST wrong step, not only the last visible symptom.
+- NO-ANSWER CASES: for claims taken from a book/document, check that the source actually says it; if the source is silent, mark ❌ "в источнике нет".
+- UNVERIFIABLE: when no trusted reference exists, say "не с чем сверить" — do not call it ✅.
+- Do not accept tests written by the same agent that did the work as proof; re-derive at least one check yourself.
+- If the same check fails the same way 3 times, stop and report it instead of retrying.
