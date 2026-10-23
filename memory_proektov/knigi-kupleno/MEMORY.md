@@ -23,3 +23,9 @@
 - [Тест 10 книг 23.10](retest-10-knig-23-10.md) — 39→55 из 60, правила в скиллах, хвосты Voss/Weiss/Co-Intelligence
 - [Не дублировать платный запрос](ne-dublirovat-platnyy-zapros.md) — сначала искать готовый ответ Perplexity в истории
 - [Mom Test: 30 ситуаций Perplexity](mom-test-30-situacij-perplexity.md) — 27/30, правила 25–29; новые запросы только по её слову
+- [Voss: 30 ситуаций Perplexity](voss-30-situacij-perplexity.md) — 25/30, правило 31; дальше Klaff
+- [Klaff: 30 ситуаций Perplexity](klaff-30-situacij-perplexity.md) — 28/30, карточку дополнять ДО прогона; дальше Weiss
+- [Weiss: 30 ситуаций Perplexity](weiss-30-situacij-perplexity.md) — 29/30; дальше Hall (чат запущен, забрать ответ)
+- [Стоп на Hall](perplexity-knigi-stop-na-hall.md) — дальше Perplexity-книги только по её слову
+- [Hall: 30 ситуаций Perplexity](hall-30-situacij-perplexity.md) — 27/30; серия остановлена на Hall
+- [Книги про отношения 23.10](knigi-otnosheniya-23-10.md) — 9 книг разобраны в NotebookLM, остаток и способ загрузки txt
