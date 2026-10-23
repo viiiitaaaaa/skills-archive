@@ -151,6 +151,8 @@ https://claude.ai/artifact/Dv2dQZiD5NK4fgNranKeTV — карточки (12 её 
 ## Challenger Sale (19.10.2026, по её слову «давай новую книгу»)
 Правила 22–28 — `references/challenger_pravila.md`; карточки — `references/karty/challenger_sale/`. Читать при задачах: «учить клиента», возражения, «дорого / подумаю», несколько решающих, пилот, референсы. Бэкап до правки: `knigi_kupleno\sistemaekap_skillov_challenger`.
 
+**Карточка «Клиент говорит: дорого» (подключена 23.10.2026 по её «да», пилот «учим Claude»).** Читать при «дорого / подумаю / скидку», когда она просит ответ клиенту или разбор такого возражения: `references/karty/dorogo/kartochka_dorogo.md` — 8 шагов, у каждого адрес «книга › глава». Отвечать только по карточке; чего в ней нет — «в источнике этого нет». Она часто задаёт этот вопрос боту «Равновесие» — карточка для вкладок, бот живёт отдельно (вернуться к вопросу с ботом — её слово). Тесты: `komputer\obuchenie_istochniki\pilot_dorogo	esty.md` (ключи вне папки скилла).
+
 ## SPIN Selling Fieldbook (19.10.2026, «давай новую книгу»)
 Правила 33–40 — `references/spin_pravila.md`; карточки — `references/karty/spin/`. Бэкап до правки: `knigi_kupleno\sistemaekap_skillov_spin`.
 

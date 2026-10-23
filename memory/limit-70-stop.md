@@ -25,3 +25,5 @@ metadata:
 **How to apply:** при массовых задачах с агентами проверять процент между отчётами:
 `cd C:\Users\User\claude_widget; python -c "import claude_limits_widget as w; d=w.fetch(); print(d['five_hour'], d['seven_day'])"`
 (токен из ~/.claude/.credentials.json, только api.anthropic.com). См. [[vidzhet-limitov-claude]], [[kuplennye-knigi]].
+
+**23.10.2026 (разбор ошибок, №29):** сама ничего не останавливаю при любом проценте — только ПРЕДУПРЕЖДАЮ, что лимит скоро кончится. Она объяснила: на 90% до обнуления было 15 часов и важное уже сделано, можно было тратить дальше. Решает она (стоп — только по её слову).

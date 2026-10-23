@@ -39,9 +39,27 @@
       "Read(.env*)",
       "Read(**/.env*)",
       "Read(**/id_rsa*)",
-      "Read(**/.ssh/**)"
+      "Read(**/.ssh/**)",
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
+      "PowerShell(git push --force*)",
+      "PowerShell(git push -f*)",
+      "Bash(git reset --hard*)",
+      "PowerShell(git reset --hard*)",
+      "Bash(rm -r*)",
+      "Bash(rm -fr*)",
+      "PowerShell(Remove-Item * -Recurse*)",
+      "PowerShell(rd /s*)",
+      "PowerShell(rmdir /s*)",
+      "PowerShell(del /s*)"
     ],
-    "defaultMode": "auto"
+    "defaultMode": "auto",
+    "ask": [
+      "Bash(rm *)",
+      "PowerShell(Remove-Item *)",
+      "mcp__claude_ai_Google_Drive__trash_file",
+      "mcp__claude_ai_Google_Drive__share_file"
+    ]
   },
   "model": "opus",
   "hooks": {
@@ -86,6 +104,11 @@
           {
             "type": "command",
             "command": "python -I -X utf8 C:/Users/User/pult/hooks/stop_proverka.py",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "python -I -X utf8 C:/Users/User/pult/hooks/sverka_stop.py",
             "timeout": 10
           }
         ]
@@ -132,6 +155,18 @@
             "type": "command",
             "command": "python -I -X utf8 C:/Users/User/pult/hooks/storozh.py",
             "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python -I -X utf8 C:/Users/User/pult/hooks/predkompakt_arhiv.py",
+            "timeout": 20
           }
         ]
       }
