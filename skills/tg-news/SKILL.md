@@ -8,6 +8,16 @@ description: "Новости из Telegram-каналов одной коман�
 Папка: `C:\Users\User\tg_monitor`. Python — системный `python` (C:\Python314), библиотеки requests/bs4/lxml стоят.
 Панель: артефакт «Рабочая панель» https://claude.ai/artifact/9mbsDoDoHmQg5ZyXGK368R
 
+## «Новости» = ВСЁ сразу (её слово 23.10.2026: «объединить по одному указанию»)
+Одно слово «новости» запускает три потока, итог — ОДНИМ списком в конце (по её логике отбора: что меняет наше действие):
+1. **Сайты и журнал:** `cd C:\Users\User\tg_monitor; python vse_novosti.py` — сайты-источники (Shopify, e-commerce США/РФ → `rss_novoe.md`)
+   и журнал (Хабр, Selectel → `zhurnal\data\lenta.json`). Блок «Зайти вручную» в `rss_novoe.md` (eCommerce Fastlane, Retail TouchPoints) —
+   открыть в Chrome, прочитать заголовки; важное разобрать как «сейчас / в запас» (раздел ниже); приёмы — в `znaniya/references/saity_istochniki_2310.md`
+   и `ecommercefastlane.md`. Статьи журнала — по правилам `zhurnal\CLAUDE.md` («разбери журнал»).
+2. **Telegram:** шаги 0 и дальше ниже (облачный сбор, news.py, Telegram Web, чаты).
+3. **Итог ей:** не три отчёта, а один список: «Telegram — N важных, сайты — N, журнал — N»; у каждого пункта источник и «зачем нам»;
+   сверху то, что просит действия (срок, деньги, ошибка). Новый источник — строка в `rss_sources.json` (с лентой) или с пометкой `manual`.
+
 ## Правила пользователя
 
 - Команда «новости» = весь цикл сразу, без лишних вопросов: сбор → разбор → панель → открыть.
@@ -292,6 +302,7 @@ commit + push, и `claude-skills\sync_skills.ps1`.
 | `tg_monitor.py` | старый сборщик (функции fetch/parse/save_media используются news.py) |
 | `news.py` | сбор с догоном + сборка панели |
 | `channels.txt` | список каналов |
+| `rss_sources.py` / `rss_sources.json` | сайты-источники (Shopify, e-commerce США/РФ): после «новостей» запустить `python rss_sources.py`, показать ей новое из `rss_novoe.md` (7–10 строк, что важно нам) и блок «Зайти вручную» (eCommerce Fastlane, Retail TouchPoints) — зайти в Chrome и прочитать заголовки; полезное — в `znaniya/references/ecommercefastlane.md` (23.10.2026) |
 | `notes.json` | пересказы и пометки skip — копятся, не удалять |
 | `panel_state.json` | время последнего сбора → метка «новое» |
 | `panel_extra.html` | подборка «Курсы — что купить» (статичная, правится руками); ниже неё автоматический список свежих курсов |

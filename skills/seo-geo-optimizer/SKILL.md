@@ -319,3 +319,5 @@ other CMSes, the user manually applies the markdown output.
 - **`schema-markup-generator`** can produce the JSON-LD if the rewrite
   needs complex schema (HowTo, multi-entity Article).
 - **`meta-tags-optimizer`** finalizes title + meta description after rewrite.
+
+**Для Shopify-магазина (23.10.2026):** конкретные приёмы и бесплатные отчёты ИИ-видимости (Search Console, Bing AI Performance, GA4) — `C:\Users\User\.claude\skills\znaniya\references\ecommercefastlane.md`.
