@@ -1,0 +1,1 @@
+- [Переводчик: старт](perevodchik-start.md) — 25.10 каркас ждёт её ответов; путь Gemini Live Translate
