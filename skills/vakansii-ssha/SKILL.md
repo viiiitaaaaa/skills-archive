@@ -135,3 +135,6 @@ Google и Meta Ads в продакшене, годы в B2B SaaS.
 
 Ссылки: сверка — https://claude.ai/artifact/5JJLAf6jZGLXcrntxigt8Q
 резюме — https://claude.ai/artifact/Uv6mKTgzFnjRFQPQgFYqLB
+
+
+- Не называть зарплату первой: перевести разговор на обязанности (Ask for It, стр. 205–206; 25.10.2026).
