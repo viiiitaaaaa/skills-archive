@@ -37,3 +37,5 @@
 - [Учёба: только техника 25.10](uchenie-tolko-tehnika-2510.md) — её уточнение: 09/10/07/11/05 берём; психология, ОКР, любовь, вакансии отложены; план PLAN_tehnika_2510.md
 - [Учёба-техника: ход 25.10](uchenie-tehnika-hod-2510.md) — 266 конспектов, 7 скиллов стоят, 11 книг ждут её «давай»; Kimi/GLM/DeepSeek не трогать
 - [6 скиллов по книгам ИИ — 25.10](skilly-6-knig-ii-2510.md) — Koenigstein, 2 RAG, Mollick, Prediction, Loop поставлены; аналитика/обучение — след. неделя
+- [6 скиллов: аналитика и обучение — 26.10](skilly-6-knig-analitika-obuchenie-2610.md) — Lean, Minto, Story, Stick, Peak, Mind; Ollama писал, проверка 6–12 из 12
+- [Happ обновлён 26.10](vpn-happ-obnovlenie-2610.md) — 4.3.0→4.4.8, сервер сам стал #3; слежение vpn_sledim.py пишет журнал смен и обрывов для поддержки
