@@ -1,15 +1,5 @@
 {
   "obshchie": {
-    "stealth-browser": {
-      "type": "stdio",
-      "command": "C:\\Users\\User\\tools\\stealth-browser-mcp\\venv\\Scripts\\python.exe",
-      "args": [
-        "C:\\Users\\User\\tools\\stealth-browser-mcp\\src\\server.py",
-        "--disable-cdp-functions",
-        "--disable-dynamic-hooks"
-      ],
-      "env": {}
-    },
     "playwright": {
       "type": "stdio",
       "command": "npx",

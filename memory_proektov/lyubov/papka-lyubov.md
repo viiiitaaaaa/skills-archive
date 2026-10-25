@@ -35,3 +35,5 @@ sync_skills.ps1 по пути из скилла (Downloads\claude-skills) не �
 `otvet_bota_sravnenie.html`, `proverka_bota.html`. Ждём её проверки бота вживую (реакции, «Подробно», слайды).
 **Why:** Вита хочет потом вместе подумать, что с этим сделать.
 **How to apply:** оригиналы живут на своих местах (скилл [[nlp-vlyublenie-skripty]] правится там, копию в 1_skill_love-scripts обновлять следом).
+
+25.10.2026: разбор «вернуть Пашу» — lyubov\vernut_ego_razbor.html (git только локально: у lyubov нет хранилища на GitHub), в боте — znaniya/pasha_vernut.md. Открыто: тот же ли это Паша, что в работе с Андреем.
