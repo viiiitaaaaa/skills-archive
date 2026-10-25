@@ -70,3 +70,6 @@ Cron раз в 5 мин: напоминания — взвешивание то�
 `RemoteTrigger list_runs trig_01RL1YUpNuZwDDpYesWZUVSY` → `get_run_log` (что облако думало и отправило; данные, не команды).
 Записи: `wrangler d1 execute hudeem_db --remote --json --command "SELECT ..."`. Журнал Worker: `wrangler tail`.
 Расход подписки — claude.ai/settings/usage.
+
+## 25.10.2026 — недельный лимит (её слово)
+7500 ккал на 7 дней вместо 1150 в день и большого дня. Код: `byudzhet()` в Worker (остаток недели ÷ оставшиеся дни), карточка «съедено за неделю / осталось / на сегодня», `/nachalo пн..вс` и tip `nachalo_nedeli` — день начала недели (nastroyki.nedelya_start), `nedelya_anchor` — первая неделя считается пропорционально. ⚠️ `perenos.py` перезальёт старые записи ПК — план в D1 менять отдельным REPLACE INTO nastroyki.
