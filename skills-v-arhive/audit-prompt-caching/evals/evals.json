@@ -1,0 +1,275 @@
+{
+  "skill_name": "audit-prompt-caching",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Use $audit-prompt-caching. Сделай ревью.",
+      "expected_output": "cache-focused review, not a general code review; findings first."
+    },
+    {
+      "id": 2,
+      "prompt": "Do we need to change the project after the new OpenAI prompt caching docs? The app is OpenAI-compatible through a wrapper and uses prompt_cache_key.",
+      "expected_output": "Change needed? Check wrapper support first; no-change is valid."
+    },
+    {
+      "id": 3,
+      "prompt": "Сделай ревью на русском: 7 prompt families, most run once per day, and a script scan might touch env files.",
+      "expected_output": "Russian; Project Context Gate; Script Transparency Rule; do not mark prefix-cache findings high severity."
+    },
+    {
+      "id": 4,
+      "prompt": "Give a quick operational playbook for low cache hit rate, provider wrapper ambiguity, TTL decisions, and a minimum telemetry contract with prefix_hash and first_256_token_hash.",
+      "expected_output": "Include read/write fields, TTFT, route/model/provider, prefix_hash, first_256_token_hash. Do not log raw prompts."
+    },
+    {
+      "id": 5,
+      "prompt": "benchmark vLLM APC with vllm bench serve prefix_repetition and compare it to benchmark_prefix_caching.py output.",
+      "expected_output": "Compare vllm:prefix_cache_hits, vllm:prefix_cache_queries, vllm:prompt_tokens_cached; do not claim production ROI."
+    },
+    {
+      "id": 6,
+      "prompt": "An MCP tool registry changes tools every step. The agent got more expensive after selecting fewer tools.",
+      "expected_output": "Check tools_count/tool hash/prefix_hash/cache fields; use stable bundles, allowed tools, tool search, or deferred loading."
+    },
+    {
+      "id": 7,
+      "prompt": "The team has 90 percent cached tokens but output tokens dominate and changing the prompt cache setup may not help.",
+      "expected_output": "Not worth caching: output/decode dominates; not worth changing the cache setup."
+    },
+    {
+      "id": 8,
+      "prompt": "Audit an OpenAI request builder where system uses datetime.now().isoformat(), response_format has dynamic `requestId`, and tools come from registry order.",
+      "expected_output": "Flag volatile prefix, dynamic schema, unsorted tools; validate prefix fingerprints and cached_tokens."
+    },
+    {
+      "id": 9,
+      "prompt": "A 25-step coding agent selects 6 tools per step; tools_count changes and prefix_hash changes while total cost rises.",
+      "expected_output": "Dynamic tools are prefix drift; use stable bundles, allowed tools/tool search, or deferred loading."
+    },
+    {
+      "id": 10,
+      "prompt": "Self-hosted vLLM has four replicas behind a Service, stable 30k-token prompts, low hit rate, and --max-model-len 131072 while p99 is 12k.",
+      "expected_output": "Treat prefix-aware routing and max_model_len as hypotheses. Require a matched-workload comparison plus route/replica/cache/KV, tail-latency, capacity at SLO, queue/error and rewarm evidence before rollout."
+    },
+    {
+      "id": 11,
+      "prompt": "DashScope Qwen writes cache_creation_input_tokens but reads are unclear across OpenAI-compatible and Anthropic-compatible response fields.",
+      "expected_output": "Distinguish creation/write from read fields; check prefix/TTL/route/model support."
+    },
+    {
+      "id": 12,
+      "prompt": "RAG document-classification migration from Claude to OpenAI: layout is system instructions, then the user question, then repeated 12k policy.",
+      "expected_output": "Move stable document before dynamic user text; verify prefix hashes and usage."
+    },
+    {
+      "id": 13,
+      "prompt": "OpenRouter usage shows `cache_write_tokens` but cached_tokens stays zero after provider.order, fallback, openrouter/auto, and dynamic first messages.",
+      "expected_output": "Check routed provider/model, first-message identity, fallback, transforms, locality."
+    },
+    {
+      "id": 14,
+      "prompt": "Review an Amazon Bedrock Converse request where cachePoint appears after a user-specific intro and tools vary by route.",
+      "expected_output": "Check cachePoint placement, support, read/write tokens, dynamic pre-checkpoint content."
+    },
+    {
+      "id": 15,
+      "prompt": "A Claude app added top-level `cache_control`; stable policy is followed by timestamp and user question, so writes happen every request.",
+      "expected_output": "Use explicit stable-prefix breakpoint; validate cache_read_input_tokens."
+    },
+    {
+      "id": 16,
+      "prompt": "Audit a direct GPT-5.6 request that copied prompt_cache_retention from GPT-5.5 and marks a stable policy before a dynamic suffix.",
+      "expected_output": "Replace the legacy field with prompt_cache_options, validate prompt_cache_breakpoint placement, and say whole-input comparison does not prove provider breakpoint reuse."
+    },
+    {
+      "id": 17,
+      "prompt": "OpenAI GPT-5.6 telemetry has high cache_write_tokens and few reads. Is the cache saving money?",
+      "expected_output": "Treat cache fields as inclusive input breakdowns and require current read, write, input, and output pricing before a cost conclusion."
+    },
+    {
+      "id": 18,
+      "prompt": "Our LiteLLM gateway reports a 70 percent gateway response-cache hit rate, but the OpenAI cached_tokens stays 0 on the same route. Is prompt caching working?",
+      "expected_output": "Separate the gateway_response plane from the provider_prompt plane; a gateway response-cache hit is not provider prefix reuse and each plane needs its own evidence."
+    },
+    {
+      "id": 19,
+      "prompt": "An unknown OpenAI-compatible wrapper reports a 95 percent cache hit rate in our dashboard. Can we book the savings this quarter?",
+      "expected_output": "Unknown wrapper accounting stays ambiguous, so denominator_status is ambiguous and the ratio is non-decision-grade: no savings claim until the accounting semantics are proven."
+    },
+    {
+      "id": 20,
+      "prompt": "We only have a prompt builder diff: no usage logs, no routing data, no cost model, and no isolation review. Give me the cache clinic summary.",
+      "expected_output": "Report every unproven clinic dimension as unknown instead of dropping it, and give no aggregate score, grade, or rank across dimensions."
+    },
+    {
+      "id": 21,
+      "prompt": "An unknown legacy vLLM line has no prefix_cache_retention_interval CLI flag, but its manifest contains VLLM_PREFIX_CACHE_RETENTION_INTERVAL. What retention value should we deploy?",
+      "expected_output": "Change needed: unknown until feature/version evidence. Establish image digest, vllm version or source SHA, help/resolved config/source feature presence, and effective source; do not transfer v0.27.1 or post-017e9f4 semantics from the env name alone."
+    },
+    {
+      "id": 22,
+      "prompt": "Compare stable vLLM v0.27.1 with source at 017e9f4448b700e85ee16023287b025693c72b9e and ef47a897e2ad9a404cce9c9e7df15934deb8ffbe: env-only retention None, pure-full env=0 error, and random defaults for all hash algorithms versus main CLI/config 0 no-op and split crypto/xxhash defaults.",
+      "expected_output": "Keep the version matrices separate: v0.27.1 already has env-only retention with default None; stable env=0 is a pure-full configuration error, and every supported algorithm has a random per-process default. Post-017e9f4 exposes CLI/config with default 0 and post-ef47a897 splits fixed deterministic sha256/sha256_cbor from random xxhash/xxhash_cbor. Verify the deployment SHA before exact advice."
+    },
+    {
+      "id": 23,
+      "prompt": "A hybrid vLLM model has FullAttentionSpec and SlidingWindowMLASpec/MambaSpec KV groups. Evaluate None, 0, and a positive prefix_cache_retention_interval and check scheduler_block_size.",
+      "expected_output": "Apply retention per concrete KV spec class: FullAttentionSpec is non-eligible while SlidingWindowMLASpec and MambaSpec are eligible. Use the runtime version matrix for None/0/positive, require positive values to align with effective scheduler_block_size, and do not classify by model name."
+    },
+    {
+      "id": 24,
+      "prompt": "FS, OBJ, and P2P vLLM workers share a KV tier, but sha256 and xxhash configurations disagree. Explain algorithm, effective seed, serialization/runtime, P2P handshake, and cache_salt isolation.",
+      "expected_output": "Separate compatibility from isolation: align algorithm, effective seed, serialization/runtime, model/config/token inputs within an authorized sharing group; P2P must handshake and reject mismatch, while FS/OBJ need independent config evidence and a real cross-process read. Keep cache_salt as the trust boundary, never log raw xxhash seed, and do not treat algorithm plus seed as sufficient cross-version proof."
+    },
+    {
+      "id": 25,
+      "prompt": "A Vercel AI SDK OpenAI Responses agent changes activeTools on every step. Can I keep a stable full tools catalog and use providerOptions.openai.allowedTools with mode auto or required? Explain the function, custom, MCP, and web-search tool classes, plus endpoint/version/tool evidence, final wire mapping, warnings, unsupported classes, and empty-list error.",
+      "expected_output": "Run the allowedTools capability and economics gates. Verify endpoint, version, model, and tool class before using the option. Prefer the stable full tools catalog plus verified allowedTools only for the Responses surface. The final tool_choice wire mapping fixtures are {type: \"function\", name}, {type: \"custom\", name}, {type: \"mcp\", server_label}, and {type: \"web_search\"}; inspect toolNames, mode: auto, mode: required, warnings, and raw usage. tool_search, deferLoading, and namespaced tools are unsupported, warn, and an empty allow-list fails with an error. Do not transfer Vercel SDK's name-resolution, warnings, drop, or error semantics to another surface without its own wire evidence."
+    },
+    {
+      "id": 26,
+      "prompt": "An app's package.json pins @ai-sdk/openai ^3.0.70; it calls openai.responses() with openai.tools.webSearch(), and cache behavior changed after an SDK update. Which version evidence and version floors decide whether allowedTools is safe here?",
+      "expected_output": "Check package.json and the lockfile, then apply the exact matrix: 2.x unavailable in the checked schema; 3.x is available from 3.0.62 but corrected from 3.0.98; 4.x is corrected from 4.0.43. Do not move floors across majors or remove activeTools without wire evidence."
+    },
+    {
+      "id": 27,
+      "prompt": "The OpenAI Prompt Caching dashboard shows a high hit rate over time and cache reads per write. Is that enough to prove request-level prompt reuse and a routing fix?",
+      "expected_output": "Classify the dashboard as provider_dashboard_aggregate / Dashboard aggregate corroboration. Record evidence_definition_status=unknown, evidence_denominator_status=unknown, and evidence_accounting_semantics=unknown unless documented. Its formula, denominator, weighting, and route attribution remain unknown unless documented; request-level usage, prefix/tool/schema hashes, SDK/deploy version, and route correlation are required before a causal or savings claim."
+    },
+    {
+      "id": 28,
+      "prompt": "The Organization Usage API returns input_tokens, input_cached_tokens, input_cache_write_tokens, and input_uncached_tokens in time buckets grouped by model and service tier. How should the audit account for them?",
+      "expected_output": "Classify it as provider_usage_api_aggregate / OpenAI Organization Usage API aggregate. Preserve buckets, grouping, and filters; record evidence_definition_status=provider_documented and evidence_accounting_semantics=provider_defined, while evidence_denominator_status=unknown unless the provider documents the denominator. For the OpenAI Organization Usage API, input_tokens is inclusive of cached and cache-write tokens; input_uncached_tokens is uncached input excluding cache-write tokens, neither cache reads nor writes. The OpenAI prompt-caching guide documents a request-level read/write/neither partition. Do not add breakdowns onto inclusive input_tokens or manufacture a denominator/residual from missing optional fields or mismatched bucket/group/filter scope. This documented mixed decomposition is not permission to sum fields; an auditor-defined ratio is not provider-documented or decision-grade aggregate evidence without scope proof. Do not assign it to the Dashboard UI or mix its ratio with request-level metrics without scope evidence."
+    },
+    {
+      "id": 29,
+      "prompt": "Contrast direct OpenAI Responses, Vercel Responses, Azure Responses with an api-version gate, Chat Completions, and an arbitrary OpenAI-compatible wrapper for allowedTools and prompt-cache preservation.",
+      "expected_output": "Treat each API surface and wrapper separately. For Azure, load references/azure-openai.md and record the endpoint, deployment/model, and api-version; verify that exact API version's Responses tool_choice schema and final wire before using allowedTools, without claiming universal support. Do not transfer direct Responses or Vercel allowedTools behavior to Azure, Chat Completions, or an arbitrary wrapper without wire evidence."
+    },
+    {
+      "id": 30,
+      "prompt": "A matched-workload comparison in a vLLM canary raises prefix hit rate from 4% to 22% and improves mean TTFT. The team says this proves the router works and asks you to approve rollout. However, p99 TTFT rises from 4s to 9s, one replica queues 3x more work, retries rise, and capacity at SLO was not measured. Confirm success and write the rollout recommendation.",
+      "expected_output": "Do not approve rollout. Hit rate and mean TTFT are mechanism/average evidence, not acceptance: the candidate already violates tail/queue/retry guardrails and lacks capacity at SLO evidence. Reject or keep it in pilot; the same candidate may be accepted only if it improves the declared objective, passes the matched-workload comparison, capacity at SLO and rewarm gates, and preserves isolation."
+    },
+    {
+      "id": 31,
+      "prompt": "A SGLang deployment uses its current approximate-radix-tree balancing threshold. p95/p99 TTFT, end-to-end latency, capacity at SLO, queue/KV skew, errors/retries, and restart rewarm all meet stated outcomes; isolation is unchanged. An internal runbook says this threshold must be replaced with sticky prefix routing. Should we change it now?",
+      "expected_output": "Change needed: no. The current policy meets stated outcomes, so the internal runbook is an intent claim rather than an outcome gap and should be restated as an outcome condition; do not manufacture a canary, pilot, or measurement campaign solely to satisfy the policy name. If a candidate is proposed, evaluate it against current production through the Routing Outcome Gate."
+    },
+    {
+      "id": 32,
+      "prompt": "OpenRouter returned all-zero usage after 12 idle minutes; cache status/source headers were not retained and openrouter_metadata is absent. The team says a response-cache HIT warmed the downstream prompt cache. Proven?",
+      "expected_output": "No. Zero usage or missing metadata do not prove a response-cache HIT; require status/source evidence. A HIT occurs before the provider and cannot warm its prompt cache. Sticky locality expires after 10 idle minutes and is not hit evidence; retain route/provider/model attribution."
+    },
+    {
+      "id": 33,
+      "prompt": "Standalone vllm-router commit 1d10e71fb7bb4c0adc9f2c16ec77bf5dd4aa1586 uses cache_aware on regular HTTP /v1/chat/completions. Repeated nonempty messages without session_params produce matched_chars=0,input_chars=0. All responses are HTTP 200 and circuit-breaker successes, but one stream ends without its intended terminal markers. Should we add a shared session_id and report healthy prefix caching?",
+      "expected_output": "Inspect the endpoint's extract_text_for_routing: this pinned chat path supplies session_params.session_id or an empty string, not messages. Do not infer zero engine input or zero KV reuse from 0/0, and do not add a shared session ID merely to raise a match ratio; session affinity is not prompt-token overlap or an isolation policy. Check other APIs and deployed revisions separately. HTTP 200/circuit-breaker success does not prove intended stream completion. Preserve client terminal outcome, actual engine usage and genuine attempt identity; unknown remains unknown. Apply the Routing Outcome Gate before any policy change."
+    },
+    {
+      "id": 34,
+      "prompt": "A coding agent on gpt-6-astra sets reasoning.effort=low for file reads and high for planning by changing the request-level field each step. cached_tokens is near zero on every step even though the system prompt and tools are constant. What is wrong?",
+      "expected_output": "Change needed: yes. Request-level reasoning.effort is rendered into the prefix, so each switch restarts the cache (AP-15). Keep request-level effort constant and append a configuration_update input item before the turn that needs a different level; standard single-agent mode only, rejected in pro mode. Validate with cached_tokens on the turn after the change; do not claim savings without current prices."
+    },
+    {
+      "id": 35,
+      "prompt": "Мы перешли на Claude Fable 5.1 и меняем output_config.effort между запросами одного диалога. cache_creation_input_tokens растёт каждый ход, cache_read_input_tokens почти ноль. Что проверить?",
+      "expected_output": "Ответ на русском. Смена top-level output_config.effort перерисовывает промпт и сбрасывает кэш сообщений (AP-15). На Fable 5.1, Mythos 5.1 и Opus 5 использовать per-message effort: role system с пустым content и output_config.effort плюс beta-заголовок mid-conversation-output-config-2026-07-01; на Claude API и Google Cloud, не на Bedrock. Проверить, что чтения кэша сохраняются на следующем ходу; учесть 0.025x цену чтения и 512-токенный минимум."
+    },
+    {
+      "id": 36,
+      "prompt": "We put a configuration_update item into a gpt-5.6-terra Responses request and also send one on gpt-6-astra with reasoning.mode pro. Is the cache preserved?",
+      "expected_output": "No on both. configuration_update is documented only for gpt-6-astra in standard mode; other models keep effort request-level, and pro mode rejects the item. Run layout_linter.py to surface AP-15 findings and verify cache-read telemetry instead of assuming preservation."
+    },
+    {
+      "id": 37,
+      "prompt": "Our agent calls Moonshot Kimi via the OpenAI SDK. usage.cached_tokens is nonzero on the direct API, but the Anthropic-compatible Messages route shows cache_creation_input_tokens=0 and OpenRouter shows cached_tokens=0. We also vary reasoning effort per step. Is the cache broken?",
+      "expected_output": "First record host (api.moonshot.cn vs api.moonshot.ai), exact model, and surface; label records provider: moonshot. On the Chinese platform, Chat reads are prompt_tokens_details.cached_tokens and writes cache_write_tokens, exclusive parts of prompt_tokens; top-level cached_tokens is a historical api.moonshot.ai observation to verify. cache_creation_input_tokens=0 on Messages reports no write for this request; check reads first, as a full hit writes nothing. On api.moonshot.cn, omitting top-level cache_control is documented as default 5m reads and writes, not read-only, and alone proves neither writes nor their absence; in-message cache_control markers are ignored. A model without documented Cache Write is a write/billing check, not evidence of absent reads. Check effort changes splitting the prefix and join OpenRouter usage with the served provider and sticky session. No legacy /v1/caching port."
+    },
+    {
+      "id": 38,
+      "prompt": "Our Mastra output processor calls abort('Return valid JSON', { retry: true }) and sometimes retries twice with the same reason. A teammate says retries insert new system text before the history and wants the feedback made transient so identical reminders deduplicate. How should we audit the cache impact?",
+      "expected_output": "Check the resolved @mastra/core, ai, and provider adapter versions without assuming all older versions behave alike. In the released @mastra/core 1.72.0 contract, a retry is taken only when maxProcessorRetries is set and the current retry count is below it; otherwise abort with retry:true is treated as a plain abort, so confirm retries actually happened. In the regular agent loop, a retry taken from processOutputStep appends its feedback verbatim after the history as a non-transient reactive system-reminder signal, not a leading system message; released input-step tripwires bail without this retry or reminder, so verify other processor phases and durable execution in installed code. Keep it non-transient: transient dedupe moves an identical copy to the end and rewrites the prefix on the second retry. Treat this as a 1.72.0 snapshot, not a later-version guarantee. Capture consecutive final rendered provider requests, not just stored history, confirm the stable leading system content is unchanged and each retry only appends the reminder after the previous request, and compare raw per-call provider cache reads/writes before claiming hit-rate or cost changes; upstream mock tests are not provider evidence."
+    },
+    {
+      "id": 39,
+      "prompt": "Mastra ToolSearchProcessor uses context storage with autoLoad false. search_tools returned results for lookup_order with no loaded field, then load_tool returned success:false for lookup_order. The team counts both as activating lookup_order and blames search for catalog growth. We also replay threads saved by an older autoLoad setup. What counts as active?",
+      "expected_output": "Verify the installed @mastra/core version and feature presence. In the @mastra/core 1.72.0 context-storage contract, only loaded[] or a load_tool result with success:true and toolName activates a tool; plain results[].name and a failed single-tool load_tool without loaded[] do not, while a bulk toolNames load_tool still activates its loaded[] even when success is false, so search alone should not grow the catalog. autoLoad:true returns loaded[] and deliberately activates hits, and explicit loads also change tool exposure. Older saved autoLoad search results without loaded[] do not re-derive tools after upgrade; search or load again. Log per step the active tool names, sorted tool/schema hash, rendered prefix hash, and raw provider cache reads/writes before attributing any cache drop."
+    },
+    {
+      "id": 40,
+      "prompt": "We run Mastra Observational Memory with scope 'resource' across several threads per user. After thread A is observed, thread B shows fewer cache reads. Someone says resource scope was removed in @mastra/memory 1.33.0 (released with @mastra/core 1.72.0) and that dropping the setting moves existing observations into thread scope. Is that right, and how do we switch safely?",
+      "expected_output": "No. In the release shipping @mastra/core 1.72.0 and @mastra/memory 1.33.0, resource scope is deprecated with a one-time warning, not removed, and runtime is unchanged; check installed versions. Threads share one observation record, so observing A can change B's early injected context and prefix, a plausible but unproven cause; compare B's rendered prefix hashes and raw per-call cache reads on comparable workloads. Switching to default thread scope needs a valid threadId, does not migrate resource-scoped observations, and does not re-observe already observed messages. Plan continuity with retrieval and/or resource-scoped working memory, which have different semantics, before switching."
+    },
+    {
+      "id": 41,
+      "prompt": "We audit a GPT-5.6+ deployment on Azure OpenAI billed in EUR. Usage shows cache_write_tokens and cached_tokens per request, but nobody has pulled pricing for our exact model version, region, deployment type, or service tier; we only have the bundled economics table and an old launch post. Give us the numeric caching ROI verdict.",
+      "expected_output": "Withhold a numeric ROI verdict: bundled or launch-post multipliers are illustrations, not this deployment's rates. Report the measured ordinary/write/read token mix (cached_tokens and cache_write_tokens are inclusive subsets of the input total) and the formula, mark cost unknown, and request Azure's own or billed rates scoped to exact model/version, region, currency, deployment type, and service tier, recording the exact source URL or billing export, observation date, and effective date; an unknown effective date stays unknown. Verify ordinary input, cached-read, full write, output, and any storage/TTL fees actually charged before computing break-even."
+    },
+    {
+      "id": 42,
+      "prompt": "Purely hypothetical, not any provider's rates: a cache write costs 1.5x ordinary input in total and a cached read 0.2x. For equivalent cacheable tokens, 40% are reads. Finance charged each written token as ordinary input plus 1.5x and reported a loss. A dashboard shows break-even rounded to 38.46% and marks another cohort at R=0.3846 as break-even or better. Who is right?",
+      "expected_output": "Treat 1.5x as the full write price and charge each write once: (1-R)*1.5 + R*0.2 < 1 gives R > 0.5/1.3 = 5/13. At R=0.40 the cohort costs 0.6*1.5 + 0.4*0.2 = 0.98 of ordinary input, a 2% conditional input saving; adding ordinary input again double-charges writes. R=0.3846 is below exact 5/13 (cost about 1.00002, a slight loss) and exactly 5/13 is neutral, so compare exact values before rounded displays. Label the result hypothetical and input-only: no output, uncached suffix, capacity, or storage/TTL fees, no workload hit rate, and no current price claim."
+    },
+    {
+      "id": 43,
+      "prompt": "A reviewer says a newly listed GPT-5.6+ model must share an older model's cached-read discount and write multiplier because the family, API shape, and usage fields are the same. Separately, a pricing page changed one model's cached-read rate, and they want a new model-specific price exception added to the skill references. How should we handle both?",
+      "expected_output": "Family, shared usage fields, API shape, or an older model's rates do not establish a new model's ratios; verify primary rates for the exact model/version, region, currency, deployment type, and tier, or withhold a numeric verdict. A rate change alone is not reference maintenance: keep audits parameterized with verified inputs. Update references only for billing mechanics such as paid writes, storage/TTL fees, or usage accounting, or for a generalized audit rule that is wrong."
+    },
+    {
+      "id": 44,
+      "prompt": "An Azure pricing page lists a model in a region we have not used. A teammate concludes it is deployable there, supports the Responses endpoint, has a fixed minimum cacheable length and long-context boundary, and launched on the day we looked. They also want to fill gaps from direct OpenAI and Bedrock docs. What does the price row prove?",
+      "expected_output": "Only that a priced entry existed when observed. It does not prove availability or deployability in that region, Responses or other endpoint support, minimum tokens, TTL/retention, a context boundary, or a release or effective date; record the observation date and keep an unknown publication date unknown. Verify capabilities in current Azure docs and on the actual deployment (endpoint, model/version, api-version, wire capture), and do not import direct OpenAI or Bedrock claims into Azure."
+    },
+    {
+      "id": 45,
+      "prompt": "We call kimi-k3 on api.moonshot.cn through the Anthropic-compatible Messages route and put cache_control with ttl 1h on our system block, as we do for Claude. cache_creation_input_tokens is always 0. Our dashboard computes total input as input_tokens + cache_read_input_tokens + cache_creation_input_tokens + both cache_creation.ephemeral_5m/1h values. A teammate wants a 1h vs 5m ROI number from the guide's example prices. What is wrong?",
+      "expected_output": "On this Chinese-platform Messages surface, in-message cache_control markers, like the system-block 1h, are ignored; only request-top-level cache_control {type: ephemeral, ttl: 5m|1h} selects the TTL, and omitting it is documented as default 5m reads and writes, any write billed at 5m. Check reads first: zero creation on a full prefix hit is a normal free renewal, not expiry. Zero reports no write for this request, not others; omission alone proves neither writes nor their absence. Total input is input_tokens + cache_read_input_tokens + cache_creation_input_tokens; the ephemeral_5m/1h fields split creation by TTL and must not be added again. Cost = ordinary_input*Pi + write*Pw(ttl) + read*Pr + output*Po; break-even is (1-R)*w + R*r < 1 with R = read/(read+write), w = Pw(ttl)/Pi, r = Pr/Pi, and R > (w-1)/(w-r) only when w > r. Without verified rates scoped to model, region, currency, tier, source, and date, give the formula and missing inputs, not a number from guide examples."
+    },
+    {
+      "id": 46,
+      "prompt": "Using kimi-k3 Chat Completions on api.moonshot.cn without prompt_cache_options, our bill now shows cache-write charges and usage has prompt_tokens_details.cache_write_tokens. We count prompt_tokens - cached_tokens as uncached input. We plan to switch to ttl 1h mid-session. Did Moonshot just start charging for writes, how many minutes will the switch stay cold, and can we purge the old 5m entry?",
+      "expected_output": "Omitting prompt_cache_options defaults to automatic 5m writes for eligible prefixes, billed as a separate TTL-dependent write line; the source is undated, so do not claim the charge is new, and attribute the guide's totals-unchanged claim and check the bill. Read, write, and uncached are exclusive: uncached = prompt_tokens - cached_tokens - cache_write_tokens, so writes are not also ordinary input. TTL locks at first write, hits renew it free, appended writes use the locked TTL, a new TTL needs full expiry, and 5m and 1h caches do not interoperate; these rules do not establish that the switch writes or is charged (nor that it is free), or any cold-start duration or upper bound, including one derived from the old entry's remaining TTL, so measure read/write fields and Msh-Usage-Cache-Write-Tokens-5m/1h headers across the switch before claiming either. No manual purge: entries expire after inactivity, per organization."
+    },
+    {
+      "id": 47,
+      "prompt": "Our vLLM v0.30.0 deployment serves base and LoRA traffic with APC. Callers pick any cache_salt; one tenant sends cache_salt=billing-bot on base-model requests, and an unsalted adapter is named billing-bot. Hash seeds match and TTFT is great. Is cache_salt enough to isolate tenants?",
+      "expected_output": "Do not accept the isolation claim. On verified v0.30.0, generate_block_hash_extra_keys() puts a bare LoRA name and a bare first-block salt into one untagged tuple, so equal-token requests share the first-block hash and can reuse KV from different weights: a structural namespace collision, not a cryptographic hash collision, independent of algorithm/seed and not refuted by TTFT or hit metrics. Caller-chosen salts are an isolation gap unless server-derived or namespaced so none can equal an adapter name. Recommend v0.31.0 (source-tagged keys) or a verified backport plus trust-boundary salt enforcement; inspect source at the deployed SHA, salt provenance, and adapter registry passively, with no cross-tenant probe. Other versions, backports, and source builds need their own source check."
+    },
+    {
+      "id": 48,
+      "prompt": "Mixed vLLM v0.30.0 and v0.31.0 workers share an offload KV tier. Adapter qa-lora moved from /models/qa/v1 to /models/qa/v2, one worker mounts the same files at /srv/qa/v2, and KV events still show the bare name qa-lora. We plan to overwrite /models/qa/v2 in place. Will the name keep KV warm and safe?",
+      "expected_output": "No. v0.31.0 hashes LoRA as (\"lora\", name, path), so re-pointing to a new path stops stale reuse there (v0.30.0 keys only the name and can still serve old-adapter KV), but the same files under another path no longer share blocks, and every extra-key block plus its chained descendants change hash versus v0.30.0, so old persisted KV and the mixed fleet miss until schema and inputs align; unsalted text-only base chains are unaffected, so do not claim a blanket cold cache. The path is not a content hash: overwriting files at the same path, including an in-place reload, can reuse stale KV, so use a new versioned path. to_event_extra_keys() keeps untagged event extra_keys with the name but no path, so identical events do not prove identical engine keys; use source at the deployed SHA, emitted block hashes, per-worker name/path identity, and route-correlated hit/TTFT before diagnosing the read drop."
+    },
+    {
+      "id": 49,
+      "prompt": "Our GPT-6.1 Sol agent on Amazon Bedrock sends bedrock-runtime Converse requests with a cachePoint after the system prompt. A Mantle Responses path sets prompt_cache_options mode explicit with ttl 1h and puts prompt_cache_breakpoint on an input_image block, copied from our GPT-5.6 code; a short-task variant has only 800 tokens before its breakpoint. A teammate says Bedrock Sol has no explicit caching, so we should strip every marker. Traffic also pauses about 40 minutes between bursts; does that prove every request after a pause pays a cache write with zero cache reads? What should change?",
+      "expected_output": "Do not strip everything: Bedrock GPT-6.1 Sol supports implicit caching on Runtime Responses, Chat Completions, InvokeModel, and Converse, explicit on Runtime Responses, Chat Completions, and InvokeModel, and both on Mantle Responses and Chat Completions. Converse is implicit-only for this model, so flag the native cachePoint as unsupported and audit static-first prefix stability and routing there without prescribing checkpoints. On Mantle Responses keep mode explicit but use ttl 30m, the only supported TTL and the default, and move the breakpoint to an input_text block (a text part on Chat Completions or InvokeModel); GPT-5.6's input_image/input_file placement does not carry over. The cumulative prefix before a breakpoint must reach 1,024 tokens, so the 800-token variant is not cacheable; in explicit mode only explicit breakpoints are used, and a request with none does not cache. Multiple breakpoints are allowed with up to four cache writes per request. A 40-minute pause only exceeds the documented at-least-30-minute retention: it is a possible-miss risk, not proof of zero reads or that every request writes, so check raw cache read/write tokens and actual cadence before claiming cold starts or extra cost. Confirm with raw usage per route, since support does not prove hits."
+    },
+    {
+      "id": 50,
+      "prompt": "We call Amazon Bedrock bedrock-runtime Responses with model openai.gpt-6.1-sol and fall back between us.openai.gpt-6.1-sol and global.openai.gpt-6.1-sol; Mantle traffic uses openai.gpt-6.1-sol too. Some responses lack cache usage fields. The dashboard pools one hit rate across all routes and claims savings with 1.25x write and 0.05x read multipliers copied from an undated note. Is this sound?",
+      "expected_output": "No. Sol has no direct in-Region bedrock-runtime invocation: openai.gpt-6.1-sol is the Mantle ID at https://bedrock-mantle.us-east-1.api.aws/openai/v1 (us-east-1), while Runtime must use the us. or global. profile. Mantle, us., and global. are distinct routing identities, so segment telemetry per route and treat fallback between profiles as route drift instead of one pooled hit rate. Missing cache fields prove neither absence nor presence of hits; capture the raw usage object per route and API and verify which fields appear and whether accounting is additive or inclusive before computing a ratio. Documented caching support proves no observed hits, savings, or production behavior. Do not use bundled or undated multipliers: ROI needs verified rates scoped to exact provider, model/version, region, currency, endpoint/deployment, tier, source, and date; without them report the token mix and formula only."
+    },
+    {
+      "id": 51,
+      "prompt": "Our support agent runs on Gemini Enterprise Agent Platform. A multi-tenant proxy in one Google Cloud project creates an explicit context cache from each customer's ticket history and CRM notes, then stores the cachedContents name in Redis under a key built only from the queue name (support:billing). A redacted creation trace shows one cache holds only an acme user's ticket history and CRM notes, and our supplied permission config shows a globex user's permissions exclude acme ticket history. A redacted request trace shows that globex user's request attaching that cache name; the proxy has no authorization check before attaching it. Hit rate is 94% and TTFT meets SLO. A teammate says Google isolates caches by project, so there is no leak risk. Is that right?",
+      "expected_output": "No. The Agent Platform documents project-number isolation (cached content is never shared across projects), but that is the provider boundary, not application safety: within one project the application must scope cached agent outputs and prompt context to each execution context and align caching boundaries with end-user permission boundaries for multi-tenant proxies and background agents. A second username alone would not prove a violation; here the supplied evidence establishes a concrete permission boundary: the creation trace shows the cache holds acme ticket history, the permission config excludes that history from the globex user, and the redacted request trace shows the queue-keyed cachedContents name attached to that globex request with no authorization check. Report a confirmed application isolation finding for that permission-boundary violation. Disclosure of acme content in globex model outputs is not shown by this evidence; state it as unproven rather than as an observed leak. The 94% hit rate and in-SLO TTFT do not waive it. Fix the mapping so user-specific caches are keyed by tenant/user and permission scope, and authorize the caller against the complete cache contents before attaching; common static instructions may stay shared. Verify passively in code, config, and redacted traces; do not request credentials or run cross-user probes, and do not prescribe one project per user."
+    },
+    {
+      "id": 52,
+      "prompt": "We use Gemini on three routes. An Agent Platform background research agent shared by all employees creates explicit context caches from a common product manual plus the requesting employee's uploaded files. Redacted creation and attachment traces show a cache holding employee A's private uploads attached to employee B's request, and the supplied lookup code attaches cache names with no authorization check; we have not supplied B's permissions or delegations or any approved execution-boundary policy for that agent. A dashboard shows high cached token counts. An Agent Platform deal-review agent lets Alice and Bob attach one explicit cache built from private deal files; supplied server code and redacted traces show both are in an approved shared deal-review execution context, Bob has current delegated read permission for every file and agent output in that cache, and the server lookup checks that complete permission scope before each attachment. A Gemini Developer API Interactions chat route also exists. Does Google's project isolation make these routes safe across employees, is the research-agent attachment a confirmed leak, and is the deal-review sharing a leak because the users differ? Can you test it by sending requests as two different users?",
+      "expected_output": "Not from project isolation. Project-number isolation is documented for Agent Platform Gemini context caching and only separates projects; it says nothing about reuse between employees inside one project, and it must not be extended to the Gemini Developer API or Interactions route without that surface's own documentation. On the research-agent route the shared product manual is not a leak by itself, but caches that include an employee's uploaded files are user-specific and must map to the execution context and end-user permissions. The supplied lookup code has no authorization check: report it as a known missing control to fix by authorizing the caller against the complete cache contents before attaching. The traces show employee A's private uploads attached to employee B's request, but B's applicable permissions or delegations and any approved execution-boundary policy are not supplied, so whether that attachment violated a permission or execution boundary is an unresolved isolation question, not a confirmed access violation or leak; private content, a different username, or the missing check alone does not establish it. List B's permission and delegation scope and the execution-boundary policy as the evidence needed. High cached token counts prove neither safety nor a leak. On the deal-review route, the supplied code and traces confirm every recipient, including Bob through current delegated access, is authorized for the entire cached context inside an approved shared execution and permission boundary, and the lookup enforces it; that conclusion rests on the application evidence, not project isolation. Different users alone are not a finding, so do not report a leak or unauthorized disclosure there. Model-output disclosure is not shown on any route. Do not send requests as two users: cross-user probes need separate authorization and are out of scope, so review passively."
+    },
+    {
+      "id": 53,
+      "prompt": "We serve repeated stable 12k-token prompts through vLLM prefill/decode disaggregation at verified tag v0.30.0. Client chat-completion usage comes from D and says prompt_tokens=12000, prompt_tokens_details.cached_tokens=11999. P's request-correlated prefix-hit counter is 0. Our dashboard calls the denominator valid and announces 99.99% APC hit rate and near-total prefill savings. Is that conclusion supported, and what should we inspect first? Keep validation passive; no production experiments are authorized.",
+      "expected_output": "No. The valid inclusive denominator only shows that cached_tokens <= prompt_tokens is consistent arithmetic; it does not establish which worker produced the numerator. Verified v0.30.0 has no remote_prefill_cached_tokens path: the client usage comes from D, whose local prefill stats count KV transferred from P as cached, so 11999/12000 is transfer accounting, not a 99.99% APC hit rate and not prefill savings. The request-correlated P counter of 0 is the better P-side signal and contradicts the dashboard. Inspect first, passively: the deployed P and D image digests/SHAs and their scheduler and output-processor source, the connector and --enable-prompt-tokens-details launch config, the proxy handling of kv_transfer_params, and redacted request-correlated traces joining D usage to the P request, plus P-pool vllm:prefix_cache_hits/vllm:prefix_cache_queries and P prefill time/TTFT by route. v0.31.0 (PR #54222) makes P write its prefill cached-token count into kv_transfer_params and D report it when the proxy preserves the integer, but upgrading is a candidate change, not proof; verify both workers and the proxy round trip at the deployed SHA, and do not use v0.31.0 as a universal floor for forks or backports. Do not claim hits, savings, latency, or rollout from D usage; no production experiments or active tenant probes."
+    },
+    {
+      "id": 54,
+      "prompt": "Our vLLM P/D chat-completion deployment is tagged v0.31.0. A gateway rebuilds kv_transfer_params for D using only do_remote_prefill=true and remote_block_ids; in one trace it instead forwards remote_prefill_cached_tokens as the string '0'. Some client responses omit prompt_tokens_details; others report almost all prompt tokens cached. The team says the upgrade fixed usage and missing details mean zero cache hits. What evidence would make P-side APC accounting trustworthy? Keep validation passive; no production experiments are authorized.",
+      "expected_output": "A v0.31.0 tag does not prove the fix: the D-side read accepts remote_prefill_cached_tokens only when kv_transfer_params has a truthy do_remote_prefill and the value is an int. A gateway that rebuilds the params with only do_remote_prefill and remote_block_ids drops the field, and the string '0' is ignored; in both cases D silently keeps its local count, which includes KV transferred from P, so almost-all-cached responses are transfer accounting, not P-side APC hits. Missing prompt_tokens_details is unobserved, not zero: --enable-prompt-tokens-details (plural tokens) defaults to False, and the serving path also omits details when no counts are available. Trustworthy P-side accounting needs, per request: provenance correlating D usage with the P request by request ID and route; P and D image/SHA source containing both the P write and D read; do_remote_prefill on D's input; the proxy forwarding P's returned kv_transfer_params unchanged with an integer remote_prefill_cached_tokens; and the flag enabled on the responding server. Only then is an integer 0 a measured P-side zero. A valid inclusive denominator is arithmetic validity, not numerator provenance, hits, savings, latency, or rollout proof. Gather it passively from source/config review, proxy code, redacted traces recording key presence and value types, and P-pool prefix-cache hit/query metrics with P prefill/TTFT; fix the gateway to pass the field through as an integer. No production experiments or active tenant probes."
+    }
+  ]
+}

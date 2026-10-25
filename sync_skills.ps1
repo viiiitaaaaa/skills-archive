@@ -17,6 +17,15 @@ Copy-Item -Path (Join-Path $src "*") -Destination $pack -Recurse -Force
 # вложенные git-репозитории скиллов в архив не берём (у них свои репозитории)
 Get-ChildItem $pack -Recurse -Directory -Force -Filter .git | Remove-Item -Recurse -Force
 
+# 1б. Скиллы из архива «пока не нужны» (skills-v-arhive) — тоже в копию, чтобы не пропали с GitHub
+$arh = "C:\Users\User\.claude\skills-v-arhive"
+$arhDst = Join-Path $dst "skills-v-arhive"
+if (Test-Path $arh) {
+    if (Test-Path $arhDst) { Remove-Item $arhDst -Recurse -Force }
+    Copy-Item -Path $arh -Destination $arhDst -Recurse -Force
+    Get-ChildItem $arhDst -Recurse -Directory -Force -Filter .git | Remove-Item -Recurse -Force
+}
+
 # 2. Отдельно вытащить файлы с промтами и рецептами
 $promptFiles = @(
     @{ from = "site-mockups\prompts.md";                  to = "site-mockups__prompts.md" },
