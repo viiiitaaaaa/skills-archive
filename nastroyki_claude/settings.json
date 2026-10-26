@@ -131,6 +131,10 @@
             "type": "command",
             "command": "python C:/Users/User/pult/hooks/ozvuch.py",
             "timeout": 15
+          },
+          {
+            "type": "command",
+            "command": "python -I -X utf8 C:/Users/User/pult/hooks/plan_napominanie.py"
           }
         ]
       }
@@ -167,6 +171,10 @@
             "type": "command",
             "command": "python -I -X utf8 C:/Users/User/pult/hooks/predkompakt_arhiv.py",
             "timeout": 20
+          },
+          {
+            "type": "command",
+            "command": "python -I -X utf8 C:/Users/User/pult/hooks/plan_napominanie.py"
           }
         ]
       }

@@ -48,12 +48,7 @@ Watch for these signals during normal work. Any one of them is a cue to harvest:
 - The user **signals it explicitly**: "remember this", "save this as a skill",
   "don't make me re-explain this next time".
 
-**LOCAL RULE (Vita's setup): never create a skill without the user's explicit yes.**
-If the user asked for it ("remember this", "save as a skill"), that is the yes.
-If you noticed the moment yourself, propose it in one line (name + what it
-captures) and wait. Write only under the project's skills folder unless the
-user says global; for global, `~/.claude/skills` additionally needs her yes
-(the guard hook will ask). Tell the user what you captured and where (step 5).
+**Vita's setup (26.10.2026): create such a skill yourself when the moment fits; write under the project's skills folder (global `~/.claude/skills` only if the situation is general; the guard hook may ask her). No need to ask first. Tell the user what you captured and where (step 5).
 
 ### Skill, memory, or skip?
 

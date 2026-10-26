@@ -3,11 +3,13 @@ name: code-review-and-quality
 description: Conducts multi-axis code review. Use before merging any change. Use when reviewing code written by yourself, another agent, or a human. Use when you need to assess code quality across multiple dimensions before it enters the main branch. Use when asked to review a diff or a pull request, even when the diff is pasted inline.
 ---
 
+> **Вита (26.10.2026): подключай сама. Наши правила главнее текста ниже:** коммит и push только по её просьбе; помощников запускать с явной моделью sonnet/haiku (Opus-помощников нет); скиллы, которых у нас нет (subagent-driven-development, using-git-worktrees и т.п.), пропускать; скрипты .sh/.ts запускать только когда нужно по делу.
+
 # Code Review and Quality
 
 ## Overview
 
-Multi-dimensional code review with quality gates. Review changes before merge when the user asks for a review. Review covers five axes: correctness, readability, architecture, security, and performance.
+Multi-dimensional code review with quality gates. Every change gets reviewed before merge — no exceptions. Review covers five axes: correctness, readability, architecture, security, and performance.
 
 **The approval standard:** Approve a change when it definitely improves overall code health, even if it isn't perfect. Perfect code doesn't exist — the goal is continuous improvement. Don't block a change because it isn't exactly how you would have written it. If it improves the codebase and follows the project's conventions, approve it.
 
@@ -161,6 +163,7 @@ Tests reveal intent and coverage:
 - Would the tests catch a regression if the code changed?
 ```
 
+Answer the last question by experiment, not by reading. Invert one condition the change adds (drop a negation, swap `&&` for `||`), run the suite, then restore the file from a copy. A mutation that stays green is a finding: name the test case that is missing. For a project-wide mutation score, see `constraint-driven-development`.
 
 ### Step 3: Review the Implementation
 
@@ -203,6 +206,31 @@ Check the author's verification story:
 - Is there a before/after comparison?
 ```
 
+## Multi-Model Review Pattern
+
+Use different models for different review perspectives:
+
+```
+Model A writes the code
+    │
+    ▼
+Model B reviews for correctness and architecture
+    │
+    ▼
+Model A addresses the feedback
+    │
+    ▼
+Human makes the final call
+```
+
+This catches issues that a single model might miss — different models have different blind spots.
+
+**Example prompt for a review agent:**
+```
+Review this code change for correctness, security, and adherence to
+our project conventions. The spec says [X]. The change should [Y].
+Flag any issues as Critical, Required, Optional, or Nit.
+```
 
 ## Dead Code Hygiene
 
@@ -322,6 +350,10 @@ For triaging `npm audit` findings and supply-chain risk (typosquatting, compromi
 - [ ] **Approve** — Ready to merge
 - [ ] **Request changes** — Issues must be addressed
 ```
+## See Also
+
+- For detailed security review guidance, see `../../references/security-checklist.md`
+- For performance review checks, see `../../references/performance-checklist.md`
 
 ## Common Rationalizations
 

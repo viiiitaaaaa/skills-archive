@@ -6,6 +6,8 @@ metadata:
   version: "3.25.2"
 ---
 
+> **Вита (26.10.2026): хуки этого скилла заменены нашим `pult/hooks/plan_napominanie.py` (читает task_plan.md и progress.md при каждом сообщении и перед сжатием). Чужие хуки и скрипты хуков не ставим.**
+
 # Planning with Files
 
 Work like Manus: Use persistent markdown files as your "working memory on disk."

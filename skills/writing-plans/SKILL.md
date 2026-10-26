@@ -3,15 +3,19 @@ name: writing-plans
 description: Use when you have a spec or requirements for a multi-step task, before touching code
 ---
 
+> **Вита (26.10.2026): подключай сама. Наши правила главнее текста ниже:** коммит и push только по её просьбе; помощников запускать с явной моделью sonnet/haiku (Opus-помощников нет); скиллы, которых у нас нет (subagent-driven-development, using-git-worktrees и т.п.), пропускать; скрипты .sh/.ts запускать только когда нужно по делу.
+
 # Writing Plans
 
 ## Overview
 
 Write implementation plans for an engineer who has not seen this codebase or this spec. Assume they write idiomatic code in the project's language once they know the exact interface and the exact test, and that they will make a reasonable choice wherever the plan leaves one open. What they cannot know is what you decided: which files, which names and signatures, which values from the spec, which tests prove each task. Document those. Give them the whole plan as bite-sized tasks. DRY. YAGNI. TDD. Frequent commits.
 
+**Announce at start:** "I'm using the writing-plans skill to create the implementation plan."
 
+**Context:** If working in an isolated worktree, it should have been created via the `superpowers:using-git-worktrees` skill at execution time.
 
-**Save plans to:** `plans/YYYY-MM-DD-<feature-name>.md`
+**Save plans to:** `docs/superpowers/plans/YYYY-MM-DD-<feature-name>.md`
 - (User preferences for plan location override this default)
 
 ## Scope Check
@@ -54,7 +58,8 @@ independently testable deliverable.
 ```markdown
 # [Feature Name] Implementation Plan
 
-> **Для исполнителя:** выполнять план по задачам; шаги отмечены чекбоксами (`- [ ]`).
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+
 **Goal:** [One sentence describing what this builds]
 
 **Architecture:** [2-3 sentences about approach]
@@ -173,6 +178,29 @@ After writing the complete plan, look at the spec with fresh eyes and check the 
 
 If you find issues, fix them inline. No need to re-review — just fix and move on. If you find a spec requirement with no task, add the task.
 
-## После плана
+## Execution Handoff
 
-После сохранения и самопроверки дай Вите ссылку на план и спроси, всё ли в нём так, как она хочет. Выполнять план — только по её слову.
+After saving and self-reviewing the plan, link it for your human partner
+to read. If they have already explicitly supplied an execution method, ask
+them to review the plan and confirm it captures what they want; wait for that
+review before implementation, then use the preserved method. Otherwise, ask
+them to review the plan and choose an execution method before implementation.
+
+**When no execution method has already been supplied:**
+
+**"Plan complete and saved to `docs/superpowers/plans/<filename>.md`. Please review the plan. Which execution approach would you prefer?**
+
+- **Subagent-driven** - A fresh subagent implements each task and a fresh reviewer checks it before the next one starts, then a whole-branch review at the end. Most thorough; costs a fresh context per task and per review.
+- **Native** - I implement every task myself in this session, the way this harness runs work, then one fresh reviewer on the most capable model checks the whole branch. Cheapest and fastest; no independent review until the end. Runs well with a mid-tier session model, since the plan carries the design.
+
+**For this plan I recommend <one of the two>, because <one sentence from the plan: how much the tasks depend on each other's interfaces, how many there are, what a shipped mistake would cost>. Does the plan capture what you want, and which approach should we use?"**
+
+**When an execution method has already been supplied:**
+
+**"Plan complete and saved to `docs/superpowers/plans/<filename>.md`. Please review the plan. Does it capture what you want?"**
+
+**If Subagent-driven chosen:**
+- **REQUIRED SUB-SKILL:** Use superpowers:subagent-driven-development
+
+**If Native chosen:**
+- **REQUIRED SUB-SKILL:** Use superpowers:executing-plans

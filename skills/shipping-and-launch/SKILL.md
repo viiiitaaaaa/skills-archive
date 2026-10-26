@@ -3,6 +3,8 @@ name: shipping-and-launch
 description: Prepares production launches. Use when preparing to deploy to production, or when asking what needs to be in place before shipping. Use when you need a pre-launch checklist, when setting up monitoring, when planning a staged rollout, or when you need a rollback strategy.
 ---
 
+> **Вита (26.10.2026): подключай сама. Наши правила главнее текста ниже:** коммит и push только по её просьбе; помощников запускать с явной моделью sonnet/haiku (Opus-помощников нет); скиллы, которых у нас нет (subagent-driven-development, using-git-worktrees и т.п.), пропускать; скрипты .sh/.ts запускать только когда нужно по делу.
+
 # Shipping and Launch
 
 ## Overview
@@ -282,6 +284,13 @@ Every deployment needs a rollback plan before it happens:
 - Redeploy previous version: < 5 minutes
 - Database rollback: < 15 minutes
 ```
+## See Also
+
+- For the project-wide Definition of Done that every change must clear before this checklist, see `../../references/definition-of-done.md`
+- For security pre-launch checks, see `../../references/security-checklist.md`
+- For performance pre-launch checklist, see `../../references/performance-checklist.md`
+- For accessibility verification before launch, see `../../references/accessibility-checklist.md`
+- For the alerting rules and SLO-tied thresholds, see `observability-and-instrumentation`
 
 ## Common Rationalizations
 

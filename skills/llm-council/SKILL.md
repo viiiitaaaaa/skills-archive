@@ -3,7 +3,7 @@
 name: llm-council
 
 
-description: "Run any question, idea, or decision through a council of 5 AI advisors who independently analyze it, peer-review each other anonymously, and synthesize a final verdict. Based on Karpathy's LLM Council methodology. TRIGGERS ONLY on the user's explicit phrase: 'council this', 'run the council', 'war room this', 'pressure-test this', 'stress-test this', 'debate this', or Russian 'созови совет'. Do NOT trigger on ordinary questions or decisions (it spawns 10 sub-agents and burns the usage limit); if a decision looks worth a council, offer it in one line and wait for a yes."
+description: "Run any question, idea, or decision through a council of 5 AI advisors who independently analyze it, peer-review each other anonymously, and synthesize a final verdict. Based on Karpathy's LLM Council methodology. Use automatically when a decision is important, costly or ambiguous and one opinion is not enough; also on the user's phrases: 'council this', 'run the council', 'pressure-test this', 'stress-test this', 'debate this', Russian 'созови совет'. Run the advisors as sonnet helpers (set model explicitly).
 
 ---
 

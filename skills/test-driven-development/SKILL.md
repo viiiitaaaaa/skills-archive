@@ -3,6 +3,8 @@ name: test-driven-development
 description: Use when implementing any feature or bugfix, before writing implementation code
 ---
 
+> **Вита (26.10.2026): подключай сама. Наши правила главнее текста ниже:** коммит и push только по её просьбе; помощников запускать с явной моделью sonnet/haiku (Opus-помощников нет); скиллы, которых у нас нет (subagent-driven-development, using-git-worktrees и т.п.), пропускать; скрипты .sh/.ts запускать только когда нужно по делу.
+
 # Test-Driven Development (TDD)
 
 ## Overview
@@ -11,6 +13,7 @@ Write the test first. Watch it fail. Write minimal code to pass.
 
 **Core principle:** If you didn't watch the test fail, you don't know if it tests the right thing.
 
+**Violating the letter of the rules is violating the spirit of the rules.**
 
 ## When to Use
 
@@ -20,11 +23,12 @@ Write the test first. Watch it fail. Write minimal code to pass.
 - Refactoring
 - Behavior changes
 
-**Exceptions (ask Vita (the user)):**
+**Exceptions (ask your human partner):**
 - Throwaway prototypes
 - Generated code
 - Configuration files
 
+Thinking "skip TDD just this once"? Stop. That's rationalization.
 
 ## The Iron Law
 
@@ -32,7 +36,15 @@ Write the test first. Watch it fail. Write minimal code to pass.
 NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST
 ```
 
-Если код уже написан до теста — не удаляй его, сообщи Вите и предложи дописать тест.
+Write code before the test? Delete it. Start over.
+
+**No exceptions:**
+- Don't keep it as "reference"
+- Don't "adapt" it while writing tests
+- Don't look at it
+- Delete means delete
+
+Implement fresh from tests. Period.
 
 ## Red-Green-Refactor
 
@@ -105,7 +117,7 @@ Vague name, tests mock not code
 **MANDATORY. Never skip.**
 
 ```bash
-python -m pytest <path to test>
+npm test path/to/test.test.ts
 ```
 
 Confirm:
@@ -160,7 +172,7 @@ Don't add features, refactor other code, or "improve" beyond the test.
 **MANDATORY.**
 
 ```bash
-python -m pytest <path to test>
+npm test path/to/test.test.ts
 ```
 
 Confirm:
@@ -299,7 +311,7 @@ Can't check all boxes? You skipped TDD. Start over.
 
 | Problem | Solution |
 |---------|----------|
-| Don't know how to test | Write wished-for API. Write assertion first. Ask Vita (the user). |
+| Don't know how to test | Write wished-for API. Write assertion first. Ask your human partner. |
 | Test too complicated | Design too complicated. Simplify interface. |
 | Must mock everything | Code too coupled. Use dependency injection. |
 | Test setup huge | Extract helpers. Still complex? Simplify design. |
@@ -317,3 +329,4 @@ Production code → test exists and failed first
 Otherwise → not TDD
 ```
 
+No exceptions without your human partner's permission.

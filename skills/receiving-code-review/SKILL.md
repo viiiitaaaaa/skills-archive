@@ -3,6 +3,8 @@ name: receiving-code-review
 description: Use when receiving code review feedback, before implementing suggestions, especially if feedback seems unclear or technically questionable - requires technical rigor and verification, not performative agreement or blind implementation
 ---
 
+> **Вита (26.10.2026): подключай сама. Наши правила главнее текста ниже:** коммит и push только по её просьбе; помощников запускать с явной моделью sonnet/haiku (Opus-помощников нет); скиллы, которых у нас нет (subagent-driven-development, using-git-worktrees и т.п.), пропускать; скрипты .sh/.ts запускать только когда нужно по делу.
+
 # Code Review Reception
 
 ## Overview
@@ -24,6 +26,18 @@ WHEN receiving code review feedback:
 6. IMPLEMENT: One item at a time, test each
 ```
 
+## Forbidden Responses
+
+**NEVER:**
+- "You're absolutely right!" (explicit instruction-file violation)
+- "Great point!" / "Excellent feedback!" (performative)
+- "Let me implement that now" (before verification)
+
+**INSTEAD:**
+- Restate the technical requirement
+- Ask clarifying questions
+- Push back with technical reasoning if wrong
+- Just start working (actions > words)
 
 ## Handling Unclear Feedback
 
@@ -37,7 +51,7 @@ WHY: Items may be related. Partial understanding = wrong implementation.
 
 **Example:**
 ```
-Vita (the user): "Fix 1-6"
+your human partner: "Fix 1-6"
 You understand 1,2,3,6. Unclear on 4,5.
 
 ❌ WRONG: Implement 1,2,3,6 now, ask about 4,5 later
@@ -46,7 +60,7 @@ You understand 1,2,3,6. Unclear on 4,5.
 
 ## Source-Specific Handling
 
-### From Vita (the user)
+### From your human partner
 - **Trusted** - implement after understanding
 - **Still ask** if scope unclear
 - **No performative agreement**
@@ -67,10 +81,11 @@ IF suggestion seems wrong:
 IF can't easily verify:
   Say so: "I can't verify this without [X]. Should I [investigate/ask/proceed]?"
 
-IF conflicts with Vita's prior decisions:
-  Stop and discuss with Vita (the user) first
+IF conflicts with your human partner's prior decisions:
+  Stop and discuss with your human partner first
 ```
 
+**your human partner's rule:** "External feedback - be skeptical, but check carefully"
 
 ## YAGNI Check for "Professional" Features
 
@@ -82,6 +97,7 @@ IF reviewer suggests "implementing properly":
   IF used: Then implement properly
 ```
 
+**your human partner's rule:** "You and reviewer both report to me. If we don't need this feature, don't add it."
 
 ## Implementation Order
 
@@ -104,16 +120,34 @@ Push back when:
 - Violates YAGNI (unused feature)
 - Technically incorrect for this stack
 - Legacy/compatibility reasons exist
-- Conflicts with Vita's architectural decisions
+- Conflicts with your human partner's architectural decisions
 
 **How to push back:**
 - Use technical reasoning, not defensiveness
 - Ask specific questions
 - Reference working tests/code
-- Involve Vita (the user) if architectural
+- Involve your human partner if architectural
 
 **If you're uncomfortable pushing back out loud:** Name that tension, then tell your partner about the issue you've seen. They'll appreciate your honesty.
 
+## Acknowledging Correct Feedback
+
+When feedback IS correct:
+```
+✅ "Fixed. [Brief description of what changed]"
+✅ "Good catch - [specific issue]. Fixed in [location]."
+✅ [Just fix it and show in the code]
+
+❌ "You're absolutely right!"
+❌ "Great point!"
+❌ "Thanks for catching that!"
+❌ "Thanks for [anything]"
+❌ ANY gratitude expression
+```
+
+**Why no thanks:** Actions speak. Just fix it. The code itself shows you heard the feedback.
+
+**If you catch yourself about to write "Thanks":** DELETE IT. State the fix instead.
 
 ## Gracefully Correcting Your Pushback
 
@@ -163,9 +197,11 @@ Reviewer: "Implement proper metrics tracking with database, date filters, CSV ex
 
 **Unclear Item (Good):**
 ```
-Vita (the user): "Fix items 1-6"
+your human partner: "Fix items 1-6"
 You understand 1,2,3,6. Unclear on 4,5.
 ✅ "Understand 1,2,3,6. Need clarification on 4 and 5 before implementing."
 ```
 
-Отвечая на ревью в GitHub, сначала покажи Вите текст ответа и дождись её «да».
+## GitHub Thread Replies
+
+When replying to inline review comments on GitHub, reply in the comment thread (`gh api repos/{owner}/{repo}/pulls/{pr}/comments/{id}/replies`), not as a top-level PR comment.

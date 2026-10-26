@@ -30,3 +30,5 @@
 - [Hall: 30 ситуаций Perplexity](hall-30-situacij-perplexity.md) — 27/30; серия остановлена на Hall
 - [Книги про отношения 23.10](knigi-otnosheniya-23-10.md) — 9 книг разобраны в NotebookLM, остаток и способ загрузки txt
 - [Судьи и свежие тесты 24.10](sudi-gemini-opus-fresh-tests-24-10.md) — Gemini фильтр, Opus арбитр, 36/40, правила 42–54; книги стоп
+- [Второй поиск GitHub-скиллов 26.10](github-skilly-vtoroy-poisk-2610.md) — 4 поставлены, qiaomu в карантине, Кодекс не берём
+- [Чужие скиллы: безопасно — сама, опасно — переписать](chuzhie-skilly-chernovik-svoe.md) — её правило 26.10
