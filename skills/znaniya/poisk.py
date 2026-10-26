@@ -6,12 +6,13 @@ python poisk.py "доставка в США" [--n 15] [--vse]
 Выдаёт куски с путём к файлу и строкой — открыть и прочитать целиком перед ответом.
 """
 import json
+import math
 import re
 import sys
 from pathlib import Path
 
 SKILLS = Path(r"C:\Users\User\.claude\skills")
-MEMORY = Path(r"C:\Users\User\.claude\projects\C--Users-User\memory")
+PROJECTS = Path(r"C:\Users\User\.claude\projects")  # память всех папок-проектов, не только домашней
 NOTES = Path(r"C:\Users\User\tg_monitor\notes.json")
 STOP = {"что", "мы", "про", "как", "для", "наш", "наши", "это", "и", "в", "на", "по", "с", "о", "об", "знаем", "умеем"}
 
@@ -32,13 +33,13 @@ def stems(q):
 def md_chunks():
     # принятое.md — копия notes.json, его ищем по заметкам
     files = [f for f in SKILLS.rglob("*.md") if "synced" not in f.parts and f.name != "принятое.md"]
-    files += list(MEMORY.glob("*.md"))
+    files += [m for m in PROJECTS.glob("*/memory/*.md") if "scratch" not in m.parent.parent.name.lower()]
     for f in files:
         try:
             lines = f.read_text(encoding="utf-8-sig").splitlines()
         except (UnicodeDecodeError, OSError):
             continue
-        kind = "память" if MEMORY in f.parents else f"скилл {f.relative_to(SKILLS).parts[0]}"
+        kind = "память" if f.parent.name == "memory" else f"скилл {f.relative_to(SKILLS).parts[0]}"
         start, head, buf = 1, "", []
         for i, l in enumerate(lines, 1):
             if l.startswith("#") and buf:
@@ -67,6 +68,7 @@ def note_chunks(vse):
 
 
 def main():
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")  # «→» в текстах ломал вывод в cp1251
     a = sys.argv[1:]
     if not a:
         print(__doc__)
@@ -79,12 +81,16 @@ def main():
         print("пустой запрос")
         return
     hits = []
-    for kind, where, head, text, w in list(md_chunks()) + list(note_chunks(vse)):
+    allc = list(md_chunks()) + list(note_chunks(vse))
+    low = [norm(c[3]) for c in allc]
+    idf = {s: math.log((len(allc) + 1) / (1 + sum(s in t for t in low))) + 0.1 for s in st}
+    for kind, where, head, text, w in allc:
         t, h = norm(text), norm(head)
         found = [s for s in st if s in t]
         if not found:
             continue
-        score = (len(set(found)) / len(st)) * 10 + sum(2 for s in st if s in h) + min(t.count(st[0]), 5) * 0.2
+        # редкое слово весит больше частого (IDF): «Франклина» важнее, чем «метод»
+        score = sum(idf[s] for s in set(found)) / sum(idf[s] for s in st) * 10 + sum(2 * idf[s] / max(idf.values()) for s in st if s in h) + min(t.count(st[0]), 5) * 0.2
         hits.append((score * w, kind, where, head, text, found))
     hits.sort(key=lambda x: -x[0])
     full = [x for x in hits if len(set(x[5])) == len(set(st))]
