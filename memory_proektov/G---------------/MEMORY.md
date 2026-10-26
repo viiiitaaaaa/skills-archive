@@ -2,3 +2,5 @@
 - [Сон ноутбука и .bat](son-noutbuka-i-bat.md) — звук держал без сна, зарядка будила; .bat только ASCII
 - [Почта для дел — gokjhfrr](pochta-dela-gokjhfrr.md) — сторож pochta_dela.py; с tehrez21 она пересылает сама; ПК выключен — Apps Script «Pochta Yurka» + облако
 - [Мособлсуд с ПК не открыть](mosoblsud-s-pk-ne-otkryt.md) — DNS суда отказывает всем, сразу просить телефон; дело 3fb61489
+- [Дубль группы во вкладку — разово 27.10](sledit-gruppu-polnyy-spisok.md) — исключение, правило «отвечать в Доки Юрка» не меняется
+- [Атлант и ИП Барсуков — раздельно](atlant-i-ip-barsukov-razdelno.md) — в документы по ИП Атлант Групп не включать
