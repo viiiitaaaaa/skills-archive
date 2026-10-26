@@ -42,3 +42,4 @@
 - [GitHub-скиллы поставлены 26.10](github-skilly-ustanovleno-2610.md) — 26 оценено, код прочитан целиком, ~30 скиллов в skills без хуков; claude-hud нет (её слово), в карантине 17 gh-*
 - [Фоновые скрипты — скрытое окно](fonovye-skripty-skrytoe-okno.md) — 26.10: subprocess в фоне только с CREATE_NO_WINDOW, иначе мигает PowerShell
 - [Скиллы: ошибки замечаю сама](skill-oshibki-zamechat-samoy.md) — 26.10 её слово: она не отследит, я сама проверяю и правлю скилл
+- [Cloudflare разбор 26.10](cloudflare-razbor-2610.md) — лимиты не исчерпаны по цифрам, гостья любви ~2 ответа, lyubov-bot: один KV.list; ждём снимок плашки
