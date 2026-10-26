@@ -1,0 +1,2 @@
+
+**26.10.2026 (её слово «чини Playwright»):** Playwright MCP стоит глобально (`npm i -g @playwright/mcp@0.0.83`), в `~\.claude.json` запуск напрямую `node.exe …\npm\node_modules\@playwright\mcp\cli.js`, без npx (копия `.claude.json.bak_playwright_2610`). «Два подключения» = одна цепочка (npx сам зовёт playwright-mcp), дубля нет. Старт вкладки: было 4 процесса, стало 1. Обновлять версию — вручную `npm i -g`, путь тот же. Остался npx только у apify в lead-engine (не трогала).
