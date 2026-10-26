@@ -30,7 +30,16 @@
       "Bash(git commit *)",
       "Read(**)",
       "Edit(**)",
-      "mcp__claude-in-chrome"
+      "mcp__claude-in-chrome",
+      "Bash(ls *)",
+      "Bash(wc *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(grep *)",
+      "Bash(cp * C:/Users/User/knigi_kupleno/notebooklm/*)",
+      "Bash(cp * C:/Users/User/knigi_kupleno/txt/*)",
+      "Bash(python -I C:/Users/User/knigi_kupleno/notebooklm/*)",
+      "Bash(python C:/Users/User/.claude/agent_status.py *)"
     ],
     "deny": [
       "mcp__claude_ai_Claude_Docs",
@@ -146,6 +155,16 @@
           {
             "type": "command",
             "command": "python -I -X utf8 C:/Users/User/pult/hooks/storozh.py",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Bash|PowerShell|mcp__claude-in-chrome__computer|mcp__claude-in-chrome__form_input|mcp__playwright__browser_type|mcp__playwright__browser_fill_form",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python -I -X utf8 C:/Users/User/pult/hooks/lichnoe_pered_oblakom.py",
             "timeout": 10
           }
         ]

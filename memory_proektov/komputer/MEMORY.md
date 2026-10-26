@@ -41,3 +41,4 @@
 - [Happ обновлён 26.10](vpn-happ-obnovlenie-2610.md) — 4.3.0→4.4.8, сервер сам стал #3; слежение vpn_sledim.py пишет журнал смен и обрывов для поддержки
 - [GitHub-скиллы поставлены 26.10](github-skilly-ustanovleno-2610.md) — 26 оценено, код прочитан целиком, ~30 скиллов в skills без хуков; claude-hud нет (её слово), в карантине 17 gh-*
 - [Фоновые скрипты — скрытое окно](fonovye-skripty-skrytoe-okno.md) — 26.10: subprocess в фоне только с CREATE_NO_WINDOW, иначе мигает PowerShell
+- [Скиллы: ошибки замечаю сама](skill-oshibki-zamechat-samoy.md) — 26.10 её слово: она не отследит, я сама проверяю и правлю скилл

@@ -18,3 +18,5 @@ metadata:
 
 **Why:** хуки чужих — риск; её правила: лимит, новые скиллы только по её «да», сначала каркас сайта.
 **How to apply:** новые чужие скиллы — только через карантин и чтение; не ставить хуки из чужих репо; archify в карантине нет. См. [[uchim-claude-resheniya]], [[ne-zapuskat-bez-sprosa]].
+
+**Переписано нами 26.10 (её слово «берём, но переписываем, как будто мы написали сами»; дела 42e066fd и 518cbea8):** сканер `skan_karantin.py` (+шаблоны SkillSpector), `drift_agentov.py`, скиллы `uluchshit-skill`, `scheta-ip`, `pravila-kod-iz-knig`, `otsenka-skilla`, `proverka-claude-md`, помощники `bezopasnik` и `otladchik`, советы — `claude-code-priemy/references/sovety_tips_2610.md`. Оригиналы остаются в карантине как черновики. Не взяли: хуки/cron/сеть SkillOpt, Composio, DDD-книги, ленту уведомлений и подписи clawsec, плагин dx. Остаётся: `clawsec`-проверки Windows 10/ESU, журналы Защитника, брандмауэр (защита ПК).
