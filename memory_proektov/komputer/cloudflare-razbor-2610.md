@@ -14,3 +14,5 @@ metadata:
 
 **Why:** чтобы при новом «лимит кончился» не гонять заново, а сразу спросить слово с плашки.
 **How to apply:** токен wrangler в `%APPDATA%\xdg.config\.wrangler\config\default.toml`, GraphQL работает (workersInvocationsAdaptive, kvOperationsAdaptiveGroups, d1AnalyticsAdaptiveGroups, aiInferenceAdaptiveGroups); журнал запросов (observability) токену недоступен. См. [[cloudflare-limity]].
+
+**Дополнение 26.10 (снимок через Chrome):** на главной dash.cloudflare.com плашки про лимит нет; тариф аккаунта — Free. На Free в KV «записи+удаления+списки» вместе = 1000/сутки; у нас ~569 списков (lyubov-bot) + ≤186 записей (doki-bot) ≈ 755 — самый тесный лимит, вероятный виновник. Слово с её плашки так и не названо (todo 72fd6379 открыта).
