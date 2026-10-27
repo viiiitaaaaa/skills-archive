@@ -21,3 +21,4 @@
 - [Сессия 23.10: учиться, курс harness](sessiya-23-10-uchitsya.md) — скилл uchitsya, Stop-хук, сканер сирот; хвост: ужать MEMORY.md
 - [Споки — только эта вкладка](spoki-tolko-eta-vkladka.md) — razdat.py spoki (все вкладки) не запускать самой
 - [Сессия 23.10 вечер: площадки и сайты](sessiya-23-10-ploshchadki-saity.md) — rss_sources.py, «новости» = всё; сбор только по её слову
+- [Сессия 27.10: новости, чаты, скиллы](sessiya-27-10-novosti-chaty.md) — всё собрано и разобрано; WB/Ozon и ролики в архиве; Pomerado в карантине 🟢
