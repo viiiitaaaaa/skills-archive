@@ -62,15 +62,15 @@
       "PowerShell(rmdir /s*)",
       "PowerShell(del /s*)"
     ],
-    "defaultMode": "auto",
     "ask": [
       "Bash(rm *)",
       "PowerShell(Remove-Item *)",
       "mcp__claude_ai_Google_Drive__trash_file",
       "mcp__claude_ai_Google_Drive__share_file"
-    ]
+    ],
+    "defaultMode": "auto"
   },
-  "model": "opus",
+  "model": "claude-fable-5-1",
   "hooks": {
     "PermissionRequest": [
       {
