@@ -29,3 +29,9 @@
 Остались в работе: знания, пульт, дела, новости (tg-news, noted-news), право, диск и ПК, английский, вакансии, редактура, приёмы Claude Code.
 
 **27.10.2026 подняты обратно в skills\ по дизайну сайта (её слово):** molyanov-layout-writing, molyanov-layout-reviewing, theme-factory, visual-explainer, ads-google-ads-landing, seo-page, seo-broken-link-checker, seo-competitor-pages, seo-image-seo, seo-schema-markup-generator, seo-sitemap-audit, seo-local-seo, seo-geo-optimizer, seo-meta-tags-optimizer, seo-setup-cms, seo-ecommerce-seo. Дело кончилось — вернуть сюда.
+
+**27.10.2026 (позже) подняты ещё по сайту «Смарт Люкс» (её слово: дизайн, вёрстки, документы, тексты):** graphic-designer, show-me, slopotron, gemini-infographic, seo-content-writer, seo-keyword-research, seo-analysis, seo-content-planner, molyanov-documentation-writing, molyanov-code-writing, molyanov-code-reviewing, b2b-sbor. Дело кончилось — вернуть сюда.
+
+**27.10.2026 сразу в архив (её слово: «нам это пока не нужно, может быть, позже коснёмся»):**
+`wb-ozon-pravila-prodavca` — справочник правил WB и Ozon из чатов продавцов (299 веток; выплаты, СПП, габариты, приёмка, КИЗ, возвраты, реклама, комиссия Ozon 27%); достать по «поднимай WB/Ozon».
+`video-tovarov` — ролики товаров с ИИ-агентом (Remotion, FFmpeg, HyperFrames, 46 движений камеры, промпты; 17 карточек, ничего не установлено); достать по «поднимай ролики».
