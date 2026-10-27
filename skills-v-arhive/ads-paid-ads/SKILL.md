@@ -33,3 +33,5 @@ For a single-platform request, route directly rather than duplicating a speciali
 ## Operating posture
 
 Lead with the decision: what is working, what is not, and the one action with the most defensible impact. Keep recommendations measurable and reversible. A campaign plan, creative brief, or allocation table is `ready_for_review`; it becomes `published` only after the platform confirms the exact object and settings.
+
+- Идеи из поста «Семья на маркетплейсах», см. references/semya_na_mp.md (27.10.2026)

@@ -27,3 +27,5 @@
 - Работа и поиск: job-application-assistant, job-scraper, b2b-sbor, niche-research, vendor-check, trend-radar (радар выключен), dolphin-shots
 - Прочее: analytics-dashboard, be-ambitious, brag-slim, cut-products, fuck-cancer, hudeem-bot, idea-to-MVP, love-scripts, n8n-shpargalka, neki, orx, security-audit, show-me, slopotron, theme-factory, visual-explainer
 Остались в работе: знания, пульт, дела, новости (tg-news, noted-news), право, диск и ПК, английский, вакансии, редактура, приёмы Claude Code.
+
+**27.10.2026 подняты обратно в skills\ по дизайну сайта (её слово):** molyanov-layout-writing, molyanov-layout-reviewing, theme-factory, visual-explainer, ads-google-ads-landing, seo-page, seo-broken-link-checker, seo-competitor-pages, seo-image-seo, seo-schema-markup-generator, seo-sitemap-audit, seo-local-seo, seo-geo-optimizer, seo-meta-tags-optimizer, seo-setup-cms, seo-ecommerce-seo. Дело кончилось — вернуть сюда.
