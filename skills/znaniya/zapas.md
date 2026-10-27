@@ -21,4 +21,4 @@
 
 | Дата | Откуда | Тема | Ссылка | Тема-ключ | Статус |
 |---|---|---|---|---|---|
-| 27.10.2026 | журнал/semya-na-marketplejsah-2367 | реклама WB/Ozon: обучение кампаний, CTR, ДРР, комбинация инструментов | C:\Users\User\zhurnal\data\semya_na_mp_reklama.md | реклама, WB, Ozon, Shopify, ДРР, CTR, инфографика | в скилл reklama-marketplejsy 27.10 |
+| 27.10.2026 | журнал/semya-na-marketplejsah-2367 | реклама WB/Ozon: обучение кампаний, CTR, ДРР, комбинация инструментов | C:\Users\User\zhurnal\data\semya_na_mp_reklama.md | реклама, WB, Ozon, Shopify, Google Ads, TikTok Ads, ДРР, CTR, инфографика | в скилл reklama-marketplejsy 27.10 |
