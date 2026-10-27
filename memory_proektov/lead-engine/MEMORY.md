@@ -15,6 +15,7 @@
 - [Сессия 13–14.10: договорённости и книги](sessiya-14-10-dogovorennosti-knigi.md) — Паша, игра «Цена слова», 24 книги, 2 резюме; хвост «доделай книги»
 
 ## Сайт Смарт Люкс (папка site)
+- [Сайт «Смарт Инжиниринг» 27.10](sayt-smart-inzhiniring-2710.md) — инженерный сайт, палитра №4, форма-телефон; ждёт Андрея и картинки
 - [Сессия 10–12.10: сайт Frivent](sessiya-10-10-sayt-frivent.md) — хвосты: политика юристу, примеры→настоящие
 - [Сайт Frivent: адрес и автопроверка](frivent-preview-i-avtoproverka.md) — frivent-site.frivent-dom.workers.dev; deploy_cf + qa_site
 - [Правки сайта от Паши 13.10](pravki-sayta-pasha-13-10.md) — сделаны 19.10 (Смарт Люкс, УТП-блоки); ждём тексты Паши и «да» на выкладку
@@ -28,3 +29,4 @@
 - [Upscayl: ошибка видеокарты](upscayl-tile-size.md) — «vkQueueSubmit failed -4» → -t 64
 - [Inspo MCP для дизайна](inspo-mcp.md) — 832 сайта-примера; no-ai-slop стоит; ax/untidetect отвергнуты
 - [Новости: дизайн сайтов](novosti-dizayn-saytov.md) — каналы дизайна, блок на панели; видео не качать
+- [Chrome не запрещён](chrome-ne-zapreschen.md) — 28.10 её «схера ли я хрому запретила»; промт исказил, работать с Chrome
