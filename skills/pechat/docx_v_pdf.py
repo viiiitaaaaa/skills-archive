@@ -24,6 +24,8 @@ def para_css(p, default_size):
     ls = pf.line_spacing
     if isinstance(ls, float):
         css.append(f"line-height:{ls:.2f}")
+    if pf.page_break_before:  # «с новой страницы» в Word — так же и в PDF (29.10.2026: приложение с подписью на второй лист)
+        css.append("break-before:page")
     return ";".join(css)
 
 
