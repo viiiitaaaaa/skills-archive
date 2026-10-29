@@ -184,6 +184,16 @@
             "timeout": 10
           }
         ]
+      },
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python -I -X utf8 C:/Users/User/pult/hooks/predohranitel.py",
+            "timeout": 10
+          }
+        ]
       }
     ],
     "PostToolUse": [

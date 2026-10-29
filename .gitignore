@@ -4,3 +4,6 @@ __pycache__/
 *.pyc
 # VPN-конфиг Happ с данными серверов — только на компьютере (🟡)
 **/happ_china_latest.json
+
+# kami: файл дизайн-цветов называется tokens.json, ловится охранником ключей по имени (внутри только цвета CSS, не ключи; 30.10.2026)
+skills/kami/references/tokens.json
