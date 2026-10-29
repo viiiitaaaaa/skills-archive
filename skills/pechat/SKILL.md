@@ -33,7 +33,10 @@ python "C:\Users\User\.claude\skills\pechat\print_file.py" "<полный пут
   Google Drive (export) или взять рядом лежащий .pdf/.html.
 - `.docx` — Ворда нет: искать рядом PDF/HTML-версию; если нет — открыть .docx в Google Drive и экспортировать в PDF.
   Быстрее (27.10.2026): `python docx_v_pdf.py <файл.docx> <выход.pdf>` (в папке скилла; python-docx → HTML → Chrome),
-  потом печать PDF. Документы с [скобками]/пустыми полями (кроме даты и подписи) — не печатать, сначала показать ей.
+  потом печать PDF. **НО docx_v_pdf.py теряет картинки** (29.10.2026: прошение Лёзова вышло без фото приложений) — если в .docx
+  есть фото/сканы: `python C:\Users\User\case-bot\v_html.py <файл.docx>` (картинки внутри, разрывы страниц) →
+  `chrome --headless=new --no-pdf-header-footer --print-to-pdf=<выход.pdf> file:///<файл.html>` → проверить, что в PDF есть картинки.
+  Документы с [скобками]/пустыми полями (кроме даты и подписи) — не печатать, сначала показать ей.
 - 27.10.2026 Ricoh по Wi-Fi (192.168.0.104:9100) не ответил — печатала на Canon по шнуру: перед печатью
   `Test-NetConnection 192.168.0.104 -Port 9100` и `Get-PnpDevice -PresentOnly | ? FriendlyName -match Canon`.
   Очередь Canon пустеет за ~10 с — вышли ли листы, спросить её.
