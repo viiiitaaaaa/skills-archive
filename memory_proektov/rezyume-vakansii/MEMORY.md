@@ -17,7 +17,7 @@
 - [Пакет китайцу — формат](paket-kitaycu-format.md) — PDF с китайским именем, системные шрифты, кнопки EN/中文/RU
 - [Пакеты резюме и партнёру — статус 16.10](paket-status-16-10.md) — где лежит, что сделано, что ждёт её (контакты, LinkedIn, README)
 - [Поднятие вкладки — сверить все дела](podnyatie-sveryat-vse-dela.md) — сначала все открытые дела темы в pult\dela.json, не только №N
-- [Грин-карта — статус 22.10](greencard-dv-status-18-10.md) — DV-2027 по суду до 1.11 (обжалуют); сторож greencard-storozh → бот; greencard.html
+- [Грин-карта — статус 22.10](greencard-dv-status-18-10.md) — 30.10: апелляция приостановила открытие DV-2027, срока нет; сторож greencard-storozh → бот; greencard.html
 - [Игра английского 21.10](angliyskiy-igra-21-10.md) — igra.html + 9 книг в knigi\, OCR Windows, сборка sobrat_igru.py, скилл angliyskiy
 - [Фоновые команды не забывать](fonovye-komandy-ne-zabyvat.md) — забытая фоновая команда держала вкладку «в работе» и ноут бодрым
 - [Профиль поиска 22.10 (бот вакансий)](profil-poiska-bot-22-10.md) — оплата: зарубеж. карта/USDT/Россия, ИП; Middle (её выбор); все 3 направления; от 75 000 $; полная + проекты
