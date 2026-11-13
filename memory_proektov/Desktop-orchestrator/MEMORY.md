@@ -1,0 +1,5 @@
+- [Пользовательница и друг из России](user-helps-friend-in-russia.md) — она не в РФ; Авито-задачи для друга из России, рынок avito.ru
+- [Механику — скриптом или дешёвой моделью](feedback-cheap-executors-for-mechanical-work.md) — сбор страниц скриптом (Anakin), а анализ и выводы — сама
+- [Ниши агентства](project-avito-agency-10-niches.md) — 12.11 выбраны натяжные потолки и отопление дома
+- [Рутину — в Hermes (ChatGPT Plus)](feedback-use-hermes-for-routine.md) — hermes -z "задача"; не тратить лимиты Claude на тексты и чтение больших файлов
+- [Без экрана и без её копипаста](feedback-autonomy-no-screen.md) — задания Hermes только через CLI; computer-use запрещён

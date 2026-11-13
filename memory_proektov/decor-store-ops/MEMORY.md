@@ -1,7 +1,0 @@
-- [artmellio-system: ветка dev разошлась](artmellio-system-dev-vetka.md) — работаем в feature/operations-panel
-- [ARTMELLIO — не её](artmellio-ne-ee.md) — магазин не её; её бизнес — ИП
-- [Скрипты Dolphin{anty}](dolphin-anty-scripts.md) — готовая автоматизация профилей и скринов, не писать заново
-- [Профиль Dolphin — только один](dolphin-profile-id.md) — ВСЕГДА 859648353 (AliExpress, магазин, trend-radar); 828976678 нет
-- [Новый магазин (профиль 3)](novyy-magazin-shopify-profil3.md) — Dolphin 859648353, 2e0bv7-jn.myshopify.com
-- [Уроки из новостей](uroki-iz-novostey.md) — скилл dropship-lessons, напоминать к месту
-- [妙手ERP](miaoshou-erp.md) — Shopify подключён; 17zwd после авторизации 17网
